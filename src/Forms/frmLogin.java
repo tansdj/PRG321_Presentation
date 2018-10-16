@@ -67,22 +67,22 @@ public class frmLogin extends javax.swing.JFrame {
         pnlLogin.setPreferredSize(new java.awt.Dimension(700, 600));
         pnlLogin.setLayout(null);
 
-        lblBCLogo.setIcon(new javax.swing.ImageIcon("C:\\Users\\Eldane\\Downloads\\Webp.net-resizeimage.png")); // NOI18N
+        lblBCLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/BC_Logo.png"))); // NOI18N
         lblBCLogo.setLabelFor(lblBCLogo);
         pnlLogin.add(lblBCLogo);
         lblBCLogo.setBounds(40, 10, 220, 110);
 
-        lblStationary1.setFont(new java.awt.Font("Eraser", 0, 44)); // NOI18N
+        lblStationary1.setFont(new java.awt.Font("Ink Free", 1, 44)); // NOI18N
         lblStationary1.setForeground(new java.awt.Color(255, 255, 255));
         lblStationary1.setText("Stationary Management");
         pnlLogin.add(lblStationary1);
-        lblStationary1.setBounds(150, 30, 570, 60);
+        lblStationary1.setBounds(150, 40, 570, 60);
 
-        lblSystem.setFont(new java.awt.Font("Eraser", 0, 44)); // NOI18N
+        lblSystem.setFont(new java.awt.Font("Ink Free", 1, 44)); // NOI18N
         lblSystem.setForeground(new java.awt.Color(255, 255, 255));
-        lblSystem.setText("SYSTEM");
+        lblSystem.setText("System");
         pnlLogin.add(lblSystem);
-        lblSystem.setBounds(170, 80, 190, 40);
+        lblSystem.setBounds(170, 90, 260, 40);
 
         pnlLoginDetails.setBackground(new java.awt.Color(0, 0, 0));
         pnlLoginDetails.setLayout(null);
