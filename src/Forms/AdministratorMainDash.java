@@ -96,7 +96,7 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnManageStock.setContentAreaFilled(false);
         btnManageStock.setFocusPainted(false);
         btnManageStock.setIconTextGap(5);
-        btnManageStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
+        btnManageStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/products_Red.png"))); // NOI18N
         btnManageStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnManageStockActionPerformed(evt);
@@ -114,7 +114,7 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnManageUser.setFocusPainted(false);
         btnManageUser.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnManageUser.setIconTextGap(10);
-        btnManageUser.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
+        btnManageUser.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/clients_Red.png"))); // NOI18N
         btnManageUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnManageUserActionPerformed(evt);
@@ -132,7 +132,7 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnExit.setFocusPainted(false);
         btnExit.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnExit.setIconTextGap(90);
-        btnExit.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
+        btnExit.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/LogOut1_red.png"))); // NOI18N
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExitActionPerformed(evt);
