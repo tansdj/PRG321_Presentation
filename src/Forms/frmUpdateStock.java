@@ -40,6 +40,7 @@ public class frmUpdateStock extends javax.swing.JFrame {
         btnUpdateStock = new javax.swing.JButton();
         btnViewStock = new javax.swing.JButton();
         btnAddStock = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
         pnlProductInfo = new javax.swing.JPanel();
         lblProductInfo = new javax.swing.JLabel();
         lblProductName = new javax.swing.JLabel();
@@ -60,6 +61,7 @@ public class frmUpdateStock extends javax.swing.JFrame {
         btnEditStock = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         pnlRegisterHeader.setBackground(new java.awt.Color(255, 255, 0));
         pnlRegisterHeader.setPreferredSize(new java.awt.Dimension(1071, 530));
@@ -120,11 +122,17 @@ public class frmUpdateStock extends javax.swing.JFrame {
         btnAddProduct.setContentAreaFilled(false);
         btnAddProduct.setFocusPainted(false);
         btnAddProduct.setIconTextGap(12);
+        btnAddProduct.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
+        btnAddProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddProductActionPerformed(evt);
+            }
+        });
 
         btnUpdateStock.setBackground(new java.awt.Color(40, 40, 40));
         btnUpdateStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnUpdateStock.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdateStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1.png"))); // NOI18N
+        btnUpdateStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
         btnUpdateStock.setText("Update Stock");
         btnUpdateStock.setBorder(null);
         btnUpdateStock.setBorderPainted(false);
@@ -149,6 +157,7 @@ public class frmUpdateStock extends javax.swing.JFrame {
         btnViewStock.setFocusPainted(false);
         btnViewStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewStock.setIconTextGap(25);
+        btnViewStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
         btnViewStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewStockActionPerformed(evt);
@@ -165,6 +174,29 @@ public class frmUpdateStock extends javax.swing.JFrame {
         btnAddStock.setContentAreaFilled(false);
         btnAddStock.setFocusPainted(false);
         btnAddStock.setIconTextGap(30);
+        btnAddStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
+        btnAddStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddStockActionPerformed(evt);
+            }
+        });
+
+        btnBack.setBackground(new java.awt.Color(204, 0, 0));
+        btnBack.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnBack.setForeground(new java.awt.Color(255, 255, 255));
+        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1.png"))); // NOI18N
+        btnBack.setText("Main Dash");
+        btnBack.setBorder(null);
+        btnBack.setBorderPainted(false);
+        btnBack.setContentAreaFilled(false);
+        btnBack.setFocusPainted(false);
+        btnBack.setIconTextGap(20);
+        btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlMenuLayout = new javax.swing.GroupLayout(pnlMenu);
         pnlMenu.setLayout(pnlMenuLayout);
@@ -176,7 +208,8 @@ public class frmUpdateStock extends javax.swing.JFrame {
                 .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnViewStock, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
                     .addComponent(btnUpdateStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAddStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnAddStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnBack, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlMenuLayout.setVerticalGroup(
@@ -190,7 +223,9 @@ public class frmUpdateStock extends javax.swing.JFrame {
                 .addComponent(btnUpdateStock, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnViewStock, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(738, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(693, Short.MAX_VALUE))
         );
 
         pnlProductInfo.setBackground(new java.awt.Color(45, 45, 45));
@@ -412,7 +447,9 @@ public class frmUpdateStock extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUpdateStockActionPerformed
 
     private void btnViewStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStockActionPerformed
-        // TODO add your handling code here:
+        frmViewStock viewStock = new frmViewStock();
+        viewStock.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnViewStockActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
@@ -426,6 +463,24 @@ public class frmUpdateStock extends javax.swing.JFrame {
     private void cmbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStatusActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbStatusActionPerformed
+
+    private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
+        frmAddProduct addProduct = new frmAddProduct();
+        addProduct.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnAddProductActionPerformed
+
+    private void btnAddStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStockActionPerformed
+        frmAddStock addStock = new frmAddStock();
+        addStock.setVisible(true);
+        this.setVisible(false);    
+    }//GEN-LAST:event_btnAddStockActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        AdministratorMainDash mainDash = new AdministratorMainDash();
+        mainDash.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -465,6 +520,7 @@ public class frmUpdateStock extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddProduct;
     private javax.swing.JButton btnAddStock;
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnEditStock;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdateStock;

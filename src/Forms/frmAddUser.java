@@ -38,6 +38,7 @@ public class frmAddUser extends javax.swing.JFrame {
         pnlMenu = new javax.swing.JPanel();
         btnViewUser = new javax.swing.JButton();
         btnAddUser = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
         pnlUserInfo = new javax.swing.JPanel();
         lblUserInfo = new javax.swing.JLabel();
         lblFirstname = new javax.swing.JLabel();
@@ -60,6 +61,7 @@ public class frmAddUser extends javax.swing.JFrame {
         lblAnswer = new javax.swing.JLabel();
         txtAnswer = new javax.swing.JTextField();
         txtSecurityQuestion = new javax.swing.JTextField();
+        btnRejectUser = new javax.swing.JButton();
         btnInsertUser = new javax.swing.JButton();
         pnlAddressInfo = new javax.swing.JPanel();
         lblAddressInfo = new javax.swing.JLabel();
@@ -79,6 +81,7 @@ public class frmAddUser extends javax.swing.JFrame {
         lbxUsers = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         pnlRegisterHeader.setBackground(new java.awt.Color(255, 255, 0));
         pnlRegisterHeader.setPreferredSize(new java.awt.Dimension(1071, 530));
@@ -134,6 +137,7 @@ public class frmAddUser extends javax.swing.JFrame {
         btnViewUser.setFocusPainted(false);
         btnViewUser.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewUser.setIconTextGap(25);
+        btnViewUser.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
         btnViewUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewUserActionPerformed(evt);
@@ -143,13 +147,31 @@ public class frmAddUser extends javax.swing.JFrame {
         btnAddUser.setBackground(new java.awt.Color(204, 0, 0));
         btnAddUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnAddUser.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1.png"))); // NOI18N
+        btnAddUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
         btnAddUser.setText("Add User");
         btnAddUser.setBorder(null);
         btnAddUser.setBorderPainted(false);
         btnAddUser.setContentAreaFilled(false);
         btnAddUser.setFocusPainted(false);
         btnAddUser.setIconTextGap(30);
+
+        btnBack.setBackground(new java.awt.Color(204, 0, 0));
+        btnBack.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnBack.setForeground(new java.awt.Color(255, 255, 255));
+        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1.png"))); // NOI18N
+        btnBack.setText("Main Dash");
+        btnBack.setActionCommand("Main Dash");
+        btnBack.setBorder(null);
+        btnBack.setBorderPainted(false);
+        btnBack.setContentAreaFilled(false);
+        btnBack.setFocusPainted(false);
+        btnBack.setIconTextGap(20);
+        btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlMenuLayout = new javax.swing.GroupLayout(pnlMenu);
         pnlMenu.setLayout(pnlMenuLayout);
@@ -158,18 +180,21 @@ public class frmAddUser extends javax.swing.JFrame {
             .addGroup(pnlMenuLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnViewUser, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                    .addComponent(btnAddUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnViewUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAddUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnBack, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlMenuLayout.setVerticalGroup(
             pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMenuLayout.createSequentialGroup()
-                .addGap(69, 69, 69)
+                .addGap(70, 70, 70)
                 .addComponent(btnViewUser, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(826, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(787, Short.MAX_VALUE))
         );
 
         pnlUserInfo.setBackground(new java.awt.Color(45, 45, 45));
@@ -258,8 +283,19 @@ public class frmAddUser extends javax.swing.JFrame {
         txtSecurityQuestion.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         txtSecurityQuestion.setEnabled(false);
 
+        btnRejectUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnRejectUser.setText("Reject User");
+        btnRejectUser.setBorderPainted(false);
+        btnRejectUser.setFocusPainted(false);
+        btnRejectUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRejectUserActionPerformed(evt);
+            }
+        });
+
         btnInsertUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnInsertUser.setText("Add User");
+        btnInsertUser.setBorderPainted(false);
         btnInsertUser.setFocusPainted(false);
         btnInsertUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -289,19 +325,19 @@ public class frmAddUser extends javax.swing.JFrame {
                                 .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(79, Short.MAX_VALUE))
                     .addGroup(pnlLoginInfoLayout.createSequentialGroup()
-                        .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnInsertUser)
-                            .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(lblSecurityQuestion)
-                                .addGroup(pnlLoginInfoLayout.createSequentialGroup()
-                                    .addComponent(lblAnswer)
-                                    .addGap(34, 34, 34))
-                                .addComponent(txtAccessLevel, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblStatus)
-                                .addComponent(lblUsername)
-                                .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtSecurityQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                                .addComponent(txtAnswer)))
+                        .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtSecurityQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                            .addComponent(txtAnswer)
+                            .addComponent(lblSecurityQuestion)
+                            .addComponent(lblAnswer)
+                            .addComponent(txtAccessLevel, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblStatus)
+                            .addComponent(lblUsername)
+                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginInfoLayout.createSequentialGroup()
+                                .addComponent(btnInsertUser)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnRejectUser)))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         pnlLoginInfoLayout.setVerticalGroup(
@@ -333,9 +369,11 @@ public class frmAddUser extends javax.swing.JFrame {
                 .addComponent(lblAnswer)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addComponent(btnInsertUser)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRejectUser)
+                    .addComponent(btnInsertUser))
+                .addGap(40, 40, 40))
         );
 
         pnlAddressInfo.setBackground(new java.awt.Color(45, 45, 45));
@@ -441,9 +479,9 @@ public class frmAddUser extends javax.swing.JFrame {
                     .addComponent(lblLine1)
                     .addComponent(txtLine1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblLine2)
-                    .addComponent(txtLine2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtLine2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblLine2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCity)
@@ -514,7 +552,7 @@ public class frmAddUser extends javax.swing.JFrame {
                     .addComponent(txtCampus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(pnlAddressInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(59, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(pnlLoginInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -545,10 +583,10 @@ public class frmAddUser extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(170, 170, 170)
+                        .addGap(90, 90, 90)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(pnlUserInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -556,14 +594,24 @@ public class frmAddUser extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnViewUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewUserActionPerformed
-        // TODO add your handling code here:
+        frmViewUsers viewUser = new frmViewUsers();
+        viewUser.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnViewUserActionPerformed
 
+    private void btnRejectUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRejectUserActionPerformed
+
+    }//GEN-LAST:event_btnRejectUserActionPerformed
+
     private void btnInsertUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertUserActionPerformed
-        frmRegisterUserLogin userLogin = new frmRegisterUserLogin();
-        userLogin.setVisible(true);
-        this.setVisible(false);
+        // TODO add your handling code here:
     }//GEN-LAST:event_btnInsertUserActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        AdministratorMainDash mainDash = new AdministratorMainDash();
+        mainDash.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -602,7 +650,9 @@ public class frmAddUser extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddUser;
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnInsertUser;
+    private javax.swing.JButton btnRejectUser;
     private javax.swing.JButton btnViewUser;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAccessLevel;

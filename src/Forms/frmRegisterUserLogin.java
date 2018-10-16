@@ -107,7 +107,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         btnRegisterUser.setBackground(new java.awt.Color(204, 0, 0));
         btnRegisterUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnRegisterUser.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegisterUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1.png"))); // NOI18N
+        btnRegisterUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
         btnRegisterUser.setText("Register User");
         btnRegisterUser.setBorder(null);
         btnRegisterUser.setBorderPainted(false);
@@ -126,6 +126,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         btnBack.setFocusPainted(false);
         btnBack.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnBack.setIconTextGap(70);
+        btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);

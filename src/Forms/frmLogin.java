@@ -242,9 +242,9 @@ public class frmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_cbxForgotPasswordKeyPressed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        frmAddStock addStock = new frmAddStock();
-        addStock.setVisible(true);
-        this.setVisible(false);
+       AdministratorMainDash adminDash = new AdministratorMainDash();
+       adminDash.setVisible(true);
+       this.setVisible(false);
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed

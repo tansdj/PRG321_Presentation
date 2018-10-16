@@ -121,13 +121,14 @@ public class frmRegisterUser extends javax.swing.JFrame {
         btnRegisterUser.setBackground(new java.awt.Color(204, 0, 0));
         btnRegisterUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnRegisterUser.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegisterUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1.png"))); // NOI18N
+        btnRegisterUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
         btnRegisterUser.setText("Register User");
         btnRegisterUser.setBorder(null);
         btnRegisterUser.setBorderPainted(false);
         btnRegisterUser.setContentAreaFilled(false);
         btnRegisterUser.setFocusPainted(false);
         btnRegisterUser.setIconTextGap(10);
+        btnRegisterUser.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
 
         btnBack.setBackground(new java.awt.Color(40, 40, 40));
         btnBack.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
@@ -140,6 +141,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
         btnBack.setFocusPainted(false);
         btnBack.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnBack.setIconTextGap(70);
+        btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
@@ -313,9 +315,9 @@ public class frmRegisterUser extends javax.swing.JFrame {
                     .addComponent(lblLine1)
                     .addComponent(txtLine1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblLine2)
-                    .addComponent(txtLine2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtLine2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblLine2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCity)
@@ -500,19 +502,13 @@ public class frmRegisterUser extends javax.swing.JFrame {
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         frmLogin login = new frmLogin();
         login.setVisible(true);
-        this.setVisible(false);
-                
+        this.setVisible(false); 
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnNextRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextRegistrationActionPerformed
-        //frmRegisterUserLogin userLogin = new frmRegisterUserLogin();
-        //userLogin.setVisible(true);
-        //this.setVisible(false);
-        
-        frmAddStock add = new frmAddStock();
-        add.setVisible(true);
-        this.setVisible(false);
-                
+        frmRegisterUserLogin userLogin = new frmRegisterUserLogin();
+        userLogin.setVisible(true);
+        this.setVisible(false);           
     }//GEN-LAST:event_btnNextRegistrationActionPerformed
 
     /**
