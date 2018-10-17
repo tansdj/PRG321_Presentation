@@ -51,11 +51,11 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         txtPassword = new javax.swing.JTextField();
         lblPassword = new javax.swing.JLabel();
         llblRePassword = new javax.swing.JLabel();
-        cmbAccessLevel = new javax.swing.JComboBox<>();
         txtStatus = new javax.swing.JTextField();
         lblAccessLevel = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
         txtRePassword = new javax.swing.JTextField();
+        txtRePassword1 = new javax.swing.JTextField();
         btnRegister = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -201,7 +201,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
                 .addComponent(lblAnswer)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlLoginInfo.setBackground(new java.awt.Color(45, 45, 45));
@@ -229,9 +229,6 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         llblRePassword.setForeground(new java.awt.Color(255, 255, 255));
         llblRePassword.setText("Re-Enter Password:");
 
-        cmbAccessLevel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        cmbAccessLevel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrator", "Standard" }));
-
         txtStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         txtStatus.setEnabled(false);
@@ -246,6 +243,11 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
 
         txtRePassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtRePassword.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        txtRePassword1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtRePassword1.setText("Standard");
+        txtRePassword1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtRePassword1.setEnabled(false);
 
         javax.swing.GroupLayout pnlLoginInfoLayout = new javax.swing.GroupLayout(pnlLoginInfo);
         pnlLoginInfo.setLayout(pnlLoginInfoLayout);
@@ -268,10 +270,10 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
                                     .addComponent(lblStatus))
                                 .addGap(76, 76, 76)
                                 .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtPassword)
+                                    .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
                                     .addComponent(txtStatus)
-                                    .addComponent(cmbAccessLevel, 0, 204, Short.MAX_VALUE)
-                                    .addComponent(txtRePassword, javax.swing.GroupLayout.Alignment.TRAILING))
+                                    .addComponent(txtRePassword, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtRePassword1))
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(pnlLoginInfoLayout.createSequentialGroup()
                         .addGap(28, 28, 28)
@@ -297,8 +299,8 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
                     .addComponent(txtRePassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbAccessLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblAccessLevel))
+                    .addComponent(lblAccessLevel)
+                    .addComponent(txtRePassword1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -321,32 +323,32 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlRegisterHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(79, 79, 79)
+                        .addGap(57, 57, 57)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(pnlLoginInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(18, 18, 18)
                                 .addComponent(pnlSecurityQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnRegister))))
+                            .addComponent(btnRegister)))
+                    .addComponent(pnlRegisterHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(602, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlRegisterHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlLoginInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pnlSecurityQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(88, 88, 88)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(pnlSecurityQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlLoginInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addComponent(btnRegister)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -407,7 +409,6 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnRegister;
     private javax.swing.JButton btnRegisterUser;
-    private javax.swing.JComboBox<String> cmbAccessLevel;
     private javax.swing.JComboBox<String> cmbQuestion;
     private javax.swing.JLabel lblAccessLevel;
     private javax.swing.JLabel lblAnswer;
@@ -427,6 +428,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
     private javax.swing.JTextField txtAnswer;
     private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtRePassword;
+    private javax.swing.JTextField txtRePassword1;
     private javax.swing.JTextField txtStatus;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables

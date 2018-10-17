@@ -18,8 +18,6 @@ public class frmLogin extends javax.swing.JFrame {
      */
     public frmLogin() {
         initComponents();
-        pnlLoginDetails.setBackground(new Color(0,0,0,150));
-        cbxForgotPassword.setBackground(new Color(0,0,0,0));
         this.setLocationRelativeTo(null); // Centers form in the middle of screen
         btnRegister.setOpaque(false);
         btnRegister.setContentAreaFilled(false);
@@ -42,11 +40,9 @@ public class frmLogin extends javax.swing.JFrame {
         lblSystem = new javax.swing.JLabel();
         pnlLoginDetails = new javax.swing.JPanel();
         lblUsername = new javax.swing.JLabel();
-        lblAccessLevel = new javax.swing.JLabel();
         lblPassword = new javax.swing.JLabel();
         txtPassword = new javax.swing.JTextField();
         txtUsername = new javax.swing.JTextField();
-        cmbAccessLevel = new javax.swing.JComboBox<>();
         pnlLoginHeader = new javax.swing.JPanel();
         lblLogin = new javax.swing.JLabel();
         pnlLoginHeader1 = new javax.swing.JPanel();
@@ -91,34 +87,23 @@ public class frmLogin extends javax.swing.JFrame {
         lblUsername.setForeground(new java.awt.Color(255, 255, 255));
         lblUsername.setText("Username:");
         pnlLoginDetails.add(lblUsername);
-        lblUsername.setBounds(90, 90, 82, 21);
-
-        lblAccessLevel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblAccessLevel.setForeground(new java.awt.Color(255, 255, 255));
-        lblAccessLevel.setText("Access Level:");
-        pnlLoginDetails.add(lblAccessLevel);
-        lblAccessLevel.setBounds(90, 200, 103, 21);
+        lblUsername.setBounds(90, 100, 82, 21);
 
         lblPassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblPassword.setForeground(new java.awt.Color(255, 255, 255));
         lblPassword.setText("Password:");
         pnlLoginDetails.add(lblPassword);
-        lblPassword.setBounds(90, 130, 76, 21);
+        lblPassword.setBounds(90, 140, 76, 21);
 
         txtPassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtPassword.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         pnlLoginDetails.add(txtPassword);
-        txtPassword.setBounds(250, 130, 180, 25);
+        txtPassword.setBounds(250, 140, 180, 25);
 
         txtUsername.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtUsername.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         pnlLoginDetails.add(txtUsername);
-        txtUsername.setBounds(250, 90, 180, 25);
-
-        cmbAccessLevel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        cmbAccessLevel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Standard", "Administrator" }));
-        pnlLoginDetails.add(cmbAccessLevel);
-        cmbAccessLevel.setBounds(250, 200, 180, 27);
+        txtUsername.setBounds(250, 100, 180, 25);
 
         pnlLoginHeader.setBackground(new java.awt.Color(204, 0, 0));
 
@@ -132,7 +117,7 @@ public class frmLogin extends javax.swing.JFrame {
         pnlLoginHeaderLayout.setHorizontalGroup(
             pnlLoginHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginHeaderLayout.createSequentialGroup()
-                .addContainerGap(203, Short.MAX_VALUE)
+                .addContainerGap(206, Short.MAX_VALUE)
                 .addComponent(lblLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(137, 137, 137))
         );
@@ -163,6 +148,7 @@ public class frmLogin extends javax.swing.JFrame {
         pnlLoginDetails.add(pnlLoginHeader1);
         pnlLoginHeader1.setBounds(0, 0, 520, 60);
 
+        cbxForgotPassword.setBackground(new java.awt.Color(0, 0, 0));
         cbxForgotPassword.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         cbxForgotPassword.setForeground(new java.awt.Color(255, 255, 255));
         cbxForgotPassword.setText("Forgot Password?");
@@ -175,7 +161,7 @@ public class frmLogin extends javax.swing.JFrame {
             }
         });
         pnlLoginDetails.add(cbxForgotPassword);
-        cbxForgotPassword.setBounds(250, 160, 180, 29);
+        cbxForgotPassword.setBounds(250, 170, 180, 29);
 
         btnLogin.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnLogin.setText("Login");
@@ -188,13 +174,14 @@ public class frmLogin extends javax.swing.JFrame {
             }
         });
         pnlLoginDetails.add(btnLogin);
-        btnLogin.setBounds(340, 260, 90, 30);
+        btnLogin.setBounds(340, 220, 90, 30);
 
         btnRegister.setBackground(new java.awt.Color(0, 0, 0));
         btnRegister.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         btnRegister.setForeground(new java.awt.Color(255, 255, 0));
         btnRegister.setText("Register Here");
         btnRegister.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnRegister.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRegister.setFocusPainted(false);
         btnRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -202,13 +189,13 @@ public class frmLogin extends javax.swing.JFrame {
             }
         });
         pnlLoginDetails.add(btnRegister);
-        btnRegister.setBounds(230, 300, 160, 27);
+        btnRegister.setBounds(240, 280, 160, 27);
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Not Registered Yet?");
         pnlLoginDetails.add(jLabel1);
-        jLabel1.setBounds(120, 300, 150, 30);
+        jLabel1.setBounds(130, 280, 150, 30);
 
         pnlLogin.add(pnlLoginDetails);
         pnlLoginDetails.setBounds(90, 150, 520, 340);
@@ -292,9 +279,7 @@ public class frmLogin extends javax.swing.JFrame {
     private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnRegister;
     private javax.swing.JCheckBox cbxForgotPassword;
-    private javax.swing.JComboBox<String> cmbAccessLevel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel lblAccessLevel;
     private javax.swing.JLabel lblBCLogo;
     private javax.swing.JLabel lblLogin;
     private javax.swing.JLabel lblLoginBackground;
