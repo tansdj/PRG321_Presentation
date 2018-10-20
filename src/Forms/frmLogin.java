@@ -5,7 +5,9 @@
  */
 package Forms;
 
+import PersonManagement.User;
 import java.awt.Color;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -229,9 +231,28 @@ public class frmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_cbxForgotPasswordKeyPressed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-       AdministratorMainDash adminDash = new AdministratorMainDash();
-       adminDash.setVisible(true);
-       this.setVisible(false);
+       
+       String userName, passWord;
+     
+       boolean allowAccess = false;
+       
+       userName = txtUsername.getText();
+       passWord = txtPassword.getText();
+       
+       User userLogin = new User(userName,passWord);
+       allowAccess = userLogin.testLogin();
+       
+       if(allowAccess == true)
+       {
+            AdministratorMainDash adminDash = new AdministratorMainDash();
+            adminDash.setVisible(true);
+            this.setVisible(false);
+       }
+       else
+       {
+           JOptionPane.showMessageDialog(null, "You have provided incorrect login credentials! Please try again","Incorrect Login Credentials",JOptionPane.WARNING_MESSAGE);
+       }
+        
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed

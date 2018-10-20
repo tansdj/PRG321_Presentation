@@ -5,8 +5,14 @@
  */
 package Forms;
 
+import ProductManagement.Category;
+import ProductManagement.Model;
+import ProductManagement.Product;
+import ProductManagement.Stock;
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.ListModel;
 
 /**
  *
@@ -56,6 +62,12 @@ public class frmViewStock extends javax.swing.JFrame {
         txtDescription2 = new javax.swing.JTextField();
         lblQuantity = new javax.swing.JLabel();
         txtQuantity = new javax.swing.JTextField();
+        lblProductModel = new javax.swing.JLabel();
+        lblProductCost = new javax.swing.JLabel();
+        lblProductSale = new javax.swing.JLabel();
+        txtProductModel = new javax.swing.JTextField();
+        txtProductCost = new javax.swing.JTextField();
+        txtProductSale = new javax.swing.JTextField();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
 
@@ -281,6 +293,30 @@ public class frmViewStock extends javax.swing.JFrame {
         txtQuantity.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         txtQuantity.setEnabled(false);
 
+        lblProductModel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblProductModel.setForeground(new java.awt.Color(255, 255, 255));
+        lblProductModel.setText("Model:");
+
+        lblProductCost.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblProductCost.setForeground(new java.awt.Color(255, 255, 255));
+        lblProductCost.setText("Cost Price:");
+
+        lblProductSale.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblProductSale.setForeground(new java.awt.Color(255, 255, 255));
+        lblProductSale.setText("Sales Price:");
+
+        txtProductModel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtProductModel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtProductModel.setEnabled(false);
+
+        txtProductCost.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtProductCost.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtProductCost.setEnabled(false);
+
+        txtProductSale.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtProductSale.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtProductSale.setEnabled(false);
+
         javax.swing.GroupLayout pnlProductInfoLayout = new javax.swing.GroupLayout(pnlProductInfo);
         pnlProductInfo.setLayout(pnlProductInfoLayout);
         pnlProductInfoLayout.setHorizontalGroup(
@@ -293,6 +329,18 @@ public class frmViewStock extends javax.swing.JFrame {
                     .addGroup(pnlProductInfoLayout.createSequentialGroup()
                         .addGap(58, 58, 58)
                         .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(pnlProductInfoLayout.createSequentialGroup()
+                                .addComponent(lblProductSale)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtProductSale, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlProductInfoLayout.createSequentialGroup()
+                                .addComponent(lblProductCost)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtProductCost, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlProductInfoLayout.createSequentialGroup()
+                                .addComponent(lblProductModel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtProductModel, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlProductInfoLayout.createSequentialGroup()
                                 .addComponent(lblQuantity)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -319,30 +367,40 @@ public class frmViewStock extends javax.swing.JFrame {
             pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlProductInfoLayout.createSequentialGroup()
                 .addGap(47, 47, 47)
-                .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(lblProductInfo2)
+                .addGap(35, 35, 35)
+                .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblProductName2)
+                    .addComponent(txtProductName2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDescription2)
+                    .addComponent(txtDescription2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblStatus2)
+                    .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblCategory2)
+                    .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtProductModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblProductModel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblProductCost)
+                    .addComponent(txtProductCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblProductSale)
+                    .addComponent(txtProductSale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlProductInfoLayout.createSequentialGroup()
-                        .addComponent(lblProductInfo2)
-                        .addGap(35, 35, 35)
-                        .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblProductName2)
-                            .addComponent(txtProductName2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblDescription2)
-                            .addComponent(txtDescription2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblStatus2)
-                            .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCategory2)
-                            .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(lblQuantity)
-                        .addGap(4, 4, 4)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblQuantity))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         jRadioButton1.setBackground(new java.awt.Color(45, 45, 45));
@@ -377,7 +435,7 @@ public class frmViewStock extends javax.swing.JFrame {
                         .addComponent(jRadioButton1)
                         .addGap(27, 27, 27)
                         .addComponent(jRadioButton2)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(374, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -394,9 +452,9 @@ public class frmViewStock extends javax.swing.JFrame {
                             .addComponent(jRadioButton1)
                             .addComponent(jRadioButton2))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(pnlProductInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pnlProductInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(2059, Short.MAX_VALUE))
         );
 
@@ -431,6 +489,40 @@ public class frmViewStock extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
+     private void formWindowActivated(java.awt.event.WindowEvent evt) {                                     
+        // TODO add your handling code here:
+        Product product = new Product();
+        Stock stock = new Stock();
+        ArrayList<Stock> stockList;
+        stockList = stock.select();
+        
+        for (int i = 0; i < stockList.size(); i++) 
+        {
+            lbxProducts.setModel((ListModel<String>) stockList);
+            lbxProducts.setListData((String[]) stockList.toArray());
+        }
+    }  
+     
+     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        // TODO add your handling code here:
+        //To be added
+    }                                             
+
+    private void lbxProductsFocusGained(java.awt.event.FocusEvent evt) {                                        
+        // TODO add your handling code here:
+        Product selectedProduct = (Product) lbxProducts.getModel();
+        Model model = selectedProduct.getModel();
+        Category category = selectedProduct.getCategory();
+
+        txtCategory.setText(category.getDescription());
+        txtProductCost.setText(String.valueOf(selectedProduct.getCostPrice()));
+        txtProductSale.setText(String.valueOf(selectedProduct.getSalesPrice()));
+//        txtQuantity.setText(selectedProduct.);
+        txtStatus.setText(selectedProduct.getStatus());
+        txtProductName2.setText(selectedProduct.getName());
+        txtDescription2.setText(selectedProduct.getDescription());
+    }      
+    
     /**
      * @param args the command line arguments
      */
@@ -478,8 +570,11 @@ public class frmViewStock extends javax.swing.JFrame {
     private javax.swing.JLabel lblAddProduct;
     private javax.swing.JLabel lblCategory2;
     private javax.swing.JLabel lblDescription2;
+    private javax.swing.JLabel lblProductCost;
     private javax.swing.JLabel lblProductInfo2;
+    private javax.swing.JLabel lblProductModel;
     private javax.swing.JLabel lblProductName2;
+    private javax.swing.JLabel lblProductSale;
     private javax.swing.JLabel lblQuantity;
     private javax.swing.JLabel lblStatus2;
     private javax.swing.JList<String> lbxProducts;
@@ -489,7 +584,10 @@ public class frmViewStock extends javax.swing.JFrame {
     private javax.swing.JPanel pnlRegisterHeader1;
     private javax.swing.JTextField txtCategory;
     private javax.swing.JTextField txtDescription2;
+    private javax.swing.JTextField txtProductCost;
+    private javax.swing.JTextField txtProductModel;
     private javax.swing.JTextField txtProductName2;
+    private javax.swing.JTextField txtProductSale;
     private javax.swing.JTextField txtQuantity;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtStatus;

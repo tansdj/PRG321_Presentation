@@ -5,9 +5,18 @@
  */
 package Forms;
 
+import PersonManagement.Address;
+import PersonManagement.Contact;
+import PersonManagement.Department;
+import PersonManagement.Person;
+import PersonManagement.SecurityQuestions;
 import java.awt.Color;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import bc_stationary_bll.InputValidation;
+import com.mysql.jdbc.exceptions.DeadlockTimeoutRollbackMarker;
+import java.util.ArrayList;
 
 /**
  *
@@ -22,6 +31,12 @@ public class frmRegisterUser extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         this.getContentPane().setBackground(new Color(45,45,45));
+        ArrayList<Department> departments = new ArrayList<Department>();
+        Department dept = new Department();
+        departments = dept.select();
+        for(Department d:departments){
+            cmbDepartment.addItem(d.getName());
+        }
     }
 
     /**
@@ -47,6 +62,8 @@ public class frmRegisterUser extends javax.swing.JFrame {
         lblLastname = new javax.swing.JLabel();
         lblCampus = new javax.swing.JLabel();
         cmbCampus = new javax.swing.JComboBox<>();
+        lblIDNumber = new javax.swing.JLabel();
+        txtIDNumber = new javax.swing.JTextField();
         pnlAddressInfo = new javax.swing.JPanel();
         lblAddressInfo = new javax.swing.JLabel();
         lblLine1 = new javax.swing.JLabel();
@@ -195,6 +212,13 @@ public class frmRegisterUser extends javax.swing.JFrame {
         cmbCampus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         cmbCampus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pretoria", "Ekurhuleni", "Nelson Mandela Bay" }));
 
+        lblIDNumber.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblIDNumber.setForeground(new java.awt.Color(255, 255, 255));
+        lblIDNumber.setText("ID Number:");
+
+        txtIDNumber.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtIDNumber.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
         javax.swing.GroupLayout pnlPersonalInfoLayout = new javax.swing.GroupLayout(pnlPersonalInfo);
         pnlPersonalInfo.setLayout(pnlPersonalInfoLayout);
         pnlPersonalInfoLayout.setHorizontalGroup(
@@ -205,17 +229,25 @@ public class frmRegisterUser extends javax.swing.JFrame {
                         .addGap(58, 58, 58)
                         .addGroup(pnlPersonalInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlPersonalInfoLayout.createSequentialGroup()
-                                .addComponent(lblCampus)
-                                .addGap(76, 76, 76)
-                                .addComponent(cmbCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPersonalInfoLayout.createSequentialGroup()
-                                .addComponent(lblLastname)
-                                .addGap(63, 63, 63)
-                                .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPersonalInfoLayout.createSequentialGroup()
-                                .addComponent(lblFirstname)
-                                .addGap(65, 65, 65)
-                                .addComponent(txtFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(pnlPersonalInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblCampus)
+                                    .addComponent(lblIDNumber))
+                                .addGroup(pnlPersonalInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(pnlPersonalInfoLayout.createSequentialGroup()
+                                        .addGap(56, 56, 56)
+                                        .addComponent(cmbCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPersonalInfoLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtIDNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(pnlPersonalInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPersonalInfoLayout.createSequentialGroup()
+                                    .addComponent(lblLastname)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPersonalInfoLayout.createSequentialGroup()
+                                    .addComponent(lblFirstname)
+                                    .addGap(65, 65, 65)
+                                    .addComponent(txtFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(pnlPersonalInfoLayout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(lblPersonalInfo)))
@@ -230,15 +262,19 @@ public class frmRegisterUser extends javax.swing.JFrame {
                 .addGroup(pnlPersonalInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblFirstname)
                     .addComponent(txtFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlPersonalInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblLastname)
-                    .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
+                    .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblLastname))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlPersonalInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCampus)
-                    .addComponent(cmbCampus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
+                    .addComponent(txtIDNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblIDNumber))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlPersonalInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbCampus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCampus))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pnlAddressInfo.setBackground(new java.awt.Color(45, 45, 45));
@@ -498,7 +534,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         frmLogin login = new frmLogin();
         login.setVisible(true);
@@ -506,9 +542,75 @@ public class frmRegisterUser extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnNextRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextRegistrationActionPerformed
-        frmRegisterUserLogin userLogin = new frmRegisterUserLogin();
+        //Variable Declaration
+        String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail, userID, userDepart,addressPostal;
+        InputValidation inValidation = new InputValidation();
+        Person person = new Person();
+        try 
+        {
+            //Assigning values to variables
+            userFirstName = (String)txtFirstname.getText();
+            userLastName = (String)txtLastname.getText();
+            userCampus = (String)cmbCampus.getSelectedItem().toString();
+            addressLine1 = (String)txtLine1.getText();
+            addressLine2 = (String)txtLine2.getText();
+            addressCity = (String)txtCity.getText();
+            addressPostal = (String)txtPostalCode.getText();
+            contactCell =  (String)txtCellphoneNo.getText();
+            contactEmail = (String)txtEmail.getText();
+            userID = (String)txtIDNumber.getText();
+            userDepart = (String)cmbDepartment.getSelectedItem().toString();
+            
+            //Creating and populating arrays to pass values to validation class
+            String[][] nameVariables = {{"First Name",userFirstName},
+                {"Last Name",userLastName}};
+            
+            String[][] stringVariables = {{"Campus",userCampus},
+                {"City",addressCity},{"Department",userDepart}};
+            
+            String[][] stringWithIntVariables = {{"Address Line 1",addressLine1},
+                {"Address Line 2",addressLine2},};
+            
+            String[][] idString = {{"ID Number",userID}};
+            
+            Object[][] intVariables = {{"Postal Code",addressPostal}};
+            
+            Object[][] cellVariables = {{"Cellphone Number",contactCell}};
+            
+            Object[][] emailVariables = {{"Email Address",contactEmail}};
+            
+            //Passing arrays to validation class  
+            try 
+            {
+//                inValidation.validateName_Surname(nameVariables);
+//                inValidation.validateString(stringVariables);
+//                inValidation.validateStringInt(stringWithIntVariables);
+//                inValidation.validateInt(intVariables);
+//                inValidation.validateCell(cellVariables);
+//                inValidation.validateEmail(emailVariables);
+//                inValidation.validateID(idString);
+            }
+            catch (Exception e) 
+            {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+            finally
+            {
+                Address address = new Address(addressLine1,addressLine2,addressCity,addressPostal);
+                Contact contact = new Contact(contactCell,contactEmail);
+                Department department = new Department(userDepart);
+                
+                person = new Person(userFirstName,userLastName,userID,address,contact,department,userCampus);
+            }
+        } 
+        catch (Exception e) 
+        {
+            
+        }
+        
+        frmRegisterUserLogin userLogin = new frmRegisterUserLogin(person);
         userLogin.setVisible(true);
-        this.setVisible(false);           
+        this.setVisible(false);       
     }//GEN-LAST:event_btnNextRegistrationActionPerformed
 
     /**
@@ -562,6 +664,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
     private javax.swing.JLabel lblDepartmentInfo;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblFirstname;
+    private javax.swing.JLabel lblIDNumber;
     private javax.swing.JLabel lblLastname;
     private javax.swing.JLabel lblLine1;
     private javax.swing.JLabel lblLine2;
@@ -579,6 +682,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
     private javax.swing.JTextField txtCity;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFirstname;
+    private javax.swing.JTextField txtIDNumber;
     private javax.swing.JTextField txtLastname;
     private javax.swing.JTextField txtLine1;
     private javax.swing.JTextField txtLine2;

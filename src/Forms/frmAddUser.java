@@ -5,8 +5,19 @@
  */
 package Forms;
 
+import PersonManagement.Address;
+import PersonManagement.Contact;
+import PersonManagement.Person;
+import PersonManagement.SecurityQuestions;
+import PersonManagement.User;
+import PersonManagement.UserSecurityQuestions;
+import bc_stationary_bll.InputValidation;
 import java.awt.Color;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 
 /**
  *
@@ -17,10 +28,22 @@ public class frmAddUser extends javax.swing.JFrame {
     /**
      * Creates new form frmAddUser
      */
+    public ArrayList<User> userList;
     public frmAddUser() {
         initComponents();
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         this.getContentPane().setBackground(new Color(45,45,45));
+        
+        User user = new User();
+        userList = user.selectPending();
+        
+        DefaultListModel model = new DefaultListModel();
+        
+        for(User u: userList)
+        {
+            model.addElement(u);
+        }
+        lbxUsers.setModel(model);
     }
 
     /**
@@ -74,9 +97,11 @@ public class frmAddUser extends javax.swing.JFrame {
         lblPostalCode = new javax.swing.JLabel();
         txtPostalCode = new javax.swing.JTextField();
         lblFirstname1 = new javax.swing.JLabel();
-        txtFirstname1 = new javax.swing.JTextField();
-        txtLastname2 = new javax.swing.JTextField();
+        txtCellphoneNo = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
         lblLastname1 = new javax.swing.JLabel();
+        lblIDNumber = new javax.swing.JLabel();
+        txtIDNumber = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         lbxUsers = new javax.swing.JList<>();
 
@@ -160,7 +185,6 @@ public class frmAddUser extends javax.swing.JFrame {
         btnBack.setForeground(new java.awt.Color(255, 255, 255));
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1.png"))); // NOI18N
         btnBack.setText("Main Dash");
-        btnBack.setActionCommand("Main Dash");
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
@@ -419,13 +443,13 @@ public class frmAddUser extends javax.swing.JFrame {
         lblFirstname1.setForeground(new java.awt.Color(255, 255, 255));
         lblFirstname1.setText("Cellphone No:");
 
-        txtFirstname1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtFirstname1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtFirstname1.setEnabled(false);
+        txtCellphoneNo.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtCellphoneNo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtCellphoneNo.setEnabled(false);
 
-        txtLastname2.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtLastname2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtLastname2.setEnabled(false);
+        txtEmail.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtEmail.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtEmail.setEnabled(false);
 
         lblLastname1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblLastname1.setForeground(new java.awt.Color(255, 255, 255));
@@ -459,11 +483,11 @@ public class frmAddUser extends javax.swing.JFrame {
                                 .addGroup(pnlAddressInfoLayout.createSequentialGroup()
                                     .addComponent(lblLastname1)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtLastname2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAddressInfoLayout.createSequentialGroup()
                                     .addComponent(lblFirstname1)
                                     .addGap(65, 65, 65)
-                                    .addComponent(txtFirstname1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(txtCellphoneNo, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(pnlAddressInfoLayout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(lblAddressInfo)))
@@ -493,13 +517,21 @@ public class frmAddUser extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblFirstname1)
-                    .addComponent(txtFirstname1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCellphoneNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtLastname2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblLastname1))
                 .addContainerGap())
         );
+
+        lblIDNumber.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblIDNumber.setForeground(new java.awt.Color(255, 255, 255));
+        lblIDNumber.setText("ID Number:");
+
+        txtIDNumber.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtIDNumber.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtIDNumber.setEnabled(false);
 
         javax.swing.GroupLayout pnlUserInfoLayout = new javax.swing.GroupLayout(pnlUserInfo);
         pnlUserInfo.setLayout(pnlUserInfoLayout);
@@ -511,13 +543,17 @@ public class frmAddUser extends javax.swing.JFrame {
                         .addGap(28, 28, 28)
                         .addComponent(lblUserInfo))
                     .addGroup(pnlUserInfoLayout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addGroup(pnlUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnlUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlUserInfoLayout.createSequentialGroup()
                                 .addComponent(lblCampus)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(74, 74, 74)
                                 .addComponent(txtCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(pnlUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUserInfoLayout.createSequentialGroup()
+                                    .addComponent(lblIDNumber)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtIDNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUserInfoLayout.createSequentialGroup()
                                     .addComponent(lblLastname)
                                     .addGap(63, 63, 63)
@@ -548,15 +584,24 @@ public class frmAddUser extends javax.swing.JFrame {
                     .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCampus)
-                    .addComponent(txtCampus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblIDNumber)
+                    .addComponent(txtIDNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnlUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCampus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCampus))
                 .addGap(18, 18, 18)
                 .addComponent(pnlAddressInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
             .addComponent(pnlLoginInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         lbxUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxUsers.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lbxUsersValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(lbxUsers);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -600,11 +645,144 @@ public class frmAddUser extends javax.swing.JFrame {
     }//GEN-LAST:event_btnViewUserActionPerformed
 
     private void btnRejectUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRejectUserActionPerformed
-
+        //Variable Declaration
+        String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail;
+        int addressPostal;
+        User userToUpdate;
+        Person selectedPerson = selectedUser.getPerson();
+        InputValidation inValidation = new InputValidation();
+        Person person;
+        try 
+        {
+            //Assigning values to variables
+            userFirstName = (String)txtFirstname.getText();
+            userLastName = (String)txtLastname.getText();
+            userCampus = (String)txtCampus.getText();
+            addressLine1 = (String)txtLine1.getText();
+            addressLine2 = (String)txtLine2.getText();
+            addressCity = (String)txtCity.getText();
+            addressPostal = (Integer)Integer.parseInt(txtPostalCode.getText());
+            contactCell =  (String)txtCellphoneNo.getText();
+            contactEmail = (String)txtEmail.getText();
+            
+            //Creating and populating arrays to pass values to validation class
+            String[][] nameVariables = {{"First Name",userFirstName},
+                {"Last Name",userLastName}};
+            
+            String[][] stringVariables = {{"Campus",userCampus},
+                {"City",addressCity}};
+            
+            String[][] stringWithIntVariables = {{"Address Line 1",addressLine1},
+                {"Address Line 2",addressLine2},};
+            
+            Object[][] intVariables = {{"Postal Code",addressPostal}};
+            
+            Object[][] cellVariables = {{"Cellphone Number",contactCell}};
+            
+            Object[][] emailVariables = {{"Email Address",contactEmail}};
+            
+            //Passing arrays to validation class            
+            try 
+            {
+//                inValidation.validateName_Surname(nameVariables);
+//                inValidation.validateString(stringVariables);
+//                inValidation.validateStringInt(stringWithIntVariables);
+//                inValidation.validateInt(intVariables);
+//                inValidation.validateCell(cellVariables);
+//                inValidation.validateEmail(emailVariables);    
+            }
+            catch (Exception e) 
+            {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+            finally
+            {
+                userToUpdate = new User(selectedPerson, selectedUser.getUsername(), selectedUser.getPassword(), selectedUser.getAccessLevel(), "Discontinued");
+                if(userToUpdate.update()!=-1){
+                    JOptionPane.showMessageDialog(null, "User Rejected!","Success",JOptionPane.INFORMATION_MESSAGE);
+                    AdministratorMainDash mainDash = new AdministratorMainDash();
+                    mainDash.setVisible(true);
+                    this.setVisible(false);
+                }else{
+                    JOptionPane.showMessageDialog(null, "User could not be rejected!","Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } 
+        catch (Exception e) 
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }//GEN-LAST:event_btnRejectUserActionPerformed
 
     private void btnInsertUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertUserActionPerformed
-        // TODO add your handling code here:
+        //Variable Declaration
+        String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail;
+        int addressPostal;
+        User userToUpdate;
+        Person selectedPerson = selectedUser.getPerson();
+        InputValidation inValidation = new InputValidation();
+        Person person;
+        try 
+        {
+            //Assigning values to variables
+            userFirstName = (String)txtFirstname.getText();
+            userLastName = (String)txtLastname.getText();
+            userCampus = (String)txtCampus.getText();
+            addressLine1 = (String)txtLine1.getText();
+            addressLine2 = (String)txtLine2.getText();
+            addressCity = (String)txtCity.getText();
+            addressPostal = (Integer)Integer.parseInt(txtPostalCode.getText());
+            contactCell =  (String)txtCellphoneNo.getText();
+            contactEmail = (String)txtEmail.getText();
+            
+            //Creating and populating arrays to pass values to validation class
+            String[][] nameVariables = {{"First Name",userFirstName},
+                {"Last Name",userLastName}};
+            
+            String[][] stringVariables = {{"Campus",userCampus},
+                {"City",addressCity}};
+            
+            String[][] stringWithIntVariables = {{"Address Line 1",addressLine1},
+                {"Address Line 2",addressLine2},};
+            
+            Object[][] intVariables = {{"Postal Code",addressPostal}};
+            
+            Object[][] cellVariables = {{"Cellphone Number",contactCell}};
+            
+            Object[][] emailVariables = {{"Email Address",contactEmail}};
+            
+            //Passing arrays to validation class            
+            try 
+            {
+//                inValidation.validateName_Surname(nameVariables);
+//                inValidation.validateString(stringVariables);
+//                inValidation.validateStringInt(stringWithIntVariables);
+//                inValidation.validateInt(intVariables);
+//                inValidation.validateCell(cellVariables);
+//                inValidation.validateEmail(emailVariables);    
+            }
+            catch (Exception e) 
+            {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+            finally
+            {
+                userToUpdate = new User(selectedPerson, selectedUser.getUsername(), selectedUser.getPassword(), selectedUser.getAccessLevel(), "Active");
+               
+                if(userToUpdate.update()!=-1){
+                    JOptionPane.showMessageDialog(null, "User Confirmed!","Success",JOptionPane.INFORMATION_MESSAGE);
+                    AdministratorMainDash mainDash = new AdministratorMainDash();
+                    mainDash.setVisible(true);
+                    this.setVisible(false);
+                }else{
+                    JOptionPane.showMessageDialog(null, "User Not Added!","Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } 
+        catch (Exception e) 
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }//GEN-LAST:event_btnInsertUserActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -612,6 +790,37 @@ public class frmAddUser extends javax.swing.JFrame {
         mainDash.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
+
+    public User selectedUser;
+    private void lbxUsersValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxUsersValueChanged
+        int index= lbxUsers.getSelectedIndex();
+        selectedUser = userList.get(index);
+        Person person = selectedUser.getPerson();
+        Person per = person.selectSpecPerson();
+        Address address = per.getAddress();
+        Contact contact = per.getContact();
+        UserSecurityQuestions userSecQ = new UserSecurityQuestions(selectedUser,new SecurityQuestions(),"");
+        userSecQ = userSecQ.selectSpecUserQuestions();
+        
+
+        
+        txtFirstname.setText(person.getName());
+        txtLastname.setText(person.getSurname());
+        txtIDNumber.setText(person.getId());
+        txtCampus.setText(person.getCampus());
+        txtLine1.setText(address.getLine1());
+        txtLine2.setText(address.getLine2());
+        txtCity.setText(address.getCity());
+        txtPostalCode.setText(address.getPostalCode());
+        txtCellphoneNo.setText(contact.getCell());
+        txtEmail.setText(contact.getEmail());
+        txtUsername.setText(selectedUser.getUsername());
+        txtPassword.setText(selectedUser.getPassword());
+        txtAccessLevel.setText(selectedUser.getAccessLevel());
+        txtStatus.setText(selectedUser.getStatus());
+        txtSecurityQuestion.setText(userSecQ.getQuestion().getQuestion());
+        txtAnswer.setText(userSecQ.getAnswer());
+    }//GEN-LAST:event_lbxUsersValueChanged
 
     /**
      * @param args the command line arguments
@@ -663,6 +872,7 @@ public class frmAddUser extends javax.swing.JFrame {
     private javax.swing.JLabel lblCity;
     private javax.swing.JLabel lblFirstname;
     private javax.swing.JLabel lblFirstname1;
+    private javax.swing.JLabel lblIDNumber;
     private javax.swing.JLabel lblLastname;
     private javax.swing.JLabel lblLastname1;
     private javax.swing.JLabel lblLine1;
@@ -684,11 +894,12 @@ public class frmAddUser extends javax.swing.JFrame {
     private javax.swing.JTextField txtAccessLevel;
     private javax.swing.JTextField txtAnswer;
     private javax.swing.JTextField txtCampus;
+    private javax.swing.JTextField txtCellphoneNo;
     private javax.swing.JTextField txtCity;
+    private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFirstname;
-    private javax.swing.JTextField txtFirstname1;
+    private javax.swing.JTextField txtIDNumber;
     private javax.swing.JTextField txtLastname;
-    private javax.swing.JTextField txtLastname2;
     private javax.swing.JTextField txtLine1;
     private javax.swing.JTextField txtLine2;
     private javax.swing.JTextField txtPassword;

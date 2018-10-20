@@ -5,8 +5,19 @@
  */
 package Forms;
 
+import PersonManagement.Address;
+import PersonManagement.Contact;
+import PersonManagement.Department;
+import PersonManagement.Person;
+import PersonManagement.SecurityQuestions;
+import PersonManagement.User;
+import PersonManagement.UserSecurityQuestions;
+import bc_stationary_bll.InputValidation;
 import java.awt.Color;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,10 +28,28 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
     /**
      * Creates new form frmRegisterUserLogin
      */
+    
     public frmRegisterUserLogin() {
         initComponents();
+        
+        
+       // DefaultComboBoxModel model = new DefaultComboBoxModel(strQ);
+    }
+    
+    public Person person = null;
+    public frmRegisterUserLogin(Person p)
+    {
+        initComponents();
+        person = p;
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         this.getContentPane().setBackground(new Color(45,45,45));
+        
+        ArrayList<SecurityQuestions> questions = new ArrayList<SecurityQuestions>();
+        SecurityQuestions seqQuestion = new SecurityQuestions();
+        questions = seqQuestion.select();
+        for(SecurityQuestions s:questions){
+            cmbQuestion.addItem(s.getQuestion());
+        }
     }
 
     /**
@@ -55,10 +84,11 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         lblAccessLevel = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
         txtRePassword = new javax.swing.JTextField();
-        txtRePassword1 = new javax.swing.JTextField();
+        txtAccessLevel = new javax.swing.JTextField();
         btnRegister = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(45, 45, 45));
         setResizable(false);
 
         pnlRegisterHeader.setBackground(new java.awt.Color(255, 255, 0));
@@ -114,6 +144,11 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         btnRegisterUser.setContentAreaFilled(false);
         btnRegisterUser.setFocusPainted(false);
         btnRegisterUser.setIconTextGap(10);
+        btnRegisterUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterUserActionPerformed(evt);
+            }
+        });
 
         btnBack.setBackground(new java.awt.Color(40, 40, 40));
         btnBack.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
@@ -230,6 +265,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         llblRePassword.setText("Re-Enter Password:");
 
         txtStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtStatus.setText("Pending");
         txtStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         txtStatus.setEnabled(false);
 
@@ -244,10 +280,10 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         txtRePassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtRePassword.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        txtRePassword1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtRePassword1.setText("Standard");
-        txtRePassword1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtRePassword1.setEnabled(false);
+        txtAccessLevel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtAccessLevel.setText("Standard");
+        txtAccessLevel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtAccessLevel.setEnabled(false);
 
         javax.swing.GroupLayout pnlLoginInfoLayout = new javax.swing.GroupLayout(pnlLoginInfo);
         pnlLoginInfo.setLayout(pnlLoginInfoLayout);
@@ -273,7 +309,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
                                     .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
                                     .addComponent(txtStatus)
                                     .addComponent(txtRePassword, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtRePassword1))
+                                    .addComponent(txtAccessLevel))
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(pnlLoginInfoLayout.createSequentialGroup()
                         .addGap(28, 28, 28)
@@ -300,7 +336,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblAccessLevel)
-                    .addComponent(txtRePassword1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtAccessLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -365,10 +401,77 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        frmRegisterUserLogin userLogin = new frmRegisterUserLogin();
-        userLogin.setVisible(true);
+        String userName="", passWord="", passWordRe="", passWordTemp="", accessLevel="", status="", securityQuestion="", securityAwns="";
+        InputValidation inValidation = new InputValidation();
+        
+        Department department;
+        Contact contact;
+        Address address;           
+        User userToInsert;
+        UserSecurityQuestions userSec;
+        SecurityQuestions secQuestion;
+        try 
+        {
+            userName = txtUsername.getText();
+            passWord = txtPassword.getText();
+            passWordRe = txtRePassword.getText();
+            accessLevel = txtAccessLevel.getText();
+            status = txtStatus.getText();
+            securityQuestion = cmbQuestion.getSelectedItem().toString();
+            securityAwns = txtAnswer.getText();
+            
+            if (passWord == passWordRe) 
+            {
+                passWordTemp = passWord;
+                            
+                String[][] passVariables = {{"Password",passWordTemp}};
+                
+                //inValidation.validatePass(passVariables);
+            }
+            
+            String[][] stringArray = {{"Username",userName},{"Access Level",accessLevel},
+                {"Status",status},{"Security Question",securityQuestion},{"Security Awnser",securityAwns}};
+            
+            //inValidation.validateStringInt(stringArray);
+
+        } 
+        catch (Exception e) 
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        finally
+        {   
+            
+            
+            userToInsert = new User(person, userName, passWord, accessLevel, status);
+            secQuestion = new SecurityQuestions(securityQuestion);
+            userSec = new UserSecurityQuestions(userToInsert, secQuestion, securityAwns);
+            
+            boolean success = true;
+            if (person.insert()==-1) {
+                success = false;
+            }
+            if (userToInsert.insert()==-1) {
+                success = false;
+            }
+            if (userSec.insert()==-1) {
+                success = false;
+            }
+            if (success) {
+                System.out.println("Successful!");
+            }else{
+                System.out.println("Something went wrong..");
+            }
+        }
+        
+        frmLogin login = new frmLogin();
+        login.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnRegisterActionPerformed
+
+    private void btnRegisterUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterUserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegisterUserActionPerformed
 
     /**
      * @param args the command line arguments
@@ -425,10 +528,10 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
     private javax.swing.JPanel pnlRegisterHeader;
     private javax.swing.JPanel pnlRegisterHeader1;
     private javax.swing.JPanel pnlSecurityQuestion;
+    private javax.swing.JTextField txtAccessLevel;
     private javax.swing.JTextField txtAnswer;
     private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtRePassword;
-    private javax.swing.JTextField txtRePassword1;
     private javax.swing.JTextField txtStatus;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
