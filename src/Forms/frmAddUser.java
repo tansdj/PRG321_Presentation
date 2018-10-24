@@ -13,6 +13,7 @@ import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
 import bc_stationary_bll.InputValidation;
 import java.awt.Color;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -234,7 +235,6 @@ public class frmAddUser extends javax.swing.JFrame {
 
         txtFirstname.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtFirstname.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtFirstname.setEnabled(false);
 
         lblLastname.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblLastname.setForeground(new java.awt.Color(255, 255, 255));
@@ -242,7 +242,6 @@ public class frmAddUser extends javax.swing.JFrame {
 
         txtLastname.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtLastname.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtLastname.setEnabled(false);
 
         lblCampus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblCampus.setForeground(new java.awt.Color(255, 255, 255));
@@ -250,7 +249,6 @@ public class frmAddUser extends javax.swing.JFrame {
 
         txtCampus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtCampus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtCampus.setEnabled(false);
 
         pnlLoginInfo.setBackground(new java.awt.Color(45, 45, 45));
         pnlLoginInfo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -265,7 +263,6 @@ public class frmAddUser extends javax.swing.JFrame {
 
         txtUsername.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtUsername.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtUsername.setEnabled(false);
 
         lblPassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblPassword.setForeground(new java.awt.Color(255, 255, 255));
@@ -273,7 +270,6 @@ public class frmAddUser extends javax.swing.JFrame {
 
         txtPassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtPassword.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtPassword.setEnabled(false);
 
         lblAccessLevel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblAccessLevel.setForeground(new java.awt.Color(255, 255, 255));
@@ -289,11 +285,9 @@ public class frmAddUser extends javax.swing.JFrame {
 
         txtStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtStatus.setEnabled(false);
 
         txtAccessLevel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtAccessLevel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtAccessLevel.setEnabled(false);
 
         lblAnswer.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblAnswer.setForeground(new java.awt.Color(255, 255, 255));
@@ -301,11 +295,9 @@ public class frmAddUser extends javax.swing.JFrame {
 
         txtAnswer.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtAnswer.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtAnswer.setEnabled(false);
 
         txtSecurityQuestion.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtSecurityQuestion.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtSecurityQuestion.setEnabled(false);
 
         btnRejectUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnRejectUser.setText("Reject User");
@@ -332,37 +324,33 @@ public class frmAddUser extends javax.swing.JFrame {
         pnlLoginInfoLayout.setHorizontalGroup(
             pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlLoginInfoLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(lblLoginInfo)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(pnlLoginInfoLayout.createSequentialGroup()
-                .addGap(58, 58, 58)
                 .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlLoginInfoLayout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(lblLoginInfo))
+                    .addGroup(pnlLoginInfoLayout.createSequentialGroup()
+                        .addGap(58, 58, 58)
                         .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtSecurityQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblAccessLevel)
                             .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(pnlLoginInfoLayout.createSequentialGroup()
                                     .addComponent(lblPassword)
                                     .addGap(101, 101, 101))
-                                .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(79, Short.MAX_VALUE))
-                    .addGroup(pnlLoginInfoLayout.createSequentialGroup()
-                        .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtSecurityQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                            .addComponent(txtAnswer)
+                                .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lblSecurityQuestion)
                             .addComponent(lblAnswer)
                             .addComponent(txtAccessLevel, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblStatus)
                             .addComponent(lblUsername)
                             .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginInfoLayout.createSequentialGroup()
+                            .addComponent(txtAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlLoginInfoLayout.createSequentialGroup()
                                 .addComponent(btnInsertUser)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnRejectUser)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(49, 49, 49)
+                                .addComponent(btnRejectUser)))))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         pnlLoginInfoLayout.setVerticalGroup(
             pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -397,7 +385,7 @@ public class frmAddUser extends javax.swing.JFrame {
                 .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRejectUser)
                     .addComponent(btnInsertUser))
-                .addGap(40, 40, 40))
+                .addGap(43, 43, 43))
         );
 
         pnlAddressInfo.setBackground(new java.awt.Color(45, 45, 45));
@@ -413,11 +401,9 @@ public class frmAddUser extends javax.swing.JFrame {
 
         txtLine1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtLine1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtLine1.setEnabled(false);
 
         txtLine2.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtLine2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtLine2.setEnabled(false);
 
         lblLine2.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblLine2.setForeground(new java.awt.Color(255, 255, 255));
@@ -429,7 +415,6 @@ public class frmAddUser extends javax.swing.JFrame {
 
         txtCity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtCity.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtCity.setEnabled(false);
 
         lblPostalCode.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblPostalCode.setForeground(new java.awt.Color(255, 255, 255));
@@ -437,7 +422,6 @@ public class frmAddUser extends javax.swing.JFrame {
 
         txtPostalCode.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtPostalCode.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtPostalCode.setEnabled(false);
 
         lblFirstname1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblFirstname1.setForeground(new java.awt.Color(255, 255, 255));
@@ -445,11 +429,9 @@ public class frmAddUser extends javax.swing.JFrame {
 
         txtCellphoneNo.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtCellphoneNo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtCellphoneNo.setEnabled(false);
 
         txtEmail.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtEmail.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtEmail.setEnabled(false);
 
         lblLastname1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblLastname1.setForeground(new java.awt.Color(255, 255, 255));
@@ -479,15 +461,14 @@ public class frmAddUser extends javax.swing.JFrame {
                                     .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(txtPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(pnlAddressInfoLayout.createSequentialGroup()
-                                    .addComponent(lblLastname1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAddressInfoLayout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlAddressInfoLayout.createSequentialGroup()
+                                .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblFirstname1)
-                                    .addGap(65, 65, 65)
-                                    .addComponent(txtCellphoneNo, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(lblLastname1))
+                                .addGap(29, 29, 29)
+                                .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                                    .addComponent(txtCellphoneNo)))))
                     .addGroup(pnlAddressInfoLayout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(lblAddressInfo)))
@@ -531,7 +512,6 @@ public class frmAddUser extends javax.swing.JFrame {
 
         txtIDNumber.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtIDNumber.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtIDNumber.setEnabled(false);
 
         javax.swing.GroupLayout pnlUserInfoLayout = new javax.swing.GroupLayout(pnlUserInfo);
         pnlUserInfo.setLayout(pnlUserInfoLayout);
@@ -645,144 +625,69 @@ public class frmAddUser extends javax.swing.JFrame {
     }//GEN-LAST:event_btnViewUserActionPerformed
 
     private void btnRejectUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRejectUserActionPerformed
-        //Variable Declaration
-        String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail;
-        int addressPostal;
+         //Variable Declaration
+        String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail, addressPostal;
         User userToUpdate;
         Person selectedPerson = selectedUser.getPerson();
         InputValidation inValidation = new InputValidation();
         Person person;
-        try 
-        {
+        
             //Assigning values to variables
-            userFirstName = (String)txtFirstname.getText();
-            userLastName = (String)txtLastname.getText();
-            userCampus = (String)txtCampus.getText();
-            addressLine1 = (String)txtLine1.getText();
-            addressLine2 = (String)txtLine2.getText();
-            addressCity = (String)txtCity.getText();
-            addressPostal = (Integer)Integer.parseInt(txtPostalCode.getText());
-            contactCell =  (String)txtCellphoneNo.getText();
-            contactEmail = (String)txtEmail.getText();
+            userFirstName = txtFirstname.getText();
+            userLastName = txtLastname.getText();
+            userCampus = txtCampus.getText();
+            addressLine1 = txtLine1.getText();
+            addressLine2 = txtLine2.getText();
+            addressCity = txtCity.getText();
+            addressPostal = txtPostalCode.getText();
+            contactCell =  txtCellphoneNo.getText();
+            contactEmail = txtEmail.getText();
             
-            //Creating and populating arrays to pass values to validation class
-            String[][] nameVariables = {{"First Name",userFirstName},
-                {"Last Name",userLastName}};
-            
-            String[][] stringVariables = {{"Campus",userCampus},
-                {"City",addressCity}};
-            
-            String[][] stringWithIntVariables = {{"Address Line 1",addressLine1},
-                {"Address Line 2",addressLine2},};
-            
-            Object[][] intVariables = {{"Postal Code",addressPostal}};
-            
-            Object[][] cellVariables = {{"Cellphone Number",contactCell}};
-            
-            Object[][] emailVariables = {{"Email Address",contactEmail}};
-            
-            //Passing arrays to validation class            
-            try 
-            {
-//                inValidation.validateName_Surname(nameVariables);
-//                inValidation.validateString(stringVariables);
-//                inValidation.validateStringInt(stringWithIntVariables);
-//                inValidation.validateInt(intVariables);
-//                inValidation.validateCell(cellVariables);
-//                inValidation.validateEmail(emailVariables);    
+            userToUpdate = new User(selectedPerson, selectedUser.getUsername(), selectedUser.getPassword(), selectedUser.getAccessLevel(), "Disabled");
+               
+            if(userToUpdate.update()!=-1){
+                JOptionPane.showMessageDialog(null, "User was successfully inserted!","Successful Insert",JOptionPane.INFORMATION_MESSAGE);
+                AdministratorMainDash mainDash = new AdministratorMainDash();
+                mainDash.setVisible(true);
+                this.setVisible(false);
             }
-            catch (Exception e) 
+            else
             {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
-            finally
-            {
-                userToUpdate = new User(selectedPerson, selectedUser.getUsername(), selectedUser.getPassword(), selectedUser.getAccessLevel(), "Discontinued");
-                if(userToUpdate.update()!=-1){
-                    JOptionPane.showMessageDialog(null, "User Rejected!","Success",JOptionPane.INFORMATION_MESSAGE);
-                    AdministratorMainDash mainDash = new AdministratorMainDash();
-                    mainDash.setVisible(true);
-                    this.setVisible(false);
-                }else{
-                    JOptionPane.showMessageDialog(null, "User could not be rejected!","Error",JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        } 
-        catch (Exception e) 
-        {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
+                JOptionPane.showMessageDialog(null, "Error occured during this process!","Unsuccessful Insertation",JOptionPane.ERROR_MESSAGE);
+            }     
     }//GEN-LAST:event_btnRejectUserActionPerformed
 
     private void btnInsertUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertUserActionPerformed
         //Variable Declaration
-        String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail;
-        int addressPostal;
+        String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail, addressPostal;
         User userToUpdate;
         Person selectedPerson = selectedUser.getPerson();
         InputValidation inValidation = new InputValidation();
         Person person;
-        try 
-        {
+        
             //Assigning values to variables
-            userFirstName = (String)txtFirstname.getText();
-            userLastName = (String)txtLastname.getText();
-            userCampus = (String)txtCampus.getText();
-            addressLine1 = (String)txtLine1.getText();
-            addressLine2 = (String)txtLine2.getText();
-            addressCity = (String)txtCity.getText();
-            addressPostal = (Integer)Integer.parseInt(txtPostalCode.getText());
-            contactCell =  (String)txtCellphoneNo.getText();
-            contactEmail = (String)txtEmail.getText();
+            userFirstName = txtFirstname.getText();
+            userLastName = txtLastname.getText();
+            userCampus = txtCampus.getText();
+            addressLine1 = txtLine1.getText();
+            addressLine2 = txtLine2.getText();
+            addressCity = txtCity.getText();
+            addressPostal = txtPostalCode.getText();
+            contactCell =  txtCellphoneNo.getText();
+            contactEmail = txtEmail.getText();
             
-            //Creating and populating arrays to pass values to validation class
-            String[][] nameVariables = {{"First Name",userFirstName},
-                {"Last Name",userLastName}};
-            
-            String[][] stringVariables = {{"Campus",userCampus},
-                {"City",addressCity}};
-            
-            String[][] stringWithIntVariables = {{"Address Line 1",addressLine1},
-                {"Address Line 2",addressLine2},};
-            
-            Object[][] intVariables = {{"Postal Code",addressPostal}};
-            
-            Object[][] cellVariables = {{"Cellphone Number",contactCell}};
-            
-            Object[][] emailVariables = {{"Email Address",contactEmail}};
-            
-            //Passing arrays to validation class            
-            try 
-            {
-//                inValidation.validateName_Surname(nameVariables);
-//                inValidation.validateString(stringVariables);
-//                inValidation.validateStringInt(stringWithIntVariables);
-//                inValidation.validateInt(intVariables);
-//                inValidation.validateCell(cellVariables);
-//                inValidation.validateEmail(emailVariables);    
-            }
-            catch (Exception e) 
-            {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
-            finally
-            {
-                userToUpdate = new User(selectedPerson, selectedUser.getUsername(), selectedUser.getPassword(), selectedUser.getAccessLevel(), "Active");
+            userToUpdate = new User(selectedPerson, selectedUser.getUsername(), selectedUser.getPassword(), selectedUser.getAccessLevel(), "Active");
                
-                if(userToUpdate.update()!=-1){
-                    JOptionPane.showMessageDialog(null, "User Confirmed!","Success",JOptionPane.INFORMATION_MESSAGE);
-                    AdministratorMainDash mainDash = new AdministratorMainDash();
-                    mainDash.setVisible(true);
-                    this.setVisible(false);
-                }else{
-                    JOptionPane.showMessageDialog(null, "User Not Added!","Error",JOptionPane.ERROR_MESSAGE);
-                }
+            if(userToUpdate.update()!=-1){
+                JOptionPane.showMessageDialog(null, "User was successfully inserted!","Successful Insert",JOptionPane.INFORMATION_MESSAGE);
+                AdministratorMainDash mainDash = new AdministratorMainDash();
+                mainDash.setVisible(true);
+                this.setVisible(false);
             }
-        } 
-        catch (Exception e) 
-        {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Error occured during this process!","Unsuccessful Insertation",JOptionPane.ERROR_MESSAGE);
+            }     
     }//GEN-LAST:event_btnInsertUserActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -796,30 +701,71 @@ public class frmAddUser extends javax.swing.JFrame {
         int index= lbxUsers.getSelectedIndex();
         selectedUser = userList.get(index);
         Person person = selectedUser.getPerson();
-        Person per = person.selectSpecPerson();
-        Address address = per.getAddress();
-        Contact contact = per.getContact();
-        UserSecurityQuestions userSecQ = new UserSecurityQuestions(selectedUser,new SecurityQuestions(),"");
-        userSecQ = userSecQ.selectSpecUserQuestions();
         
-
+        Address address = null;
+        Contact contact = null;
+        UserSecurityQuestions userSecQ = new UserSecurityQuestions(selectedUser,new SecurityQuestions(),"");
+        try
+        {
+            Person per = person.selectSpecPerson();
+            address = per.getAddress();
+            contact = per.getContact();
+            
+            userSecQ = userSecQ.selectSpecUserQuestions();
+            System.out.println(per+"*");
+        }
+        catch(SQLException se)
+        {
+        }
         
         txtFirstname.setText(person.getName());
+        txtFirstname.setEditable(false);
+        
         txtLastname.setText(person.getSurname());
+        txtLastname.setEditable(false);
+        
         txtIDNumber.setText(person.getId());
+        txtIDNumber.setEditable(false);
+        
         txtCampus.setText(person.getCampus());
+        txtCampus.setEditable(false);
+        
         txtLine1.setText(address.getLine1());
+        txtLine1.setEditable(false);
+        
         txtLine2.setText(address.getLine2());
+        txtLine2.setEditable(false);
+        
         txtCity.setText(address.getCity());
+        txtCity.setEditable(false);
+        
         txtPostalCode.setText(address.getPostalCode());
+        txtPostalCode.setEditable(false);
+        
         txtCellphoneNo.setText(contact.getCell());
+        txtCellphoneNo.setEditable(false);
+        
         txtEmail.setText(contact.getEmail());
+        txtEmail.setEditable(false);
+        
         txtUsername.setText(selectedUser.getUsername());
+        txtFirstname.setEditable(false);
+        
         txtPassword.setText(selectedUser.getPassword());
+        txtPassword.setEditable(false);
+        
         txtAccessLevel.setText(selectedUser.getAccessLevel());
+        txtAccessLevel.setEditable(false);
+        
         txtStatus.setText(selectedUser.getStatus());
+        txtStatus.setEditable(false);
+        
         txtSecurityQuestion.setText(userSecQ.getQuestion().getQuestion());
+        txtSecurityQuestion.setEditable(false);
+        
         txtAnswer.setText(userSecQ.getAnswer());
+        txtAnswer.setEditable(false);
+        
     }//GEN-LAST:event_lbxUsersValueChanged
 
     /**

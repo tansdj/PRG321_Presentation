@@ -374,7 +374,7 @@
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="llblRePassword" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblRePassword" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="lblAccessLevel" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="lblPassword" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="lblStatus" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -416,7 +416,7 @@
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="llblRePassword" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblRePassword" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtRePassword" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -492,7 +492,7 @@
             <Property name="text" type="java.lang.String" value="Password:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="llblRePassword">
+        <Component class="javax.swing.JLabel" name="lblRePassword">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="16" style="0"/>
@@ -514,7 +514,6 @@
                 <BevelBorder/>
               </Border>
             </Property>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblAccessLevel">
@@ -562,7 +561,6 @@
                 <BevelBorder/>
               </Border>
             </Property>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>

@@ -5,9 +5,15 @@
  */
 package Forms;
 
+import PersonManagement.Person;
+import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
+import PersonManagement.UserSecurityQuestions;
+import bc_stationary_bll.Validation;
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.event.ChangeEvent;
 
 /**
  *
@@ -70,17 +76,17 @@ public class frmLogin extends javax.swing.JFrame {
         pnlLogin.add(lblBCLogo);
         lblBCLogo.setBounds(40, 10, 220, 110);
 
-        lblStationary1.setFont(new java.awt.Font("Ink Free", 1, 44)); // NOI18N
+        lblStationary1.setFont(new java.awt.Font("Eraser", 1, 44)); // NOI18N
         lblStationary1.setForeground(new java.awt.Color(255, 255, 255));
         lblStationary1.setText("Stationary Management");
         pnlLogin.add(lblStationary1);
-        lblStationary1.setBounds(150, 40, 570, 60);
+        lblStationary1.setBounds(150, 30, 570, 60);
 
-        lblSystem.setFont(new java.awt.Font("Ink Free", 1, 44)); // NOI18N
+        lblSystem.setFont(new java.awt.Font("Eraser", 1, 44)); // NOI18N
         lblSystem.setForeground(new java.awt.Color(255, 255, 255));
         lblSystem.setText("System");
         pnlLogin.add(lblSystem);
-        lblSystem.setBounds(170, 90, 260, 40);
+        lblSystem.setBounds(170, 80, 260, 40);
 
         pnlLoginDetails.setBackground(new java.awt.Color(0, 0, 0));
         pnlLoginDetails.setLayout(null);
@@ -157,9 +163,9 @@ public class frmLogin extends javax.swing.JFrame {
         cbxForgotPassword.setBorder(null);
         cbxForgotPassword.setFocusPainted(false);
         cbxForgotPassword.setOpaque(false);
-        cbxForgotPassword.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cbxForgotPasswordKeyPressed(evt);
+        cbxForgotPassword.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                cbxForgotPasswordStateChanged(evt);
             }
         });
         pnlLoginDetails.add(cbxForgotPassword);
@@ -226,10 +232,6 @@ public class frmLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cbxForgotPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbxForgotPasswordKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbxForgotPasswordKeyPressed
-
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
        
        String userName, passWord;
@@ -241,7 +243,7 @@ public class frmLogin extends javax.swing.JFrame {
        
        User userLogin = new User(userName,passWord);
        allowAccess = userLogin.testLogin();
-       
+
        if(allowAccess == true)
        {
             AdministratorMainDash adminDash = new AdministratorMainDash();
@@ -250,7 +252,10 @@ public class frmLogin extends javax.swing.JFrame {
        }
        else
        {
-           JOptionPane.showMessageDialog(null, "You have provided incorrect login credentials! Please try again","Incorrect Login Credentials",JOptionPane.WARNING_MESSAGE);
+           JOptionPane.showMessageDialog(null, "You have provided incorrect login credentials! Please try again!","Incorrect Login Credentials",JOptionPane.WARNING_MESSAGE);
+           txtUsername.setText("");
+           txtPassword.setText("");
+           txtUsername.grabFocus();
        }
         
     }//GEN-LAST:event_btnLoginActionPerformed
@@ -260,6 +265,91 @@ public class frmLogin extends javax.swing.JFrame {
         register.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnRegisterActionPerformed
+
+    private void cbxForgotPasswordStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cbxForgotPasswordStateChanged
+        Validation validation = new Validation();
+        if(cbxForgotPassword.isSelected())
+        {
+            String username = txtUsername.getText();
+            User user = new User(username,"");      
+            boolean existingUser = user.testForExistingUser();
+            
+            if(username.equals("") || (!existingUser))
+            {
+                JOptionPane.showMessageDialog(null, "Please provide the correct username!","Incorrect Username",JOptionPane.WARNING_MESSAGE);
+                txtUsername.grabFocus();
+                txtUsername.setText("");
+            }
+            else
+            {  
+                UserSecurityQuestions uQuestion = new UserSecurityQuestions(user);
+                UserSecurityQuestions specUQuestion = uQuestion.selectSpecUserQuestions();
+                SecurityQuestions questions = specUQuestion.getQuestion();
+                String question = questions.getQuestion();
+                String answer = specUQuestion.getAnswer();
+                
+                String securityAnswerInput = JOptionPane.showInputDialog(null,question,"Security Question",JOptionPane.QUESTION_MESSAGE);
+                if(securityAnswerInput.equals(answer))
+                {
+                    String newPassword = JOptionPane.showInputDialog(null,"Enter New Password:","Reset Password",JOptionPane.QUESTION_MESSAGE);
+                    String newRePassword = JOptionPane.showInputDialog(null,"Re-Enter New Password:","Reset Password",JOptionPane.QUESTION_MESSAGE);
+                
+                    if((!"".equals(newPassword))&&(!"".equals(newRePassword)))
+                    {
+                        if(newPassword.equals(newRePassword))
+                        {
+                            if(validation.testLength(newPassword, 8, 15))
+                            {
+                                ArrayList<User> allUsers = user.select();
+                                User currentUser = null;
+                                
+                                for(User u : allUsers)
+                                {
+                                    if(u.getUsername().equals(username))
+                                    {
+                                        currentUser = u;
+                                    }
+                                }
+                                User userToUpdate = new User(currentUser.getUsername(), newPassword,currentUser.getAccessLevel(),currentUser.getStatus());
+                                boolean success = true;
+                                if (userToUpdate.update() == -1) 
+                                {
+                                    success = false;
+                                }
+                                
+                                if(success)
+                                {
+                                    JOptionPane.showMessageDialog(null, "The password reset was a success! Please login with new password.","Successful Password Reset",JOptionPane.INFORMATION_MESSAGE);
+                                }
+                                else
+                                {
+                                    JOptionPane.showMessageDialog(null, "A problem occured during this process!","Unsuccessful Password Reset",JOptionPane.WARNING_MESSAGE);
+                                }
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null, "The password must be at least 8 characters long and no greater than 15 characters","Reset Password Process Failed",JOptionPane.WARNING_MESSAGE);
+                            }
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null, "There was a password mismatch!","Reset Password Process Failed",JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "The password may not be empty!","Reset Password Process Failed",JOptionPane.WARNING_MESSAGE);
+                    }
+                }  
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "That answer is incorrect!","Incorrect Answer",JOptionPane.WARNING_MESSAGE);
+                }
+            }
+            
+        }
+       
+    }//GEN-LAST:event_cbxForgotPasswordStateChanged
 
     /**
      * @param args the command line arguments

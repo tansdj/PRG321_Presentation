@@ -27,6 +27,17 @@ public class frmViewStock extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         this.getContentPane().setBackground(new Color(45,45,45));
+        
+        Product product = new Product();
+        Stock stock = new Stock();
+        ArrayList<Stock> stockList;
+        stockList = stock.select();
+        
+        for (int i = 0; i < stockList.size(); i++) 
+        {
+            lbxProducts.setModel((ListModel<String>) stockList);
+            lbxProducts.setListData((String[]) stockList.toArray());
+        }
     }
 
     /**
@@ -488,21 +499,7 @@ public class frmViewStock extends javax.swing.JFrame {
         mainDash.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
-
-     private void formWindowActivated(java.awt.event.WindowEvent evt) {                                     
-        // TODO add your handling code here:
-        Product product = new Product();
-        Stock stock = new Stock();
-        ArrayList<Stock> stockList;
-        stockList = stock.select();
-        
-        for (int i = 0; i < stockList.size(); i++) 
-        {
-            lbxProducts.setModel((ListModel<String>) stockList);
-            lbxProducts.setListData((String[]) stockList.toArray());
-        }
-    }  
-     
+   
      private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
         //To be added

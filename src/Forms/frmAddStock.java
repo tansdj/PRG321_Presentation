@@ -28,17 +28,15 @@ public class frmAddStock extends javax.swing.JFrame {
     /**
      * Creates new form frmAddStock
      */
-    ArrayList<Category> allCategories;
     public frmAddStock() {
         initComponents();
          this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
          this.getContentPane().setBackground(new Color(45,45,45));
-         Category category = new Category();
-         allCategories = category.select();
-         for(Category c: allCategories)
-         {
-             cmbCategory.addItem(c.getDescription());
-         }
+         Product product = new Product();
+         ArrayList<Product> products = product.select();
+         for(Product p:products){
+            cmbProductSearch.addItem(p.getName()+" "+ p.getDescription());
+        }
     }
 
     /**
@@ -72,7 +70,6 @@ public class frmAddStock extends javax.swing.JFrame {
         txtDescription = new javax.swing.JTextField();
         lblDescription = new javax.swing.JLabel();
         lblCategory = new javax.swing.JLabel();
-        cmbCategory = new javax.swing.JComboBox<>();
         lblStatus = new javax.swing.JLabel();
         lblProductModel = new javax.swing.JLabel();
         txtProductModel = new javax.swing.JTextField();
@@ -81,6 +78,7 @@ public class frmAddStock extends javax.swing.JFrame {
         lblProductSale = new javax.swing.JLabel();
         txtProductSale = new javax.swing.JTextField();
         txtStatus = new javax.swing.JTextField();
+        txtCategory = new javax.swing.JTextField();
         cmbProductSearch = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -329,8 +327,6 @@ public class frmAddStock extends javax.swing.JFrame {
         lblCategory.setForeground(new java.awt.Color(255, 255, 255));
         lblCategory.setText("Category:");
 
-        cmbCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-
         lblStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblStatus.setForeground(new java.awt.Color(255, 255, 255));
         lblStatus.setText("Status:");
@@ -359,7 +355,9 @@ public class frmAddStock extends javax.swing.JFrame {
         txtStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtStatus.setText("Available");
         txtStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtStatus.setEnabled(false);
+
+        txtCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtCategory.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         javax.swing.GroupLayout pnlProjectInfoLayout = new javax.swing.GroupLayout(pnlProjectInfo);
         pnlProjectInfo.setLayout(pnlProjectInfoLayout);
@@ -385,10 +383,10 @@ public class frmAddStock extends javax.swing.JFrame {
                                 .addComponent(lblProductName)
                                 .addGap(65, 65, 65)
                                 .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlProjectInfoLayout.createSequentialGroup()
+                            .addGroup(pnlProjectInfoLayout.createSequentialGroup()
                                 .addComponent(lblCategory)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cmbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlProjectInfoLayout.createSequentialGroup()
                                 .addComponent(lblStatus)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -423,7 +421,7 @@ public class frmAddStock extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCategory)
-                    .addComponent(cmbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtProductModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -451,15 +449,15 @@ public class frmAddStock extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(99, 99, 99)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(lblSearchProducts)
                                 .addGap(65, 65, 65)
-                                .addComponent(cmbProductSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(cmbProductSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(28, 28, 28)
-                                .addComponent(pnlProjectInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(54, 54, 54)
-                                .addComponent(pnlInStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(pnlProjectInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(54, 54, 54)
+                        .addComponent(pnlInStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(600, 600, 600)
                         .addComponent(btnInsertStock)))
@@ -519,40 +517,43 @@ public class frmAddStock extends javax.swing.JFrame {
         Category category;
         Model model;
         //Assigning variables values            
-        try 
-        {
-            pName =  (String)txtProductName.getText();
-            pDescription = (String)txtDescription.getText();
-            pStatus = (String)txtStatus.getText();
-            pCategory = (String)cmbCategory.getSelectedItem().toString();
-            pQuantity = (Integer)numQuantity.getValue();  
-            pModel = txtProductModel.getText();
-            costPrice = (Double)Double.parseDouble(txtProductCost.getText());
-            salePrice = (Double)Double.parseDouble(txtProductSale.getText());
+            if((Integer)numQuantity.getValue() > 0)
+            {
+                pName =  txtProductName.getText();
+                pDescription = txtDescription.getText();
+                pStatus = txtStatus.getText();
+                pCategory = txtCategory.getText();
+                pQuantity = (Integer)numQuantity.getValue();  
+                pModel = txtProductModel.getText();
+                costPrice = (Double)Double.parseDouble(txtProductCost.getText());
+                salePrice = (Double)Double.parseDouble(txtProductSale.getText());
+                lblQuantity.setForeground(Color.white);
+                
+                category = new Category(pCategory);
+                model = new Model(pModel);
+                product = new Product(pName, pDescription, category, pStatus, model, costPrice, salePrice, d); 
+                stockToUpdate = new Stock(product, pQuantity);
+                
+                if(stockToUpdate.update() != -1)
+                {
+                    JOptionPane.showMessageDialog(null, "The stock was successfully updated","Update Successful",JOptionPane.INFORMATION_MESSAGE);
+                                        
+                    AdministratorMainDash mainDash = new AdministratorMainDash();
+                    mainDash.setVisible(true);
+                    this.setVisible(false);
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Something went wrong during the update process. Stock Update was unsuccessful!","Registration Failed",JOptionPane.WARNING_MESSAGE);
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Quantity cannot be 0!","Incorrect Quantity",JOptionPane.WARNING_MESSAGE);
+                lblQuantity.setForeground(Color.red);
+            }
             
-            
-            Object[][] doubleArray = {{"Cost Price",costPrice},{"Sale Price",salePrice}};
-            Object[][] intArray = {{"Quantity",pQuantity}};
-            String[][] stringArray = {{"Product Name",pName},{"Description",pDescription},{"Status",pStatus},{"Category",pCategory},{"Model",pModel}};
-            
-            inValidation.validateDouble(doubleArray);
-            inValidation.validateInt(intArray);
-            inValidation.validateStringInt(stringArray);
-            
-            category = new Category(pCategory);
-            model = new Model(pModel);
-            product = new Product(pName, pDescription, category, pStatus, model, costPrice, salePrice, d); 
-            stockToUpdate = new Stock(product, pQuantity);
-
-            stockToUpdate.update();
-            
-        } catch (Exception e) 
-        {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-        frmViewStock view = new frmViewStock();
-        view.setVisible(true);
-        this.setVisible(false);
+        
     }//GEN-LAST:event_btnInsertStockActionPerformed
 
     private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
@@ -609,7 +610,6 @@ public class frmAddStock extends javax.swing.JFrame {
     private javax.swing.JButton btnInsertStock;
     private javax.swing.JButton btnUpdateStock;
     private javax.swing.JButton btnViewStock;
-    private javax.swing.JComboBox<String> cmbCategory;
     private javax.swing.JComboBox<String> cmbProductSearch;
     private javax.swing.JLabel lblAddStock;
     private javax.swing.JLabel lblCategory;
@@ -629,6 +629,7 @@ public class frmAddStock extends javax.swing.JFrame {
     private javax.swing.JPanel pnlProjectInfo;
     private javax.swing.JPanel pnlRegisterHeader;
     private javax.swing.JPanel pnlRegisterHeader1;
+    private javax.swing.JTextField txtCategory;
     private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtProductCost;
     private javax.swing.JTextField txtProductModel;

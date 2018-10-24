@@ -13,9 +13,13 @@ import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
 import bc_stationary_bll.SoundEx;
 import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 import javax.swing.ListModel;
 
 /**
@@ -36,12 +40,75 @@ public class frmViewUsers extends javax.swing.JFrame {
         userList = user.select();
         
         DefaultListModel model = new DefaultListModel();
-        
+        // Populate Listbox
         for(User u: userList)
         {
             model.addElement(u);
         }
         lbxUsers.setModel(model);
+        
+        txtSearch.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e)
+            {
+                User user = new User();
+         ArrayList<User> usersThatFitCriteria = new ArrayList<User>();
+         String searchCode = "", userCode = "", searchText = txtSearch.getText();
+            if (searchText == "")
+            {
+                userList = user.select();
+                DefaultListModel model = new DefaultListModel();
+        
+                 for(User u: userList)
+                    {
+                     model.addElement(u);
+                    }
+                lbxUsers.setModel(model);
+            }
+            else
+            {
+                int numSearchChars; // amount of characters that are typed into the search box.
+
+                searchCode = SoundEx.Soundex(searchText);
+
+                numSearchChars = searchText.length();
+                for(User u : userList)
+                {
+                    if (u.getPerson().getName().length() >= numSearchChars)
+                    {
+
+                        userCode = SoundEx.Soundex(u.getPerson().getName().substring(0, numSearchChars));
+
+
+                        if ((userCode == searchCode))
+                        {
+                            
+                            Person p = u.getPerson();
+                            try
+                            {
+                                 p = p.selectSpecPerson();
+                            u.setPerson(p);
+                            usersThatFitCriteria.add(u);
+                            }
+                            catch(SQLException se)
+                            {
+                            
+                            }
+                           
+                        }
+
+                    }                   
+                }
+                DefaultListModel model = new DefaultListModel();
+        
+                lbxUsers.setModel(model);
+                for(User u: usersThatFitCriteria)
+                {
+                    model.addElement(u);
+                }
+                lbxUsers.setModel(model);
+            }
+            }
+        });
     }
 
     /**
@@ -232,11 +299,12 @@ public class frmViewUsers extends javax.swing.JFrame {
         txtSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtSearch.setText("Search...");
         txtSearch.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtSearch.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+        txtSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtSearchFocusGained(evt);
             }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                txtSearchInputMethodTextChanged(evt);
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtSearchFocusLost(evt);
             }
         });
 
@@ -261,7 +329,6 @@ public class frmViewUsers extends javax.swing.JFrame {
 
         txtFirstname.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtFirstname.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtFirstname.setEnabled(false);
 
         lblLastname.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblLastname.setForeground(new java.awt.Color(255, 255, 255));
@@ -269,7 +336,6 @@ public class frmViewUsers extends javax.swing.JFrame {
 
         txtLastname.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtLastname.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtLastname.setEnabled(false);
 
         lblCampus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblCampus.setForeground(new java.awt.Color(255, 255, 255));
@@ -277,7 +343,6 @@ public class frmViewUsers extends javax.swing.JFrame {
 
         txtCampus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtCampus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtCampus.setEnabled(false);
 
         pnlLoginInfo.setBackground(new java.awt.Color(45, 45, 45));
         pnlLoginInfo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -292,7 +357,6 @@ public class frmViewUsers extends javax.swing.JFrame {
 
         txtUsername.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtUsername.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtUsername.setEnabled(false);
 
         lblPassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblPassword.setForeground(new java.awt.Color(255, 255, 255));
@@ -300,7 +364,6 @@ public class frmViewUsers extends javax.swing.JFrame {
 
         txtPassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtPassword.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtPassword.setEnabled(false);
 
         lblAccessLevel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblAccessLevel.setForeground(new java.awt.Color(255, 255, 255));
@@ -316,11 +379,9 @@ public class frmViewUsers extends javax.swing.JFrame {
 
         txtStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtStatus.setEnabled(false);
 
         txtAccessLevel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtAccessLevel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtAccessLevel.setEnabled(false);
 
         lblAnswer.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblAnswer.setForeground(new java.awt.Color(255, 255, 255));
@@ -328,11 +389,9 @@ public class frmViewUsers extends javax.swing.JFrame {
 
         txtAnswer.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtAnswer.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtAnswer.setEnabled(false);
 
         txtSecurityQuestion.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtSecurityQuestion.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtSecurityQuestion.setEnabled(false);
 
         javax.swing.GroupLayout pnlLoginInfoLayout = new javax.swing.GroupLayout(pnlLoginInfo);
         pnlLoginInfo.setLayout(pnlLoginInfoLayout);
@@ -345,6 +404,7 @@ public class frmViewUsers extends javax.swing.JFrame {
             .addGroup(pnlLoginInfoLayout.createSequentialGroup()
                 .addGap(58, 58, 58)
                 .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtSecurityQuestion)
                     .addGroup(pnlLoginInfoLayout.createSequentialGroup()
                         .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblAccessLevel)
@@ -354,18 +414,17 @@ public class frmViewUsers extends javax.swing.JFrame {
                                     .addComponent(lblPassword)
                                     .addGap(101, 101, 101))
                                 .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(79, Short.MAX_VALUE))
+                        .addContainerGap(154, Short.MAX_VALUE))
                     .addGroup(pnlLoginInfoLayout.createSequentialGroup()
-                        .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblSecurityQuestion)
                             .addComponent(lblAnswer)
                             .addComponent(txtAccessLevel, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblStatus)
                             .addComponent(lblUsername)
                             .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSecurityQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                            .addComponent(txtAnswer))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addComponent(txtAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 88, Short.MAX_VALUE))))
         );
         pnlLoginInfoLayout.setVerticalGroup(
             pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -412,11 +471,9 @@ public class frmViewUsers extends javax.swing.JFrame {
 
         txtLine1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtLine1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtLine1.setEnabled(false);
 
         txtLine2.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtLine2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtLine2.setEnabled(false);
 
         lblLine2.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblLine2.setForeground(new java.awt.Color(255, 255, 255));
@@ -428,7 +485,6 @@ public class frmViewUsers extends javax.swing.JFrame {
 
         txtCity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtCity.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtCity.setEnabled(false);
 
         lblPostalCode.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblPostalCode.setForeground(new java.awt.Color(255, 255, 255));
@@ -436,7 +492,6 @@ public class frmViewUsers extends javax.swing.JFrame {
 
         txtPostalCode.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtPostalCode.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtPostalCode.setEnabled(false);
 
         lblFirstname1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblFirstname1.setForeground(new java.awt.Color(255, 255, 255));
@@ -444,11 +499,9 @@ public class frmViewUsers extends javax.swing.JFrame {
 
         txtCellphoneNo.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtCellphoneNo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtCellphoneNo.setEnabled(false);
 
         txtEmail.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtEmail.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtEmail.setEnabled(false);
 
         lblLastname1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblLastname1.setForeground(new java.awt.Color(255, 255, 255));
@@ -478,15 +531,14 @@ public class frmViewUsers extends javax.swing.JFrame {
                                     .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(txtPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(pnlAddressInfoLayout.createSequentialGroup()
-                                    .addComponent(lblLastname1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAddressInfoLayout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlAddressInfoLayout.createSequentialGroup()
+                                .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblFirstname1)
-                                    .addGap(65, 65, 65)
-                                    .addComponent(txtCellphoneNo, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(lblLastname1))
+                                .addGap(29, 29, 29)
+                                .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                                    .addComponent(txtCellphoneNo)))))
                     .addGroup(pnlAddressInfoLayout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(lblAddressInfo)))
@@ -530,7 +582,6 @@ public class frmViewUsers extends javax.swing.JFrame {
 
         txtIDNumber.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtIDNumber.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtIDNumber.setEnabled(false);
 
         javax.swing.GroupLayout pnlUserInfoLayout = new javax.swing.GroupLayout(pnlUserInfo);
         pnlUserInfo.setLayout(pnlUserInfoLayout);
@@ -607,9 +658,9 @@ public class frmViewUsers extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(64, 64, 64)
+                        .addGap(37, 37, 37)
                         .addComponent(pnlUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 230, Short.MAX_VALUE))
+                .addGap(0, 182, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -654,86 +705,81 @@ public class frmViewUsers extends javax.swing.JFrame {
         int index= lbxUsers.getSelectedIndex();
         selectedUser = userList.get(index);
         Person person = selectedUser.getPerson();
-        Person per = person.selectSpecPerson();
-        Address address = per.getAddress();
-        Contact contact = per.getContact();
+        
+        Address address = null;
+        Contact contact = null;
         UserSecurityQuestions userSecQ = new UserSecurityQuestions(selectedUser,new SecurityQuestions(),"");
-        userSecQ = userSecQ.selectSpecUserQuestions();
+        try
+        {
+            Person per = person.selectSpecPerson();
+            address = per.getAddress();
+            contact = per.getContact();
+            
+            userSecQ = userSecQ.selectSpecUserQuestions();
+        }
+        catch(SQLException se)
+        {
+        }
         
-
-        
+        txtSearch.setText(person.toString());
         txtFirstname.setText(person.getName());
+        txtFirstname.setEditable(false);
+        
         txtLastname.setText(person.getSurname());
+        txtLastname.setEditable(false);
+        
         txtIDNumber.setText(person.getId());
+        txtIDNumber.setEditable(false);
+        
         txtCampus.setText(person.getCampus());
+        txtCampus.setEditable(false);
+        
         txtLine1.setText(address.getLine1());
+        txtLine1.setEditable(false);
+        
         txtLine2.setText(address.getLine2());
+        txtLine2.setEditable(false);
+        
         txtCity.setText(address.getCity());
+        txtCity.setEditable(false);
+        
         txtPostalCode.setText(address.getPostalCode());
+        txtPostalCode.setEditable(false);
+        
         txtCellphoneNo.setText(contact.getCell());
+        txtCellphoneNo.setEditable(false);
+        
         txtEmail.setText(contact.getEmail());
+        txtEmail.setEditable(false);
+        
         txtUsername.setText(selectedUser.getUsername());
+        txtFirstname.setEditable(false);
+        
         txtPassword.setText(selectedUser.getPassword());
+        txtPassword.setEditable(false);
+        
         txtAccessLevel.setText(selectedUser.getAccessLevel());
+        txtAccessLevel.setEditable(false);
+        
         txtStatus.setText(selectedUser.getStatus());
+        txtStatus.setEditable(false);
+        
         txtSecurityQuestion.setText(userSecQ.getQuestion().getQuestion());
+        txtSecurityQuestion.setEditable(false);
+        
         txtAnswer.setText(userSecQ.getAnswer());
+        txtAnswer.setEditable(false);
     }//GEN-LAST:event_lbxUsersValueChanged
 
-    private void txtSearchInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtSearchInputMethodTextChanged
-         User user = new User();
-         ArrayList<User> usersThatFitCriteria = new ArrayList<User>();
-         String searchCode = "", userCode = "", searchText = txtSearch.getText();
-            if (searchText == "")
-            {
-                userList = user.select();
-                DefaultListModel model = new DefaultListModel();
-        
-                 for(User u: userList)
-                    {
-                     model.addElement(u);
-                    }
-                lbxUsers.setModel(model);
-            }
-            else
-            {
-                int numSearchChars; // amount of characters that are typed into the search box.
+    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
+        txtSearch.setText("");
+    }//GEN-LAST:event_txtSearchFocusGained
 
-                searchCode = SoundEx.Soundex(searchText);
+    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
+        txtSearch.setText("Search...");
+    }//GEN-LAST:event_txtSearchFocusLost
 
-                numSearchChars = searchText.length();
-                for(User u : userList)
-                {
-                    if (u.getPerson().getName().length() >= numSearchChars)
-                    {
-
-                        userCode = SoundEx.Soundex(u.getPerson().getName().substring(0, numSearchChars));
-
-
-                        if ((userCode == searchCode))
-                        {
-                            
-                            Person p = u.getPerson();
-                            p = p.selectSpecPerson();
-                            u.setPerson(p);
-                            usersThatFitCriteria.add(u);
-                        }
-
-                    }                   
-                }
-                
-                DefaultListModel model = new DefaultListModel();
-        
-                lbxUsers.setModel(model);
-                for(User u: usersThatFitCriteria)
-                {
-                    model.addElement(u);
-                }
-                lbxUsers.setModel(model);
-            }
-             
-    }//GEN-LAST:event_txtSearchInputMethodTextChanged
-                                                  
+                                                      
     /**
      * @param args the command line arguments
      */

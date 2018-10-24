@@ -15,8 +15,11 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import bc_stationary_bll.InputValidation;
+import bc_stationary_bll.Validation;
 import com.mysql.jdbc.exceptions.DeadlockTimeoutRollbackMarker;
+import java.sql.Array;
 import java.util.ArrayList;
+import javax.swing.UIManager;
 
 /**
  *
@@ -37,6 +40,8 @@ public class frmRegisterUser extends javax.swing.JFrame {
         for(Department d:departments){
             cmbDepartment.addItem(d.getName());
         }
+        pnlDepartmentInfo1.setVisible(false);
+
     }
 
     /**
@@ -83,9 +88,16 @@ public class frmRegisterUser extends javax.swing.JFrame {
         btnNextRegistration = new javax.swing.JButton();
         pnlDepartmentInfo = new javax.swing.JPanel();
         lblDepartmentInfo = new javax.swing.JLabel();
-        lblDepartment = new javax.swing.JLabel();
+        pnlDepartmentInfo1 = new javax.swing.JPanel();
+        cbxNewDepartment1 = new javax.swing.JCheckBox();
+        pnlDepartmentInfo2 = new javax.swing.JPanel();
+        cbxNewDepartment2 = new javax.swing.JCheckBox();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        pnlExistingDepartment = new javax.swing.JPanel();
         cmbDepartment = new javax.swing.JComboBox<>();
-        cbxNewDepartment = new javax.swing.JCheckBox();
+        pnlNewDepartment = new javax.swing.JPanel();
+        txtDepartment = new javax.swing.JTextField();
+        lblDepartment3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(45, 45, 45));
@@ -330,7 +342,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
                                     .addComponent(lblLine2)
                                     .addComponent(lblCity)
                                     .addComponent(lblPostalCode))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                                 .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtLine2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -339,7 +351,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
                     .addGroup(pnlAddressInfoLayout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(lblAddressInfo)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
         pnlAddressInfoLayout.setVerticalGroup(
             pnlAddressInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -441,50 +453,156 @@ public class frmRegisterUser extends javax.swing.JFrame {
         lblDepartmentInfo.setForeground(new java.awt.Color(255, 255, 255));
         lblDepartmentInfo.setText("Department Information");
 
-        lblDepartment.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblDepartment.setForeground(new java.awt.Color(255, 255, 255));
-        lblDepartment.setText("Department");
+        pnlDepartmentInfo1.setBackground(new java.awt.Color(45, 45, 45));
+
+        cbxNewDepartment1.setBackground(new java.awt.Color(45, 45, 45));
+        cbxNewDepartment1.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        cbxNewDepartment1.setForeground(new java.awt.Color(255, 255, 255));
+        cbxNewDepartment1.setText("New Department");
+        cbxNewDepartment1.setFocusPainted(false);
+
+        javax.swing.GroupLayout pnlDepartmentInfo1Layout = new javax.swing.GroupLayout(pnlDepartmentInfo1);
+        pnlDepartmentInfo1.setLayout(pnlDepartmentInfo1Layout);
+        pnlDepartmentInfo1Layout.setHorizontalGroup(
+            pnlDepartmentInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDepartmentInfo1Layout.createSequentialGroup()
+                .addContainerGap(203, Short.MAX_VALUE)
+                .addComponent(cbxNewDepartment1)
+                .addGap(95, 95, 95))
+        );
+        pnlDepartmentInfo1Layout.setVerticalGroup(
+            pnlDepartmentInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlDepartmentInfo1Layout.createSequentialGroup()
+                .addGap(108, 108, 108)
+                .addComponent(cbxNewDepartment1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pnlDepartmentInfo2.setBackground(new java.awt.Color(45, 45, 45));
+
+        cbxNewDepartment2.setBackground(new java.awt.Color(45, 45, 45));
+        cbxNewDepartment2.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        cbxNewDepartment2.setForeground(new java.awt.Color(255, 255, 255));
+        cbxNewDepartment2.setText("New Department");
+        cbxNewDepartment2.setFocusPainted(false);
+
+        javax.swing.GroupLayout pnlDepartmentInfo2Layout = new javax.swing.GroupLayout(pnlDepartmentInfo2);
+        pnlDepartmentInfo2.setLayout(pnlDepartmentInfo2Layout);
+        pnlDepartmentInfo2Layout.setHorizontalGroup(
+            pnlDepartmentInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDepartmentInfo2Layout.createSequentialGroup()
+                .addContainerGap(203, Short.MAX_VALUE)
+                .addComponent(cbxNewDepartment2)
+                .addGap(95, 95, 95))
+        );
+        pnlDepartmentInfo2Layout.setVerticalGroup(
+            pnlDepartmentInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlDepartmentInfo2Layout.createSequentialGroup()
+                .addGap(103, 103, 103)
+                .addComponent(cbxNewDepartment2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.setBackground(new java.awt.Color(45, 45, 45));
+        jTabbedPane2.setForeground(new java.awt.Color(255, 255, 255));
+        jTabbedPane2.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+
+        pnlExistingDepartment.setBackground(new java.awt.Color(45, 45, 45));
 
         cmbDepartment.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
 
-        cbxNewDepartment.setBackground(new java.awt.Color(45, 45, 45));
-        cbxNewDepartment.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        cbxNewDepartment.setForeground(new java.awt.Color(255, 255, 255));
-        cbxNewDepartment.setText("New Department");
-        cbxNewDepartment.setFocusPainted(false);
+        javax.swing.GroupLayout pnlExistingDepartmentLayout = new javax.swing.GroupLayout(pnlExistingDepartment);
+        pnlExistingDepartment.setLayout(pnlExistingDepartmentLayout);
+        pnlExistingDepartmentLayout.setHorizontalGroup(
+            pnlExistingDepartmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlExistingDepartmentLayout.createSequentialGroup()
+                .addContainerGap(52, Short.MAX_VALUE)
+                .addComponent(cmbDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
+        );
+        pnlExistingDepartmentLayout.setVerticalGroup(
+            pnlExistingDepartmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlExistingDepartmentLayout.createSequentialGroup()
+                .addContainerGap(27, Short.MAX_VALUE)
+                .addComponent(cmbDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane2.addTab("Existing", pnlExistingDepartment);
+
+        pnlNewDepartment.setBackground(new java.awt.Color(45, 45, 45));
+
+        txtDepartment.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtDepartment.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtDepartment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDepartmentActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlNewDepartmentLayout = new javax.swing.GroupLayout(pnlNewDepartment);
+        pnlNewDepartment.setLayout(pnlNewDepartmentLayout);
+        pnlNewDepartmentLayout.setHorizontalGroup(
+            pnlNewDepartmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlNewDepartmentLayout.createSequentialGroup()
+                .addContainerGap(52, Short.MAX_VALUE)
+                .addComponent(txtDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
+        );
+        pnlNewDepartmentLayout.setVerticalGroup(
+            pnlNewDepartmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlNewDepartmentLayout.createSequentialGroup()
+                .addContainerGap(29, Short.MAX_VALUE)
+                .addComponent(txtDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane2.addTab("New", pnlNewDepartment);
+
+        lblDepartment3.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblDepartment3.setForeground(new java.awt.Color(255, 255, 255));
+        lblDepartment3.setText("Department:");
 
         javax.swing.GroupLayout pnlDepartmentInfoLayout = new javax.swing.GroupLayout(pnlDepartmentInfo);
         pnlDepartmentInfo.setLayout(pnlDepartmentInfoLayout);
         pnlDepartmentInfoLayout.setHorizontalGroup(
             pnlDepartmentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDepartmentInfoLayout.createSequentialGroup()
-                .addGap(57, 57, 57)
-                .addComponent(lblDepartment)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                .addGroup(pnlDepartmentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDepartmentInfoLayout.createSequentialGroup()
-                        .addComponent(cbxNewDepartment)
-                        .addGap(95, 95, 95))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDepartmentInfoLayout.createSequentialGroup()
-                        .addComponent(cmbDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(48, 48, 48))))
             .addGroup(pnlDepartmentInfoLayout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addComponent(lblDepartmentInfo)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(pnlDepartmentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblDepartmentInfo)
+                    .addGroup(pnlDepartmentInfoLayout.createSequentialGroup()
+                        .addGroup(pnlDepartmentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlDepartmentInfoLayout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addComponent(lblDepartment3))
+                            .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlDepartmentInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlDepartmentInfo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         pnlDepartmentInfoLayout.setVerticalGroup(
             pnlDepartmentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlDepartmentInfoLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(lblDepartmentInfo)
-                .addGap(32, 32, 32)
-                .addGroup(pnlDepartmentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDepartment)
-                    .addComponent(cmbDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cbxNewDepartment)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGroup(pnlDepartmentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlDepartmentInfoLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                        .addGroup(pnlDepartmentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pnlDepartmentInfo1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDepartmentInfoLayout.createSequentialGroup()
+                                .addComponent(pnlDepartmentInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(122, 122, 122)))
+                        .addContainerGap())
+                    .addGroup(pnlDepartmentInfoLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(lblDepartment3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -493,20 +611,21 @@ public class frmRegisterUser extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlRegisterHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 160, Short.MAX_VALUE))
+                .addGap(0, 404, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(87, 87, 87)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pnlPersonalInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlAddressInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(pnlContactInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(pnlDepartmentInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(btnNextRegistration, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(248, 248, 248))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pnlPersonalInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pnlAddressInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(78, 78, 78)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(pnlContactInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlDepartmentInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addComponent(btnNextRegistration))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -514,21 +633,19 @@ public class frmRegisterUser extends javax.swing.JFrame {
                 .addComponent(pnlRegisterHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(83, 83, 83)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pnlPersonalInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pnlContactInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(48, 48, 48)
+                        .addGap(32, 32, 32)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlAddressInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(pnlDepartmentInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnNextRegistration)
-                                .addGap(31, 31, 31)))))
+                            .addComponent(pnlDepartmentInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pnlAddressInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnNextRegistration))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -543,75 +660,216 @@ public class frmRegisterUser extends javax.swing.JFrame {
 
     private void btnNextRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextRegistrationActionPerformed
         //Variable Declaration
-        String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail, userID, userDepart,addressPostal;
-        InputValidation inValidation = new InputValidation();
+        String userFirstName="", userLastName="", userCampus="", addressLine1="", addressLine2="", addressCity="", contactCell="", contactEmail="", userID="", userDepart="",addressPostal="";
+        Validation validation = new Validation();
         Person person = new Person();
         try 
         {
             //Assigning values to variables
-            userFirstName = (String)txtFirstname.getText();
-            userLastName = (String)txtLastname.getText();
-            userCampus = (String)cmbCampus.getSelectedItem().toString();
-            addressLine1 = (String)txtLine1.getText();
-            addressLine2 = (String)txtLine2.getText();
-            addressCity = (String)txtCity.getText();
-            addressPostal = (String)txtPostalCode.getText();
-            contactCell =  (String)txtCellphoneNo.getText();
-            contactEmail = (String)txtEmail.getText();
-            userID = (String)txtIDNumber.getText();
-            userDepart = (String)cmbDepartment.getSelectedItem().toString();
-            
-            //Creating and populating arrays to pass values to validation class
-            String[][] nameVariables = {{"First Name",userFirstName},
-                {"Last Name",userLastName}};
-            
-            String[][] stringVariables = {{"Campus",userCampus},
-                {"City",addressCity},{"Department",userDepart}};
-            
-            String[][] stringWithIntVariables = {{"Address Line 1",addressLine1},
-                {"Address Line 2",addressLine2},};
-            
-            String[][] idString = {{"ID Number",userID}};
-            
-            Object[][] intVariables = {{"Postal Code",addressPostal}};
-            
-            Object[][] cellVariables = {{"Cellphone Number",contactCell}};
-            
-            Object[][] emailVariables = {{"Email Address",contactEmail}};
-            
-            //Passing arrays to validation class  
-            try 
+            if((validation.testProperString(txtFirstname.getText()))&&(!"".equals(txtFirstname.getText())))
             {
-//                inValidation.validateName_Surname(nameVariables);
-//                inValidation.validateString(stringVariables);
-//                inValidation.validateStringInt(stringWithIntVariables);
-//                inValidation.validateInt(intVariables);
-//                inValidation.validateCell(cellVariables);
-//                inValidation.validateEmail(emailVariables);
-//                inValidation.validateID(idString);
+                userFirstName = txtFirstname.getText();
+                lblFirstname.setForeground(Color.white); 
+                if((validation.testProperString(txtLastname.getText()))&&(!"".equals(txtLastname.getText())))
+                {
+                    userLastName = txtLastname.getText();
+                    lblLastname.setForeground(Color.white);
+                    if((validation.testNumericString(txtIDNumber.getText()))&&(!"".equals(txtLastname.getText())))
+                    {
+                        if(validation.testLength(txtIDNumber.getText(), 13, 13))
+                        {
+                            userID = txtIDNumber.getText();
+                            lblIDNumber.setForeground(Color.white);
+                            if(validation.testProperString(cmbCampus.getSelectedItem().toString()))
+                            {
+                                userCampus = cmbCampus.getSelectedItem().toString();
+                                lblCampus.setForeground(Color.white);
+                                if(!"".equals(txtLine1.getText()))
+                                {
+                                    addressLine1 = txtLine1.getText();
+                                    lblLine1.setForeground(Color.white);
+                                    if(!"".equals(txtLine2.getText()))
+                                    {
+                                        addressLine2 = txtLine2.getText();
+                                        lblLine2.setForeground(Color.white);
+                                        if((validation.testProperString(txtCity.getText())) && (!"".equals(txtCity.getText())))
+                                        {
+                                            addressCity = (String)txtCity.getText();
+                                            lblCity.setForeground(Color.white);
+                                            if(validation.testNumericString(txtPostalCode.getText()))
+                                            {
+                                                if(validation.testLength(txtPostalCode.getText(), 4, 4))
+                                                {
+                                                    addressPostal = txtPostalCode.getText();
+                                                    lblPostalCode.setForeground(Color.white);
+                                                    if(validation.testNumericString(txtCellphoneNo.getText()))
+                                                    {
+                                                        if(validation.testLength(txtCellphoneNo.getText(), 10, 10))
+                                                        {
+                                                            contactCell = txtCellphoneNo.getText();
+                                                            lblCellNo.setForeground(Color.white);
+                                                            
+                                                            char[] emailCharacters = new char[]{'@','.'};
+                                                            if((validation.testContains(txtEmail.getText(), emailCharacters)) && (!"".equals(txtEmail.getText())))
+                                                            {
+                                                                contactEmail = txtEmail.getText();
+                                                                lblEmail.setForeground(Color.white);
+                                                                if(validation.testProperString(cmbDepartment.getSelectedItem().toString()))
+                                                                {
+                                                                    int selectedDepartOption = jTabbedPane2.getSelectedIndex();
+                                                                    if(selectedDepartOption == 0)
+                                                                    {
+                                                                        userDepart = cmbDepartment.getSelectedItem().toString();
+                                                                        lblDepartment3.setForeground(Color.white);
+                                                                    
+                                                                        Address address = new Address(addressLine1,addressLine2,addressCity,addressPostal);
+                                                                        Contact contact = new Contact(contactCell,contactEmail);
+                                                                        Department department = new Department(userDepart);
+                                                                        person = new Person(userFirstName,userLastName,userID,address,contact,department,userCampus);
+                                                               
+                                                                        JOptionPane.showMessageDialog(null, "This part of the registration process has successfully been captured. Now proceed to final step.","Registration Information Part I Successfully Captured",JOptionPane.INFORMATION_MESSAGE);
+                                                                        frmRegisterUserLogin userLogin = new frmRegisterUserLogin(person);
+                                                                        userLogin.setVisible(true);
+                                                                        this.setVisible(false);  
+                                                                    }
+                                                                    else if(selectedDepartOption == 1)
+                                                                    {
+                                                                        userDepart = txtDepartment.getText();
+                                                                        lblDepartment3.setForeground(Color.white);
+                                                                    
+                                                                        Address address = new Address(addressLine1,addressLine2,addressCity,addressPostal);
+                                                                        Contact contact = new Contact(contactCell,contactEmail);
+                                                                        Department department = new Department(userDepart);
+                                                                        if(department.insert() != -1)
+                                                                        {
+                                                                            person = new Person(userFirstName,userLastName,userID,address,contact,department,userCampus);
+                                                               
+                                                                            JOptionPane.showMessageDialog(null, "This part of the registration process has successfully been captured. Now proceed to final step.","Registration Information Part I Successfully Captured",JOptionPane.INFORMATION_MESSAGE);
+                                                                            frmRegisterUserLogin userLogin = new frmRegisterUserLogin(person);
+                                                                            userLogin.setVisible(true);
+                                                                            this.setVisible(false);  
+                                                                        }                                                         
+                                                                    }       
+                                                                }
+                                                                else
+                                                                {
+                                                                    JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Department",JOptionPane.WARNING_MESSAGE);
+                                                                    lblDepartment3.setForeground(Color.red);
+                                                                }                                              
+                                                            }
+                                                            else
+                                                            {
+                                                                JOptionPane.showMessageDialog(null, "This is not a valid email address. Please Try Again!","Incorrect Email",JOptionPane.WARNING_MESSAGE);
+                                                                txtEmail.setText("");
+                                                                txtEmail.grabFocus();
+                                                                lblEmail.setForeground(Color.red);
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            JOptionPane.showMessageDialog(null, "This field must contain 10 numeric characters. Please Try Again!","Incorrect Cellphone Number",JOptionPane.WARNING_MESSAGE);
+                                                            txtCellphoneNo.setText("");
+                                                            txtCellphoneNo.grabFocus();
+                                                            lblCellNo.setForeground(Color.red);
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain letters. Please Try Again!","Incorrect Cellphone Number",JOptionPane.WARNING_MESSAGE);
+                                                        txtCellphoneNo.setText("");
+                                                        txtCellphoneNo.grabFocus();
+                                                        lblCellNo.setForeground(Color.red);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    JOptionPane.showMessageDialog(null, "This field must contain 4 numeric characters. Please Try Again!","Incorrect Postal Code",JOptionPane.WARNING_MESSAGE);
+                                                    txtPostalCode.setText("");
+                                                    txtPostalCode.grabFocus();
+                                                    lblPostalCode.setForeground(Color.red);
+                                                }  
+                                            }
+                                            else
+                                            {
+                                                JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain letters. Please Try Again!","Incorrect Postal Code",JOptionPane.WARNING_MESSAGE);
+                                                txtPostalCode.setText("");
+                                                txtPostalCode.grabFocus();
+                                                lblPostalCode.setForeground(Color.red);
+                                            }                                         
+                                        }
+                                        else
+                                        {
+                                            JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain numberic characters. Please Try Again!","Incorrect City",JOptionPane.WARNING_MESSAGE);
+                                            txtCity.setText("");
+                                            txtCity.grabFocus();
+                                            lblCity.setForeground(Color.red);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Address Line 2",JOptionPane.WARNING_MESSAGE);
+                                        txtLine2.setText("");
+                                        txtLine2.grabFocus();
+                                        lblLine2.setForeground(Color.red);
+                                    }
+                                }
+                                else
+                                {
+                                    JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Address Line 1",JOptionPane.WARNING_MESSAGE);
+                                    txtLine1.setText("");
+                                    txtLine1.grabFocus();
+                                    lblLine1.setForeground(Color.red);
+                                }
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Campus",JOptionPane.WARNING_MESSAGE);
+                                lblCampus.setForeground(Color.red);
+                            }
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null, "This field must be exactly 13 numeric characters. Please Try Again!","Incorrect ID Number",JOptionPane.WARNING_MESSAGE);
+                            txtIDNumber.setText("");
+                            txtIDNumber.grabFocus();
+                            lblIDNumber.setForeground(Color.red);
+                        } 
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "This field cannot be empty nor may it contain any letters. Please Try Again!","Incorrect ID Number",JOptionPane.WARNING_MESSAGE);
+                        txtIDNumber.setText("");
+                        txtIDNumber.grabFocus();
+                        lblIDNumber.setForeground(Color.red);
+                    }
+                    
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "This field cannot be empty nor may it contain any numeric characters. Please Try Again!","Incorrect Lastname",JOptionPane.WARNING_MESSAGE);
+                    txtLastname.setText("");
+                    txtLastname.grabFocus();
+                    lblLastname.setForeground(Color.red);
+                }
             }
-            catch (Exception e) 
+            else
             {
-                JOptionPane.showMessageDialog(null, e.getMessage());
+                JOptionPane.showMessageDialog(null, "This field cannot be empty nor may it contain any numeric characters. Please Try Again!","Incorrect Firstname",JOptionPane.WARNING_MESSAGE);
+                txtFirstname.setText("");
+                txtFirstname.grabFocus();
+                lblFirstname.setForeground(Color.red);  
             }
-            finally
-            {
-                Address address = new Address(addressLine1,addressLine2,addressCity,addressPostal);
-                Contact contact = new Contact(contactCell,contactEmail);
-                Department department = new Department(userDepart);
+            
                 
-                person = new Person(userFirstName,userLastName,userID,address,contact,department,userCampus);
-            }
         } 
         catch (Exception e) 
         {
             
-        }
-        
-        frmRegisterUserLogin userLogin = new frmRegisterUserLogin(person);
-        userLogin.setVisible(true);
-        this.setVisible(false);       
+        }      
     }//GEN-LAST:event_btnNextRegistrationActionPerformed
+
+    private void txtDepartmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDepartmentActionPerformed
+    }//GEN-LAST:event_txtDepartmentActionPerformed
 
     /**
      * @param args the command line arguments
@@ -652,15 +910,17 @@ public class frmRegisterUser extends javax.swing.JFrame {
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnNextRegistration;
     private javax.swing.JButton btnRegisterUser;
-    private javax.swing.JCheckBox cbxNewDepartment;
+    private javax.swing.JCheckBox cbxNewDepartment1;
+    private javax.swing.JCheckBox cbxNewDepartment2;
     private javax.swing.JComboBox<String> cmbCampus;
     private javax.swing.JComboBox<String> cmbDepartment;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JLabel lblAddressInfo;
     private javax.swing.JLabel lblCampus;
     private javax.swing.JLabel lblCellNo;
     private javax.swing.JLabel lblCity;
     private javax.swing.JLabel lblContactInfo;
-    private javax.swing.JLabel lblDepartment;
+    private javax.swing.JLabel lblDepartment3;
     private javax.swing.JLabel lblDepartmentInfo;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblFirstname;
@@ -674,12 +934,17 @@ public class frmRegisterUser extends javax.swing.JFrame {
     private javax.swing.JPanel pnlAddressInfo;
     private javax.swing.JPanel pnlContactInfo;
     private javax.swing.JPanel pnlDepartmentInfo;
+    private javax.swing.JPanel pnlDepartmentInfo1;
+    private javax.swing.JPanel pnlDepartmentInfo2;
+    private javax.swing.JPanel pnlExistingDepartment;
     private javax.swing.JPanel pnlMenu;
+    private javax.swing.JPanel pnlNewDepartment;
     private javax.swing.JPanel pnlPersonalInfo;
     private javax.swing.JPanel pnlRegisterHeader;
     private javax.swing.JPanel pnlRegisterHeader1;
     private javax.swing.JTextField txtCellphoneNo;
     private javax.swing.JTextField txtCity;
+    private javax.swing.JTextField txtDepartment;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFirstname;
     private javax.swing.JTextField txtIDNumber;

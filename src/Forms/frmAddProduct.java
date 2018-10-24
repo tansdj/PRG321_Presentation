@@ -5,12 +5,21 @@
  */
 package Forms;
 
+import PersonManagement.Department;
+import PersonManagement.User;
 import java.awt.Color;
 import javax.swing.JFrame;
 import ProductManagement.*;
 import bc_stationary_bll.*;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 /**
  *
@@ -21,10 +30,19 @@ public class frmAddProduct extends javax.swing.JFrame {
     /**
      * Creates new form frmAddProduct
      */
+    
     public frmAddProduct() {
         initComponents();
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         this.getContentPane().setBackground(new Color(45,45,45));
+        txtStatus.setEditable(false);
+        
+        Category category = new Category();
+        ArrayList<Category> categories = category.select();
+        
+        for(Category c:categories){
+            cmbCategory.addItem(c.getDescription());
+        }
     }
 
     /**
@@ -60,8 +78,11 @@ public class frmAddProduct extends javax.swing.JFrame {
         lblProductSale = new javax.swing.JLabel();
         txtProductSale = new javax.swing.JTextField();
         txtStatus = new javax.swing.JTextField();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        pnlExistingCategory = new javax.swing.JPanel();
+        cmbCategory = new javax.swing.JComboBox<>();
+        pnlNewCategory = new javax.swing.JPanel();
         txtCategory = new javax.swing.JTextField();
-        cbxChooseExistingCategory = new javax.swing.JCheckBox();
         pnlInStock = new javax.swing.JPanel();
         lblInStock = new javax.swing.JLabel();
         lblQuantity = new javax.swing.JLabel();
@@ -285,15 +306,63 @@ public class frmAddProduct extends javax.swing.JFrame {
         txtStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtStatus.setText("Available");
         txtStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtStatus.setEnabled(false);
+
+        jTabbedPane2.setBackground(new java.awt.Color(45, 45, 45));
+        jTabbedPane2.setForeground(new java.awt.Color(255, 255, 255));
+        jTabbedPane2.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        jTabbedPane2.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+
+        pnlExistingCategory.setBackground(new java.awt.Color(45, 45, 45));
+
+        cmbCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+
+        javax.swing.GroupLayout pnlExistingCategoryLayout = new javax.swing.GroupLayout(pnlExistingCategory);
+        pnlExistingCategory.setLayout(pnlExistingCategoryLayout);
+        pnlExistingCategoryLayout.setHorizontalGroup(
+            pnlExistingCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlExistingCategoryLayout.createSequentialGroup()
+                .addContainerGap(115, Short.MAX_VALUE)
+                .addComponent(cmbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33))
+        );
+        pnlExistingCategoryLayout.setVerticalGroup(
+            pnlExistingCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlExistingCategoryLayout.createSequentialGroup()
+                .addContainerGap(23, Short.MAX_VALUE)
+                .addComponent(cmbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane2.addTab("Existing", pnlExistingCategory);
+
+        pnlNewCategory.setBackground(new java.awt.Color(45, 45, 45));
 
         txtCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtCategory.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCategoryActionPerformed(evt);
+            }
+        });
 
-        cbxChooseExistingCategory.setBackground(new java.awt.Color(45, 45, 45));
-        cbxChooseExistingCategory.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        cbxChooseExistingCategory.setForeground(new java.awt.Color(255, 255, 255));
-        cbxChooseExistingCategory.setText("Choose from existing");
+        javax.swing.GroupLayout pnlNewCategoryLayout = new javax.swing.GroupLayout(pnlNewCategory);
+        pnlNewCategory.setLayout(pnlNewCategoryLayout);
+        pnlNewCategoryLayout.setHorizontalGroup(
+            pnlNewCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlNewCategoryLayout.createSequentialGroup()
+                .addContainerGap(117, Short.MAX_VALUE)
+                .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37))
+        );
+        pnlNewCategoryLayout.setVerticalGroup(
+            pnlNewCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlNewCategoryLayout.createSequentialGroup()
+                .addContainerGap(25, Short.MAX_VALUE)
+                .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane2.addTab("New", pnlNewCategory);
 
         javax.swing.GroupLayout pnlProjectInfoLayout = new javax.swing.GroupLayout(pnlProjectInfo);
         pnlProjectInfo.setLayout(pnlProjectInfoLayout);
@@ -331,13 +400,12 @@ public class frmAddProduct extends javax.swing.JFrame {
                                 .addComponent(lblProductSale)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(txtProductSale, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlProjectInfoLayout.createSequentialGroup()
-                                .addComponent(lblCategory)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cbxChooseExistingCategory)
-                                    .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                            .addComponent(lblCategory))))
                 .addContainerGap(60, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlProjectInfoLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23))
         );
         pnlProjectInfoLayout.setVerticalGroup(
             pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -357,12 +425,10 @@ public class frmAddProduct extends javax.swing.JFrame {
                     .addComponent(lblStatus)
                     .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCategory)
-                    .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbxChooseExistingCategory)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(lblCategory)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtProductModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblProductModel))
@@ -374,7 +440,7 @@ public class frmAddProduct extends javax.swing.JFrame {
                 .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtProductSale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblProductSale))
-                .addGap(24, 24, 24))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pnlInStock.setBackground(new java.awt.Color(45, 45, 45));
@@ -405,7 +471,7 @@ public class frmAddProduct extends javax.swing.JFrame {
                     .addGroup(pnlInStockLayout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(lblInStock)))
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
         pnlInStockLayout.setVerticalGroup(
             pnlInStockLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -490,37 +556,162 @@ public class frmAddProduct extends javax.swing.JFrame {
         Date d = Date.valueOf(LocalDate.MAX);
         double costPrice, salePrice;
         
-        InputValidation inValidation = new InputValidation();
+        Validation validation = new Validation();
         Category category;
         Model model;
         //Assigning variables values            
         try 
         {
-            pName =  (String)txtProductName.getText();
-            pDescription = (String)txtDescription.getText();
-            pStatus = (String)txtStatus.getText();
-            pCategory = (String)txtCategory.getText();
-            pQuantity = (Integer)numQuantity.getValue();  
-            pModel = txtProductModel.getText();
-            costPrice = (Double)Double.parseDouble(txtProductCost.getText());
-            salePrice = (Double)Double.parseDouble(txtProductSale.getText());
+            if(!"".equals(txtProductName.getText()))
+            {
+                pName =  txtProductName.getText();
+                lblProductName.setForeground(Color.white);
+                if(!"".equals(txtDescription.getText()))
+                {
+                    pDescription = txtDescription.getText();
+                    lblDescription.setForeground(Color.white);
+                    
+                    pStatus = txtStatus.getText();
+                    if((Integer)numQuantity.getValue() > 0)
+                    {
+                        pQuantity = (Integer)numQuantity.getValue();
+                        lblQuantity.setForeground(Color.white);
+                        if(txtProductModel.getText() != "")
+                        {
+                             pModel = txtProductModel.getText();
+                             lblProductModel.setForeground(Color.white);
+                             if(validation.testDouble(txtProductCost.getText()))
+                             {
+                                 costPrice = (Double)Double.parseDouble(txtProductCost.getText());
+                                 lblProductCost.setForeground(Color.white);
+                                 if(validation.testDouble(txtProductSale.getText()))
+                                 {
+                                     salePrice = (Double)Double.parseDouble(txtProductSale.getText());
+                                     lblProductSale.setForeground(Color.white);
+                                     
+                                     int selectedCategOption = jTabbedPane2.getSelectedIndex();
+                                     if(selectedCategOption == 0)
+                                     {
+                                         LocalDate local = LocalDate.now();
+                                         Date date = Date.valueOf(local);
+                                         
+                                         pCategory = cmbCategory.getSelectedItem().toString();
+                                         category = new Category(pCategory);
+                                         
+                                         model = new Model(pModel);                            
+                                         if(model.insert() != -1)
+                                         {
+                                            productToAdd = new Product(pName, pDescription, category, pStatus, model, costPrice, salePrice, date); 
+                                            Stock stock = new Stock(productToAdd,pQuantity);
+                                            if((productToAdd.insert() != -1)&&(category.insert() != -1))
+                                            {
+                                                if(stock.insert() != -1)
+                                                {
+                                                    JOptionPane.showMessageDialog(null, "The product was successfully registered","Registration Successful",JOptionPane.INFORMATION_MESSAGE);
+                                        
+                                                    AdministratorMainDash mainDash = new AdministratorMainDash();
+                                                    mainDash.setVisible(true);
+                                                    this.setVisible(false);
+                                                }
+                                                else
+                                                {
+                                                    JOptionPane.showMessageDialog(null, "Something went wrong during the registration process. Product Registration was unsuccessful!","Registration Failed",JOptionPane.WARNING_MESSAGE);
+                                                }
+                                            }
+                                            
+                                         }
+                                         
+                                     }
+                                     else if(selectedCategOption == 1)
+                                     {
+                                         LocalDate local = LocalDate.now();
+                                         Date date = Date.valueOf(local);
+                                         pCategory = txtCategory.getText(); 
+                                         category = new Category(pCategory);
+                                         
+                                         
+                                         if(category.insert() != -1)
+                                         {
+                                            model = new Model(pModel);
+                                            if(model.insert() != -1)
+                                            {
+                                                productToAdd = new Product(pName, pDescription, category, pStatus, model, costPrice, salePrice, date); 
+                                                Stock stock = new Stock(productToAdd,pQuantity);
+                                                if((productToAdd.insert() != -1))
+                                                {
+                                                    if(stock.insert() != -1)
+                                                    {
+                                                        JOptionPane.showMessageDialog(null, "The product was successfully registered","Registration Successful",JOptionPane.INFORMATION_MESSAGE);
+                                        
+                                                        AdministratorMainDash mainDash = new AdministratorMainDash();
+                                                        mainDash.setVisible(true);
+                                                        this.setVisible(false);
+                                                    }
+                                                    else
+                                                    {
+                                                        JOptionPane.showMessageDialog(null, "Something went wrong during the registration process. Product Registration was unsuccessful!","Registration Failed",JOptionPane.WARNING_MESSAGE);
+                                                    }
+                                                }
+                                                
+                                            }
+                                            
+                                         }
+                                         
+                                     }
+                                     
+                                 }
+                                 else
+                                 {
+                                    JOptionPane.showMessageDialog(null, "This field must be in the form of a currency!","Incorrect Product Sale Price",JOptionPane.WARNING_MESSAGE);
+                                    txtProductSale.setText("");
+                                    txtProductSale.grabFocus();
+                                    lblProductSale.setForeground(Color.red);
+                                 }
+                             }
+                             else
+                             {
+                                JOptionPane.showMessageDialog(null, "This field must be in the form of a currency!","Incorrect Product Cost Price",JOptionPane.WARNING_MESSAGE);
+                                txtProductCost.setText("");
+                                txtProductCost.grabFocus();
+                                lblProductCost.setForeground(Color.red);
+                             }
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Product Model",JOptionPane.WARNING_MESSAGE);
+                            txtProductModel.setText("");
+                            txtProductModel.grabFocus();
+                            lblProductModel.setForeground(Color.red);
+                        }
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "Quantity cannot be 0!","Incorrect Quantity",JOptionPane.WARNING_MESSAGE);
+                        lblQuantity.setForeground(Color.red);
+                    }
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Product Description",JOptionPane.WARNING_MESSAGE);
+                    txtDescription.setText("");
+                    txtDescription.grabFocus();
+                    lblDescription.setForeground(Color.red);
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Product Name",JOptionPane.WARNING_MESSAGE);
+                txtProductName.setText("");
+                txtProductName.grabFocus();
+                lblProductName.setForeground(Color.red);
+            }
             
             
-            Object[][] doubleArray = {{"Cost Price",costPrice},{"Sale Price",salePrice}};
-            Object[][] intArray = {{"Quantity",pQuantity}};
-            String[][] stringArray = {{"Product Name",pName},{"Description",pDescription},{"Status",pStatus},{"Category",pCategory},{"Model",pModel}};
             
-            inValidation.validateDouble(doubleArray);
-            inValidation.validateInt(intArray);
-            inValidation.validateStringInt(stringArray);
             
-            category = new Category(pCategory);
-            model = new Model(pModel);
-            productToAdd = new Product(pName, pDescription, category, pStatus, model, costPrice, salePrice, d); 
+           
             
-            productToAdd.insert();
-            model.insert();
-            category.insert();
+            
             
             
         } catch (Exception e) 
@@ -540,6 +731,10 @@ public class frmAddProduct extends javax.swing.JFrame {
         mainDash.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void txtCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCategoryActionPerformed
+
+    }//GEN-LAST:event_txtCategoryActionPerformed
 
     /**
      * @param args the command line arguments
@@ -583,7 +778,8 @@ public class frmAddProduct extends javax.swing.JFrame {
     private javax.swing.JButton btnInsertProduct;
     private javax.swing.JButton btnUpdateStock;
     private javax.swing.JButton btnViewStock;
-    private javax.swing.JCheckBox cbxChooseExistingCategory;
+    private javax.swing.JComboBox<String> cmbCategory;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JLabel lblAddProduct;
     private javax.swing.JLabel lblCategory;
     private javax.swing.JLabel lblDescription;
@@ -596,8 +792,10 @@ public class frmAddProduct extends javax.swing.JFrame {
     private javax.swing.JLabel lblQuantity;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JSpinner numQuantity;
+    private javax.swing.JPanel pnlExistingCategory;
     private javax.swing.JPanel pnlInStock;
     private javax.swing.JPanel pnlMenu;
+    private javax.swing.JPanel pnlNewCategory;
     private javax.swing.JPanel pnlProjectInfo;
     private javax.swing.JPanel pnlRegisterHeader;
     private javax.swing.JPanel pnlRegisterHeader1;

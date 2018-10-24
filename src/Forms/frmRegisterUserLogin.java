@@ -13,6 +13,7 @@ import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
 import bc_stationary_bll.InputValidation;
+import bc_stationary_bll.Validation;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
@@ -31,9 +32,6 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
     
     public frmRegisterUserLogin() {
         initComponents();
-        
-        
-       // DefaultComboBoxModel model = new DefaultComboBoxModel(strQ);
     }
     
     public Person person = null;
@@ -43,10 +41,12 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         person = p;
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         this.getContentPane().setBackground(new Color(45,45,45));
-        
+        txtAccessLevel.setEditable(false);
+        txtStatus.setEditable(false);
         ArrayList<SecurityQuestions> questions = new ArrayList<SecurityQuestions>();
         SecurityQuestions seqQuestion = new SecurityQuestions();
         questions = seqQuestion.select();
+        // Populate Combobox
         for(SecurityQuestions s:questions){
             cmbQuestion.addItem(s.getQuestion());
         }
@@ -79,7 +79,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         txtUsername = new javax.swing.JTextField();
         txtPassword = new javax.swing.JTextField();
         lblPassword = new javax.swing.JLabel();
-        llblRePassword = new javax.swing.JLabel();
+        lblRePassword = new javax.swing.JLabel();
         txtStatus = new javax.swing.JTextField();
         lblAccessLevel = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
@@ -260,14 +260,13 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         lblPassword.setForeground(new java.awt.Color(255, 255, 255));
         lblPassword.setText("Password:");
 
-        llblRePassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        llblRePassword.setForeground(new java.awt.Color(255, 255, 255));
-        llblRePassword.setText("Re-Enter Password:");
+        lblRePassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblRePassword.setForeground(new java.awt.Color(255, 255, 255));
+        lblRePassword.setText("Re-Enter Password:");
 
         txtStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtStatus.setText("Pending");
         txtStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtStatus.setEnabled(false);
 
         lblAccessLevel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblAccessLevel.setForeground(new java.awt.Color(255, 255, 255));
@@ -283,7 +282,6 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         txtAccessLevel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtAccessLevel.setText("Standard");
         txtAccessLevel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtAccessLevel.setEnabled(false);
 
         javax.swing.GroupLayout pnlLoginInfoLayout = new javax.swing.GroupLayout(pnlLoginInfo);
         pnlLoginInfo.setLayout(pnlLoginInfoLayout);
@@ -300,7 +298,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
                                 .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlLoginInfoLayout.createSequentialGroup()
                                 .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(llblRePassword)
+                                    .addComponent(lblRePassword)
                                     .addComponent(lblAccessLevel)
                                     .addComponent(lblPassword)
                                     .addComponent(lblStatus))
@@ -331,7 +329,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(llblRePassword)
+                    .addComponent(lblRePassword)
                     .addComponent(txtRePassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -402,71 +400,143 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         String userName="", passWord="", passWordRe="", passWordTemp="", accessLevel="", status="", securityQuestion="", securityAwns="";
-        InputValidation inValidation = new InputValidation();
+        Validation validation = new Validation();
         
         Department department;
         Contact contact;
-        Address address;           
+        Address address;    
         User userToInsert;
+        User user;
         UserSecurityQuestions userSec;
         SecurityQuestions secQuestion;
-        try 
+        
+        if(!"".equals(txtUsername.getText()))
         {
             userName = txtUsername.getText();
-            passWord = txtPassword.getText();
-            passWordRe = txtRePassword.getText();
-            accessLevel = txtAccessLevel.getText();
-            status = txtStatus.getText();
-            securityQuestion = cmbQuestion.getSelectedItem().toString();
-            securityAwns = txtAnswer.getText();
-            
-            if (passWord == passWordRe) 
+            lblUsername.setForeground(Color.white);
+            if((!"".equals(txtPassword.getText()))&&(!"".equals(txtRePassword.getText())))
             {
-                passWordTemp = passWord;
-                            
-                String[][] passVariables = {{"Password",passWordTemp}};
+                passWord = txtPassword.getText();
+                passWordRe = txtRePassword.getText();
                 
-                //inValidation.validatePass(passVariables);
+                if(passWord.equals(passWordRe))
+                {
+                    if(validation.testLength(passWord, 8, 15))
+                    {
+                        user = new User(userName,passWord);
+                        boolean existingUser = user.testForExistingUser();
+                        
+                        if(!existingUser)
+                        {
+                            lblUsername.setForeground(Color.white);
+                            lblPassword.setForeground(Color.white);
+                            lblRePassword.setForeground(Color.white);
+                            accessLevel = txtAccessLevel.getText();
+                            status = txtStatus.getText();
+                            if(!"".equals(cmbQuestion.getSelectedItem().toString()))
+                            {
+                                securityQuestion = cmbQuestion.getSelectedItem().toString();
+                                lblSecurityQuestion.setForeground(Color.white);
+                                if(!"".equals(txtAnswer.getText()))
+                                {
+                                    securityAwns = txtAnswer.getText();
+                                    lblAnswer.setForeground(Color.white);
+                                    
+                                    userToInsert = new User(person, userName, passWord, accessLevel, status);
+                                    secQuestion = new SecurityQuestions(securityQuestion);
+                                    userSec = new UserSecurityQuestions(userToInsert, secQuestion, securityAwns);
+            
+                                    boolean success = true;
+                                    
+                                    if (person.insert()==-1) 
+                                    {
+                                        success = false;
+                                    }
+                                    
+                                    if (userToInsert.insert()==-1) 
+                                    {
+                                        success = false;
+                                    }
+                                    
+                                    if (userSec.insert()==-1) 
+                                    {
+                                        success = false;
+                                    }
+                                    
+                                    if (success) 
+                                    {
+                                        JOptionPane.showMessageDialog(null, "The user was successfully registered","Registration Successful",JOptionPane.INFORMATION_MESSAGE);
+                                        
+                                        frmLogin login = new frmLogin();
+                                        login.setVisible(true);
+                                        this.setVisible(false);
+                                    }
+                                    else
+                                    {
+                                          JOptionPane.showMessageDialog(null, "Something went wrong during the registration process. User Registration was unsuccessful!","Registration Failed",JOptionPane.WARNING_MESSAGE);
+                                    }
+                                }
+                                else
+                                {
+                                    JOptionPane.showMessageDialog(null, "Please Enter an Answer to the Security Question!","Incorrect Security Answer",JOptionPane.WARNING_MESSAGE);
+                                    lblAnswer.setForeground(Color.red);
+                                }
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null, "Please choose a Security Question!","Incorrect Security Question",JOptionPane.WARNING_MESSAGE);
+                                lblSecurityQuestion.setForeground(Color.red);
+                            }
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null, "This user already exists. Please Try Again!","Existing User already registered",JOptionPane.WARNING_MESSAGE);
+                            txtUsername.setText("");
+                            txtPassword.setText("");
+                            txtRePassword.setText("");
+                            txtUsername.grabFocus();
+                            lblUsername.setForeground(Color.red);
+                            lblPassword.setForeground(Color.red);
+                            lblRePassword.setForeground(Color.red);
+                        }
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "These fields must be at least 8 characters long and no greater than 15 characters. Please Try Again!","Incorrect Password",JOptionPane.WARNING_MESSAGE);
+                        txtPassword.setText("");
+                        txtRePassword.setText("");
+                        txtPassword.grabFocus();
+                        lblPassword.setForeground(Color.red);
+                        lblRePassword.setForeground(Color.red);
+                    }
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "These fields must be the same. Please Try Again!","Incorrect Password",JOptionPane.WARNING_MESSAGE);
+                    txtPassword.setText("");
+                    txtRePassword.setText("");
+                    txtPassword.grabFocus();
+                    lblPassword.setForeground(Color.red);
+                    lblRePassword.setForeground(Color.red);
+                }
             }
-            
-            String[][] stringArray = {{"Username",userName},{"Access Level",accessLevel},
-                {"Status",status},{"Security Question",securityQuestion},{"Security Awnser",securityAwns}};
-            
-            //inValidation.validateStringInt(stringArray);
-
-        } 
-        catch (Exception e) 
+            else
+            {
+                JOptionPane.showMessageDialog(null, "These fields may not be empty. Please Try Again!","Incorrect Password",JOptionPane.WARNING_MESSAGE);
+                txtPassword.setText("");
+                txtRePassword.setText("");
+                txtPassword.grabFocus();
+                lblPassword.setForeground(Color.red);
+                lblRePassword.setForeground(Color.red);
+            }
+        }
+        else
         {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-        finally
-        {   
-            
-            
-            userToInsert = new User(person, userName, passWord, accessLevel, status);
-            secQuestion = new SecurityQuestions(securityQuestion);
-            userSec = new UserSecurityQuestions(userToInsert, secQuestion, securityAwns);
-            
-            boolean success = true;
-            if (person.insert()==-1) {
-                success = false;
-            }
-            if (userToInsert.insert()==-1) {
-                success = false;
-            }
-            if (userSec.insert()==-1) {
-                success = false;
-            }
-            if (success) {
-                System.out.println("Successful!");
-            }else{
-                System.out.println("Something went wrong..");
-            }
-        }
-        
-        frmLogin login = new frmLogin();
-        login.setVisible(true);
-        this.setVisible(false);
+            JOptionPane.showMessageDialog(null, "This field may not be empty. Please Try Again!","Incorrect Username",JOptionPane.WARNING_MESSAGE);
+            txtUsername.setText("");
+            txtUsername.grabFocus();
+            lblUsername.setForeground(Color.red);
+        } 
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnRegisterUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterUserActionPerformed
@@ -518,11 +588,11 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
     private javax.swing.JLabel lblChooseQuestion;
     private javax.swing.JLabel lblLoginInfo;
     private javax.swing.JLabel lblPassword;
+    private javax.swing.JLabel lblRePassword;
     private javax.swing.JLabel lblRegisterUser;
     private javax.swing.JLabel lblSecurityQuestion;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblUsername;
-    private javax.swing.JLabel llblRePassword;
     private javax.swing.JPanel pnlLoginInfo;
     private javax.swing.JPanel pnlMenu;
     private javax.swing.JPanel pnlRegisterHeader;
