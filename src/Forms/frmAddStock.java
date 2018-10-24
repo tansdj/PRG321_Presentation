@@ -28,14 +28,15 @@ public class frmAddStock extends javax.swing.JFrame {
     /**
      * Creates new form frmAddStock
      */
+    public ArrayList<Product> products;
     public frmAddStock() {
         initComponents();
          this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
          this.getContentPane().setBackground(new Color(45,45,45));
          Product product = new Product();
-         ArrayList<Product> products = product.select();
+         products = product.select();
          for(Product p:products){
-            cmbProductSearch.addItem(p.getName()+" "+ p.getDescription());
+            cmbProductSearch.addItem(p.getName()+"("+ p.getDescription()+")");
         }
     }
 
@@ -353,7 +354,6 @@ public class frmAddStock extends javax.swing.JFrame {
         txtProductSale.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         txtStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtStatus.setText("Available");
         txtStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         txtCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
@@ -438,6 +438,11 @@ public class frmAddStock extends javax.swing.JFrame {
         );
 
         cmbProductSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cmbProductSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cmbProductSearchMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -511,7 +516,6 @@ public class frmAddStock extends javax.swing.JFrame {
         Date d = Date.valueOf(LocalDate.MAX);
         double costPrice, salePrice;
         
-        InputValidation inValidation = new InputValidation();
         Stock stockToUpdate;
         Product product;
         Category category;
@@ -551,9 +555,7 @@ public class frmAddStock extends javax.swing.JFrame {
             {
                 JOptionPane.showMessageDialog(null, "Quantity cannot be 0!","Incorrect Quantity",JOptionPane.WARNING_MESSAGE);
                 lblQuantity.setForeground(Color.red);
-            }
-            
-        
+            }      
     }//GEN-LAST:event_btnInsertStockActionPerformed
 
     private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
@@ -567,6 +569,49 @@ public class frmAddStock extends javax.swing.JFrame {
         mainDash.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void cmbProductSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbProductSearchMouseClicked
+        String selectedProductSearch = cmbProductSearch.getSelectedItem().toString();
+        String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
+        String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf(")"));
+        
+        Product selectedProduct = new Product();
+        for(Product p : products)
+        {
+            if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))))
+            {
+                selectedProduct = p;
+            }
+        }
+        
+        Model model = selectedProduct.getModel(); // Tanya
+        Category category = selectedProduct.getCategory(); // Tanya
+        Stock stock = new Stock(selectedProduct,0);
+        stock = stock.selectSpecStock();
+        
+        txtProductName.setText(selectedProduct.getName());
+        txtProductName.setEditable(false);
+        
+        txtDescription.setText(selectedProduct.getDescription());
+        txtDescription.setEditable(false);
+        
+        txtStatus.setText(selectedProduct.getStatus());
+        txtStatus.setEditable(false);
+        
+        txtCategory.setText(category.getDescription()); // Tanya
+        txtCategory.setEditable(false);
+        
+        txtProductModel.setText(model.getDescription()); // Tanya
+        txtProductModel.setEditable(false);
+        
+        txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
+        txtProductCost.setEditable(false);
+        
+        txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
+        txtProductSale.setEditable(false);
+        
+        numQuantity.setValue(stock.getQuantity());
+    }//GEN-LAST:event_cmbProductSearchMouseClicked
 
     /**
      * @param args the command line arguments

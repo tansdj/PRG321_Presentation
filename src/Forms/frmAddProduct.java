@@ -5,21 +5,13 @@
  */
 package Forms;
 
-import PersonManagement.Department;
-import PersonManagement.User;
 import java.awt.Color;
 import javax.swing.JFrame;
 import ProductManagement.*;
 import bc_stationary_bll.*;
 import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 /**
  *
@@ -553,7 +545,8 @@ public class frmAddProduct extends javax.swing.JFrame {
         //Variable decleration
         String pName, pDescription, pStatus, pCategory, pModel;
         int pQuantity;
-        Date d = Date.valueOf(LocalDate.MAX);
+        LocalDate local = LocalDate.now();
+        Date date = Date.valueOf(local);
         double costPrice, salePrice;
         
         Validation validation = new Validation();
@@ -592,9 +585,6 @@ public class frmAddProduct extends javax.swing.JFrame {
                                      int selectedCategOption = jTabbedPane2.getSelectedIndex();
                                      if(selectedCategOption == 0)
                                      {
-                                         LocalDate local = LocalDate.now();
-                                         Date date = Date.valueOf(local);
-                                         
                                          pCategory = cmbCategory.getSelectedItem().toString();
                                          category = new Category(pCategory);
                                          
@@ -624,8 +614,6 @@ public class frmAddProduct extends javax.swing.JFrame {
                                      }
                                      else if(selectedCategOption == 1)
                                      {
-                                         LocalDate local = LocalDate.now();
-                                         Date date = Date.valueOf(local);
                                          pCategory = txtCategory.getText(); 
                                          category = new Category(pCategory);
                                          
@@ -705,15 +693,6 @@ public class frmAddProduct extends javax.swing.JFrame {
                 txtProductName.grabFocus();
                 lblProductName.setForeground(Color.red);
             }
-            
-            
-            
-            
-           
-            
-            
-            
-            
         } catch (Exception e) 
         {
             JOptionPane.showMessageDialog(null, e.getMessage());

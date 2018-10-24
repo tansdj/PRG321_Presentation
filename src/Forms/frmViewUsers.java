@@ -46,69 +46,7 @@ public class frmViewUsers extends javax.swing.JFrame {
             model.addElement(u);
         }
         lbxUsers.setModel(model);
-        
-        txtSearch.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e)
-            {
-                User user = new User();
-         ArrayList<User> usersThatFitCriteria = new ArrayList<User>();
-         String searchCode = "", userCode = "", searchText = txtSearch.getText();
-            if (searchText == "")
-            {
-                userList = user.select();
-                DefaultListModel model = new DefaultListModel();
-        
-                 for(User u: userList)
-                    {
-                     model.addElement(u);
-                    }
-                lbxUsers.setModel(model);
-            }
-            else
-            {
-                int numSearchChars; // amount of characters that are typed into the search box.
-
-                searchCode = SoundEx.Soundex(searchText);
-
-                numSearchChars = searchText.length();
-                for(User u : userList)
-                {
-                    if (u.getPerson().getName().length() >= numSearchChars)
-                    {
-
-                        userCode = SoundEx.Soundex(u.getPerson().getName().substring(0, numSearchChars));
-
-
-                        if ((userCode == searchCode))
-                        {
-                            
-                            Person p = u.getPerson();
-                            try
-                            {
-                                 p = p.selectSpecPerson();
-                            u.setPerson(p);
-                            usersThatFitCriteria.add(u);
-                            }
-                            catch(SQLException se)
-                            {
-                            
-                            }
-                           
-                        }
-
-                    }                   
-                }
-                DefaultListModel model = new DefaultListModel();
-        
-                lbxUsers.setModel(model);
-                for(User u: usersThatFitCriteria)
-                {
-                    model.addElement(u);
-                }
-                lbxUsers.setModel(model);
-            }
-            }
-        });
+       
     }
 
     /**
@@ -299,12 +237,14 @@ public class frmViewUsers extends javax.swing.JFrame {
         txtSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtSearch.setText("Search...");
         txtSearch.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtSearch.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtSearchFocusGained(evt);
+        txtSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtSearchMouseClicked(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtSearchFocusLost(evt);
+        });
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
             }
         });
 
@@ -771,13 +711,70 @@ public class frmViewUsers extends javax.swing.JFrame {
         txtAnswer.setEditable(false);
     }//GEN-LAST:event_lbxUsersValueChanged
 
-    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
-        txtSearch.setText("");
-    }//GEN-LAST:event_txtSearchFocusGained
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+         User user = new User();
+         ArrayList<User> usersThatFitCriteria = new ArrayList<User>();
+         String searchCode = "", userCode = "", searchText = txtSearch.getText();
+            if (searchText == "")
+            {
+                userList = user.select();
+                DefaultListModel model = new DefaultListModel();
+        
+                 for(User u: userList)
+                    {
+                     model.addElement(u);
+                    }
+                lbxUsers.setModel(model);
+            }
+            else
+            {
+                int numSearchChars; // amount of characters that are typed into the search box.
 
-    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
-        txtSearch.setText("Search...");
-    }//GEN-LAST:event_txtSearchFocusLost
+                searchCode = SoundEx.Soundex(searchText);
+
+                numSearchChars = searchText.length();
+                for(User u : userList)
+                {
+                    if (u.getPerson().getName().length() >= numSearchChars)
+                    {
+
+                        userCode = SoundEx.Soundex(u.getPerson().getName().substring(0, numSearchChars));
+
+
+                        if ((userCode.equals(searchCode)))
+                        {
+                            
+                            Person p = u.getPerson();
+                            try
+                            {
+                                p = p.selectSpecPerson();
+                                u.setPerson(p);
+                                usersThatFitCriteria.add(u);
+                            }
+                            catch(SQLException se)
+                            {
+                                System.out.println(se);
+                            }
+                           
+                        }
+
+                    }                   
+                }
+                lbxUsers.removeAll();
+                DefaultListModel model = new DefaultListModel();
+        
+                lbxUsers.setModel(model);
+                for(User u: usersThatFitCriteria)
+                {
+                    model.addElement(u);
+                }
+                lbxUsers.setModel(model);
+            }        
+    }//GEN-LAST:event_txtSearchKeyReleased
+
+    private void txtSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchMouseClicked
+        txtSearch.setText("");
+    }//GEN-LAST:event_txtSearchMouseClicked
 
                                                       
     /**

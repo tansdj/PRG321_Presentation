@@ -5,8 +5,17 @@
  */
 package Forms;
 
+import ProductManagement.Category;
+import ProductManagement.Model;
+import ProductManagement.Product;
+import ProductManagement.Stock;
 import java.awt.Color;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import javafx.animation.Animation;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,10 +26,23 @@ public class frmUpdateStock extends javax.swing.JFrame {
     /**
      * Creates new form frmUpdateStock
      */
+    public ArrayList<Product> products;
+    public ArrayList<Category> categories;
     public frmUpdateStock() {
         initComponents();
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         this.getContentPane().setBackground(new Color(45,45,45));
+        Product product = new Product();
+         products = product.select();
+         for(Product p :products){
+            cmbProductSearch.addItem(p.getName()+"("+ p.getDescription()+")");
+        }
+         
+        Category category = new Category();
+        categories = category.select();
+        for(Category c :categories){
+            cmbCategory.addItem(c.getDescription());
+        }
     }
 
     /**
@@ -58,13 +80,12 @@ public class frmUpdateStock extends javax.swing.JFrame {
         lblProductSale = new javax.swing.JLabel();
         txtProductSale = new javax.swing.JTextField();
         lblSearchProducts = new javax.swing.JLabel();
-        txtSearch = new javax.swing.JTextField();
-        btnSearch = new javax.swing.JButton();
         pnlInStock = new javax.swing.JPanel();
         lblInStock = new javax.swing.JLabel();
         lblQuantity = new javax.swing.JLabel();
         txtQuantity = new javax.swing.JTextField();
         btnEditStock = new javax.swing.JButton();
+        cmbProductSearch = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -264,11 +285,7 @@ public class frmUpdateStock extends javax.swing.JFrame {
         txtProductName.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         cmbStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        cmbStatus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbStatusActionPerformed(evt);
-            }
-        });
+        cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Not Available", "Discontinued" }));
 
         cmbCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
 
@@ -304,24 +321,17 @@ public class frmUpdateStock extends javax.swing.JFrame {
             .addGroup(pnlProductInfoLayout.createSequentialGroup()
                 .addGap(58, 58, 58)
                 .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlProductInfoLayout.createSequentialGroup()
-                            .addComponent(lblProductName)
-                            .addGap(67, 67, 67))
-                        .addGroup(pnlProductInfoLayout.createSequentialGroup()
-                            .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblCategory)
-                                .addComponent(lblStatus)
-                                .addComponent(lblDescription))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlProductInfoLayout.createSequentialGroup()
+                        .addComponent(lblProductName)
+                        .addGap(67, 67, 67))
                     .addGroup(pnlProductInfoLayout.createSequentialGroup()
-                        .addComponent(lblProductModel)
-                        .addGap(132, 132, 132))
-                    .addGroup(pnlProductInfoLayout.createSequentialGroup()
-                        .addComponent(lblProductCost)
-                        .addGap(104, 104, 104))
-                    .addGroup(pnlProductInfoLayout.createSequentialGroup()
-                        .addComponent(lblProductSale)
+                        .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblCategory)
+                            .addComponent(lblStatus)
+                            .addComponent(lblDescription)
+                            .addComponent(lblProductModel)
+                            .addComponent(lblProductCost)
+                            .addComponent(lblProductSale))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtProductCost, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -373,19 +383,6 @@ public class frmUpdateStock extends javax.swing.JFrame {
         lblSearchProducts.setForeground(new java.awt.Color(255, 255, 255));
         lblSearchProducts.setText("Search Products: ");
 
-        txtSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtSearch.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        btnSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnSearch.setText("Search");
-        btnSearch.setBorderPainted(false);
-        btnSearch.setFocusPainted(false);
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchActionPerformed(evt);
-            }
-        });
-
         pnlInStock.setBackground(new java.awt.Color(45, 45, 45));
         pnlInStock.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -399,7 +396,6 @@ public class frmUpdateStock extends javax.swing.JFrame {
 
         txtQuantity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtQuantity.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtQuantity.setEnabled(false);
 
         javax.swing.GroupLayout pnlInStockLayout = new javax.swing.GroupLayout(pnlInStock);
         pnlInStock.setLayout(pnlInStockLayout);
@@ -438,6 +434,13 @@ public class frmUpdateStock extends javax.swing.JFrame {
             }
         });
 
+        cmbProductSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cmbProductSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cmbProductSearchMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -450,17 +453,14 @@ public class frmUpdateStock extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(82, 82, 82)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(lblSearchProducts)
-                                        .addGap(47, 47, 47)
-                                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(pnlProductInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(45, 45, 45)
-                                        .addComponent(pnlInStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(cmbProductSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(pnlProductInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(45, 45, 45)
+                                .addComponent(pnlInStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(530, 530, 530)
                                 .addComponent(btnEditStock)))))
@@ -475,12 +475,11 @@ public class frmUpdateStock extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(84, 84, 84)
+                        .addGap(85, 85, 85)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblSearchProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSearch))
-                        .addGap(100, 100, 100)
+                            .addComponent(cmbProductSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(101, 101, 101)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(pnlInStock, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(pnlProductInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -504,17 +503,44 @@ public class frmUpdateStock extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnViewStockActionPerformed
 
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSearchActionPerformed
-
     private void btnEditStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditStockActionPerformed
-
+        String pName, pDescription, pStatus, pCategory, pModel;
+        int pQuantity;
+        LocalDate local = LocalDate.now();
+        Date date = Date.valueOf(local);
+        double costPrice, salePrice;
+        
+        Stock stockToUpdate;
+        Product product;
+        Category category;
+        Model model;
+        //Assigning variables values  
+        pName =  txtProductName.getText();
+        pDescription = txtDescription.getText();
+        pStatus = cmbStatus.getSelectedItem().toString();
+        pCategory = cmbCategory.getSelectedItem().toString();
+        pQuantity = Integer.parseInt(txtQuantity.getText());  
+        pModel = txtProductModel.getText();
+        costPrice = (Double)Double.parseDouble(txtProductCost.getText());
+        salePrice = (Double)Double.parseDouble(txtProductSale.getText());
+                
+        category = new Category(pCategory);
+        model = new Model(pModel);
+        product = new Product(pName, pDescription, category, pStatus, model, costPrice, salePrice, date); 
+                
+            if(product.update() != -1)
+            {
+                JOptionPane.showMessageDialog(null, "The product was successfully updated","Update Successful",JOptionPane.INFORMATION_MESSAGE);
+                                        
+                AdministratorMainDash mainDash = new AdministratorMainDash();
+                mainDash.setVisible(true);
+                this.setVisible(false);
+            }
+            else
+            {
+               JOptionPane.showMessageDialog(null, "Something went wrong during the update process. Product Update was unsuccessful!","Registration Failed",JOptionPane.WARNING_MESSAGE);
+            }
     }//GEN-LAST:event_btnEditStockActionPerformed
-
-    private void cmbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStatusActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbStatusActionPerformed
 
     private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
         frmAddProduct addProduct = new frmAddProduct();
@@ -533,6 +559,34 @@ public class frmUpdateStock extends javax.swing.JFrame {
         mainDash.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void cmbProductSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbProductSearchMouseClicked
+        String selectedProductSearch = cmbProductSearch.getSelectedItem().toString();
+        String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
+        String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf(")"));
+        
+        Product selectedProduct = new Product();
+        for(Product p : products)
+        {
+            if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))))
+            {
+                selectedProduct = p;
+            }
+        }
+        
+        Model model = selectedProduct.getModel(); // Tanya
+        Category category = selectedProduct.getCategory(); // Tanya
+        Stock stock = new Stock(selectedProduct,0);
+        stock = stock.selectSpecStock();
+        
+        txtProductName.setText(selectedProduct.getName());
+        txtDescription.setText(selectedProduct.getDescription());
+        txtProductModel.setText(model.getDescription()); // Tanya
+        txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
+        txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
+        txtQuantity.setText(Integer.toString(stock.getQuantity()));
+        txtQuantity.setEditable(false);
+    }//GEN-LAST:event_cmbProductSearchMouseClicked
 
     /**
      * @param args the command line arguments
@@ -574,10 +628,10 @@ public class frmUpdateStock extends javax.swing.JFrame {
     private javax.swing.JButton btnAddStock;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnEditStock;
-    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdateStock;
     private javax.swing.JButton btnViewStock;
     private javax.swing.JComboBox<String> cmbCategory;
+    private javax.swing.JComboBox<String> cmbProductSearch;
     private javax.swing.JComboBox<String> cmbStatus;
     private javax.swing.JLabel lblCategory;
     private javax.swing.JLabel lblDescription;
@@ -602,6 +656,5 @@ public class frmUpdateStock extends javax.swing.JFrame {
     private javax.swing.JTextField txtProductName;
     private javax.swing.JTextField txtProductSale;
     private javax.swing.JTextField txtQuantity;
-    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

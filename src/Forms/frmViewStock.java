@@ -5,12 +5,21 @@
  */
 package Forms;
 
+import PersonManagement.Address;
+import PersonManagement.Contact;
+import PersonManagement.Person;
+import PersonManagement.SecurityQuestions;
+import PersonManagement.User;
+import PersonManagement.UserSecurityQuestions;
 import ProductManagement.Category;
 import ProductManagement.Model;
 import ProductManagement.Product;
 import ProductManagement.Stock;
+import bc_stationary_bll.SoundEx;
 import java.awt.Color;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.ListModel;
 
@@ -23,21 +32,22 @@ public class frmViewStock extends javax.swing.JFrame {
     /**
      * Creates new form frmViewStock
      */
+    ArrayList<Product> productList;
     public frmViewStock() {
         initComponents();
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         this.getContentPane().setBackground(new Color(45,45,45));
         
         Product product = new Product();
-        Stock stock = new Stock();
-        ArrayList<Stock> stockList;
-        stockList = stock.select();
+        productList = product.select();
         
-        for (int i = 0; i < stockList.size(); i++) 
+        DefaultListModel model = new DefaultListModel();
+        // Populate Listbox
+        for(Product p: productList)
         {
-            lbxProducts.setModel((ListModel<String>) stockList);
-            lbxProducts.setListData((String[]) stockList.toArray());
+            model.addElement(p);
         }
+        lbxProducts.setModel(model);
     }
 
     /**
@@ -84,6 +94,16 @@ public class frmViewStock extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                formKeyReleased(evt);
+            }
+        });
 
         pnlRegisterHeader.setBackground(new java.awt.Color(255, 255, 0));
         pnlRegisterHeader.setPreferredSize(new java.awt.Dimension(1071, 530));
@@ -251,6 +271,11 @@ public class frmViewStock extends javax.swing.JFrame {
         );
 
         lbxProducts.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxProducts.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lbxProductsValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(lbxProducts);
 
         txtSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
@@ -270,11 +295,9 @@ public class frmViewStock extends javax.swing.JFrame {
 
         txtProductName2.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtProductName2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtProductName2.setEnabled(false);
 
         txtStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtStatus.setEnabled(false);
 
         lblDescription2.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblDescription2.setForeground(new java.awt.Color(255, 255, 255));
@@ -290,11 +313,9 @@ public class frmViewStock extends javax.swing.JFrame {
 
         txtCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtCategory.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtCategory.setEnabled(false);
 
         txtDescription2.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtDescription2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtDescription2.setEnabled(false);
 
         lblQuantity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblQuantity.setForeground(new java.awt.Color(255, 255, 255));
@@ -302,7 +323,6 @@ public class frmViewStock extends javax.swing.JFrame {
 
         txtQuantity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtQuantity.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtQuantity.setEnabled(false);
 
         lblProductModel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblProductModel.setForeground(new java.awt.Color(255, 255, 255));
@@ -318,15 +338,12 @@ public class frmViewStock extends javax.swing.JFrame {
 
         txtProductModel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtProductModel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtProductModel.setEnabled(false);
 
         txtProductCost.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtProductCost.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtProductCost.setEnabled(false);
 
         txtProductSale.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtProductSale.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtProductSale.setEnabled(false);
 
         javax.swing.GroupLayout pnlProductInfoLayout = new javax.swing.GroupLayout(pnlProductInfo);
         pnlProductInfo.setLayout(pnlProductInfoLayout);
@@ -457,15 +474,15 @@ public class frmViewStock extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(101, 101, 101)
+                        .addGap(173, 173, 173)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jRadioButton1)
                             .addComponent(jRadioButton2))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pnlProductInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(pnlProductInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1))))
                 .addContainerGap(2059, Short.MAX_VALUE))
         );
 
@@ -499,6 +516,48 @@ public class frmViewStock extends javax.swing.JFrame {
         mainDash.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        txtSearch.setText("");
+    }//GEN-LAST:event_formMouseClicked
+
+    private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formKeyReleased
+
+    public Product selectedProduct;
+    private void lbxProductsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxProductsValueChanged
+        int index= lbxProducts.getSelectedIndex();
+        selectedProduct = productList.get(index);
+        
+        Stock stock = new Stock(selectedProduct,0);
+        stock = stock.selectSpecStock();
+        
+        txtSearch.setText(selectedProduct.toString());
+        txtProductName2.setText(selectedProduct.getName());
+        txtProductName2.setEditable(false);
+        
+        txtDescription2.setText(selectedProduct.getDescription());
+        txtDescription2.setEditable(false);
+        
+        txtStatus.setText(selectedProduct.getStatus());
+        txtStatus.setEditable(false);
+        
+        txtProductModel.setText(selectedProduct.getModel().getDescription());
+        txtProductModel.setEditable(false);
+        
+        txtCategory.setText(selectedProduct.getCategory().getDescription());
+        txtCategory.setEditable(false);
+        
+        txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
+        txtProductCost.setEditable(false);
+        
+        txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
+        txtProductSale.setEditable(false);
+        
+        txtQuantity.setText(Integer.toString(stock.getQuantity()));
+        txtQuantity.setEditable(false);
+    }//GEN-LAST:event_lbxProductsValueChanged
    
      private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
