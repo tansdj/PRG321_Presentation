@@ -9,13 +9,10 @@ import ProductManagement.Category;
 import ProductManagement.Model;
 import ProductManagement.Product;
 import ProductManagement.Stock;
-import bc_stationary_bll.InputValidation;
 import java.awt.Color;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -52,12 +49,6 @@ public class frmAddStock extends javax.swing.JFrame {
         pnlRegisterHeader = new javax.swing.JPanel();
         pnlRegisterHeader1 = new javax.swing.JPanel();
         lblAddStock = new javax.swing.JLabel();
-        pnlMenu = new javax.swing.JPanel();
-        btnAddProduct = new javax.swing.JButton();
-        btnUpdateStock = new javax.swing.JButton();
-        btnViewStock = new javax.swing.JButton();
-        btnAddStock = new javax.swing.JButton();
-        btnBack = new javax.swing.JButton();
         pnlInStock = new javax.swing.JPanel();
         lblInStock = new javax.swing.JLabel();
         lblQuantity = new javax.swing.JLabel();
@@ -81,6 +72,12 @@ public class frmAddStock extends javax.swing.JFrame {
         txtStatus = new javax.swing.JTextField();
         txtCategory = new javax.swing.JTextField();
         cmbProductSearch = new javax.swing.JComboBox<>();
+        pnlMenu = new javax.swing.JPanel();
+        btnAddProduct = new javax.swing.JButton();
+        btnUpdateStock = new javax.swing.JButton();
+        btnViewStock = new javax.swing.JButton();
+        btnAddStock = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -130,121 +127,6 @@ public class frmAddStock extends javax.swing.JFrame {
                 .addGroup(pnlRegisterHeaderLayout.createSequentialGroup()
                     .addComponent(pnlRegisterHeader1, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
                     .addContainerGap()))
-        );
-
-        pnlMenu.setBackground(new java.awt.Color(40, 40, 40));
-
-        btnAddProduct.setBackground(new java.awt.Color(204, 0, 0));
-        btnAddProduct.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnAddProduct.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1.png"))); // NOI18N
-        btnAddProduct.setText("Add Product");
-        btnAddProduct.setBorder(null);
-        btnAddProduct.setBorderPainted(false);
-        btnAddProduct.setContentAreaFilled(false);
-        btnAddProduct.setFocusPainted(false);
-        btnAddProduct.setIconTextGap(12);
-        btnAddProduct.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
-        btnAddProduct.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddProductActionPerformed(evt);
-            }
-        });
-
-        btnUpdateStock.setBackground(new java.awt.Color(40, 40, 40));
-        btnUpdateStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnUpdateStock.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdateStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1.png"))); // NOI18N
-        btnUpdateStock.setText("Update Stock");
-        btnUpdateStock.setBorder(null);
-        btnUpdateStock.setBorderPainted(false);
-        btnUpdateStock.setContentAreaFilled(false);
-        btnUpdateStock.setFocusPainted(false);
-        btnUpdateStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnUpdateStock.setIconTextGap(6);
-        btnUpdateStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
-        btnUpdateStock.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateStockActionPerformed(evt);
-            }
-        });
-
-        btnViewStock.setBackground(new java.awt.Color(40, 40, 40));
-        btnViewStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnViewStock.setForeground(new java.awt.Color(255, 255, 255));
-        btnViewStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View.png"))); // NOI18N
-        btnViewStock.setText("View Stock");
-        btnViewStock.setBorder(null);
-        btnViewStock.setBorderPainted(false);
-        btnViewStock.setContentAreaFilled(false);
-        btnViewStock.setFocusPainted(false);
-        btnViewStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnViewStock.setIconTextGap(25);
-        btnViewStock.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
-        btnViewStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
-        btnViewStock.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewStockActionPerformed(evt);
-            }
-        });
-
-        btnAddStock.setBackground(new java.awt.Color(204, 0, 0));
-        btnAddStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnAddStock.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
-        btnAddStock.setText("Add Stock");
-        btnAddStock.setBorder(null);
-        btnAddStock.setBorderPainted(false);
-        btnAddStock.setContentAreaFilled(false);
-        btnAddStock.setFocusPainted(false);
-        btnAddStock.setIconTextGap(30);
-        btnAddStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
-
-        btnBack.setBackground(new java.awt.Color(204, 0, 0));
-        btnBack.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnBack.setForeground(new java.awt.Color(255, 255, 255));
-        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1.png"))); // NOI18N
-        btnBack.setText("Main Dash");
-        btnBack.setBorder(null);
-        btnBack.setBorderPainted(false);
-        btnBack.setContentAreaFilled(false);
-        btnBack.setFocusPainted(false);
-        btnBack.setIconTextGap(20);
-        btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
-        btnBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlMenuLayout = new javax.swing.GroupLayout(pnlMenu);
-        pnlMenu.setLayout(pnlMenuLayout);
-        pnlMenuLayout.setHorizontalGroup(
-            pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnAddProduct, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(pnlMenuLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnViewStock, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                    .addComponent(btnUpdateStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAddStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnBack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        pnlMenuLayout.setVerticalGroup(
-            pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlMenuLayout.createSequentialGroup()
-                .addGap(69, 69, 69)
-                .addComponent(btnAddProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAddStock, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addComponent(btnUpdateStock, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnViewStock, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(693, Short.MAX_VALUE))
         );
 
         pnlInStock.setBackground(new java.awt.Color(45, 45, 45));
@@ -444,6 +326,121 @@ public class frmAddStock extends javax.swing.JFrame {
             }
         });
 
+        pnlMenu.setBackground(new java.awt.Color(40, 40, 40));
+
+        btnAddProduct.setBackground(new java.awt.Color(204, 0, 0));
+        btnAddProduct.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnAddProduct.setForeground(new java.awt.Color(255, 255, 255));
+        btnAddProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1.png"))); // NOI18N
+        btnAddProduct.setText("Add Product");
+        btnAddProduct.setBorder(null);
+        btnAddProduct.setBorderPainted(false);
+        btnAddProduct.setContentAreaFilled(false);
+        btnAddProduct.setFocusPainted(false);
+        btnAddProduct.setIconTextGap(30);
+        btnAddProduct.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
+        btnAddProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddProductActionPerformed(evt);
+            }
+        });
+
+        btnUpdateStock.setBackground(new java.awt.Color(40, 40, 40));
+        btnUpdateStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnUpdateStock.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdateStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1.png"))); // NOI18N
+        btnUpdateStock.setText("Update Product");
+        btnUpdateStock.setBorder(null);
+        btnUpdateStock.setBorderPainted(false);
+        btnUpdateStock.setContentAreaFilled(false);
+        btnUpdateStock.setFocusPainted(false);
+        btnUpdateStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnUpdateStock.setIconTextGap(5);
+        btnUpdateStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
+        btnUpdateStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateStockActionPerformed(evt);
+            }
+        });
+
+        btnViewStock.setBackground(new java.awt.Color(40, 40, 40));
+        btnViewStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnViewStock.setForeground(new java.awt.Color(255, 255, 255));
+        btnViewStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View.png"))); // NOI18N
+        btnViewStock.setText("View Stock");
+        btnViewStock.setBorder(null);
+        btnViewStock.setBorderPainted(false);
+        btnViewStock.setContentAreaFilled(false);
+        btnViewStock.setFocusPainted(false);
+        btnViewStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnViewStock.setIconTextGap(40);
+        btnViewStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
+        btnViewStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewStockActionPerformed(evt);
+            }
+        });
+
+        btnAddStock.setBackground(new java.awt.Color(204, 0, 0));
+        btnAddStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnAddStock.setForeground(new java.awt.Color(255, 255, 255));
+        btnAddStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
+        btnAddStock.setText("Add Stock");
+        btnAddStock.setBorder(null);
+        btnAddStock.setBorderPainted(false);
+        btnAddStock.setContentAreaFilled(false);
+        btnAddStock.setFocusPainted(false);
+        btnAddStock.setIconTextGap(50);
+        btnAddStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
+        btnAddStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddStockActionPerformed(evt);
+            }
+        });
+
+        btnBack.setBackground(new java.awt.Color(204, 0, 0));
+        btnBack.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnBack.setForeground(new java.awt.Color(255, 255, 255));
+        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1.png"))); // NOI18N
+        btnBack.setText("Main Dash");
+        btnBack.setBorder(null);
+        btnBack.setBorderPainted(false);
+        btnBack.setContentAreaFilled(false);
+        btnBack.setFocusPainted(false);
+        btnBack.setIconTextGap(45);
+        btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlMenuLayout = new javax.swing.GroupLayout(pnlMenu);
+        pnlMenu.setLayout(pnlMenuLayout);
+        pnlMenuLayout.setHorizontalGroup(
+            pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnAddProduct, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnAddStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+            .addComponent(btnUpdateStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnViewStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnBack, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        pnlMenuLayout.setVerticalGroup(
+            pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMenuLayout.createSequentialGroup()
+                .addGap(69, 69, 69)
+                .addComponent(btnAddProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAddStock, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(btnUpdateStock, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnViewStock, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(693, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -452,7 +449,7 @@ public class frmAddStock extends javax.swing.JFrame {
                 .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(99, 99, 99)
+                        .addGap(94, 94, 94)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(lblSearchProducts)
@@ -464,7 +461,7 @@ public class frmAddStock extends javax.swing.JFrame {
                         .addGap(54, 54, 54)
                         .addComponent(pnlInStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(600, 600, 600)
+                        .addGap(595, 595, 595)
                         .addComponent(btnInsertStock)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
@@ -477,9 +474,6 @@ public class frmAddStock extends javax.swing.JFrame {
                 .addComponent(pnlRegisterHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(89, 89, 89)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblSearchProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -489,25 +483,15 @@ public class frmAddStock extends javax.swing.JFrame {
                             .addComponent(pnlInStock, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(pnlProjectInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnInsertStock)))
+                        .addComponent(btnInsertStock))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnUpdateStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStockActionPerformed
-        frmUpdateStock updateStock = new frmUpdateStock();
-        updateStock.setVisible(true);
-        this.setVisible(false);
-
-    }//GEN-LAST:event_btnUpdateStockActionPerformed
-
-    private void btnViewStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStockActionPerformed
-        frmViewStock viewStock = new frmViewStock();
-        viewStock.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnViewStockActionPerformed
 
     private void btnInsertStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertStockActionPerformed
         //Variable declaration
@@ -558,18 +542,6 @@ public class frmAddStock extends javax.swing.JFrame {
             }      
     }//GEN-LAST:event_btnInsertStockActionPerformed
 
-    private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
-        frmAddProduct addProduct = new frmAddProduct();
-        addProduct.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnAddProductActionPerformed
-
-    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        AdministratorMainDash mainDash = new AdministratorMainDash();
-        mainDash.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnBackActionPerformed
-
     private void cmbProductSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbProductSearchMouseClicked
         String selectedProductSearch = cmbProductSearch.getSelectedItem().toString();
         String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
@@ -598,10 +570,10 @@ public class frmAddStock extends javax.swing.JFrame {
         txtStatus.setText(selectedProduct.getStatus());
         txtStatus.setEditable(false);
         
-        txtCategory.setText(category.getDescription()); // Tanya
+        txtCategory.setText(category.getDescription());
         txtCategory.setEditable(false);
         
-        txtProductModel.setText(model.getDescription()); // Tanya
+        txtProductModel.setText(model.getDescription());
         txtProductModel.setEditable(false);
         
         txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
@@ -612,6 +584,34 @@ public class frmAddStock extends javax.swing.JFrame {
         
         numQuantity.setValue(stock.getQuantity());
     }//GEN-LAST:event_cmbProductSearchMouseClicked
+
+    private void btnUpdateStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStockActionPerformed
+
+    }//GEN-LAST:event_btnUpdateStockActionPerformed
+
+    private void btnViewStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStockActionPerformed
+        frmViewStock viewStock = new frmViewStock();
+        viewStock.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnViewStockActionPerformed
+
+    private void btnAddStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStockActionPerformed
+        frmAddStock addStock = new frmAddStock();
+        addStock.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnAddStockActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        AdministratorMainDash mainDash = new AdministratorMainDash();
+        mainDash.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
+        frmAddProduct addProduct = new frmAddProduct();
+        addProduct.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnAddProductActionPerformed
 
     /**
      * @param args the command line arguments

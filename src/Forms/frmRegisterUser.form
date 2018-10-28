@@ -46,7 +46,7 @@
                       <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="pnlContactInfo" max="32767" attributes="0"/>
-                          <Component id="pnlDepartmentInfo" pref="0" max="32767" attributes="0"/>
+                          <Component id="pnlDepartmentInfo" pref="473" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="btnNextRegistration" min="-2" max="-2" attributes="0"/>
@@ -59,9 +59,9 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="pnlRegisterHeader" min="-2" pref="65" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="pnlPersonalInfo" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="pnlContactInfo" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -74,10 +74,7 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnNextRegistration" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnlMenu" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="pnlMenu" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>

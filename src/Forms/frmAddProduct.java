@@ -142,20 +142,20 @@ public class frmAddProduct extends javax.swing.JFrame {
         btnAddProduct.setBorderPainted(false);
         btnAddProduct.setContentAreaFilled(false);
         btnAddProduct.setFocusPainted(false);
-        btnAddProduct.setIconTextGap(12);
+        btnAddProduct.setIconTextGap(30);
         btnAddProduct.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
 
         btnUpdateStock.setBackground(new java.awt.Color(40, 40, 40));
         btnUpdateStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnUpdateStock.setForeground(new java.awt.Color(255, 255, 255));
         btnUpdateStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1.png"))); // NOI18N
-        btnUpdateStock.setText("Update Stock");
+        btnUpdateStock.setText("Update Product");
         btnUpdateStock.setBorder(null);
         btnUpdateStock.setBorderPainted(false);
         btnUpdateStock.setContentAreaFilled(false);
         btnUpdateStock.setFocusPainted(false);
         btnUpdateStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnUpdateStock.setIconTextGap(6);
+        btnUpdateStock.setIconTextGap(5);
         btnUpdateStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
         btnUpdateStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -173,7 +173,7 @@ public class frmAddProduct extends javax.swing.JFrame {
         btnViewStock.setContentAreaFilled(false);
         btnViewStock.setFocusPainted(false);
         btnViewStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnViewStock.setIconTextGap(25);
+        btnViewStock.setIconTextGap(40);
         btnViewStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
         btnViewStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -190,7 +190,7 @@ public class frmAddProduct extends javax.swing.JFrame {
         btnAddStock.setBorderPainted(false);
         btnAddStock.setContentAreaFilled(false);
         btnAddStock.setFocusPainted(false);
-        btnAddStock.setIconTextGap(30);
+        btnAddStock.setIconTextGap(50);
         btnAddStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
         btnAddStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -207,7 +207,7 @@ public class frmAddProduct extends javax.swing.JFrame {
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
         btnBack.setFocusPainted(false);
-        btnBack.setIconTextGap(20);
+        btnBack.setIconTextGap(45);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -220,14 +220,10 @@ public class frmAddProduct extends javax.swing.JFrame {
         pnlMenuLayout.setHorizontalGroup(
             pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnAddProduct, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(pnlMenuLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnViewStock, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                    .addComponent(btnUpdateStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAddStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnBack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addComponent(btnAddStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+            .addComponent(btnUpdateStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnViewStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnBack, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlMenuLayout.setVerticalGroup(
             pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -498,12 +494,12 @@ public class frmAddProduct extends javax.swing.JFrame {
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(70, 70, 70)
+                                .addGap(61, 61, 61)
                                 .addComponent(pnlProjectInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(33, 33, 33)
                                 .addComponent(pnlInStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(524, 524, 524)
+                                .addGap(515, 515, 515)
                                 .addComponent(btnInsertProduct)))))
                 .addGap(0, 20, Short.MAX_VALUE))
         );

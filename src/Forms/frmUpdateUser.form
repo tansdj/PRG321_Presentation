@@ -3,7 +3,6 @@
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -26,14 +25,17 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <Component id="pnlRegisterHeader" min="-2" pref="1500" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="516" max="32767" attributes="0"/>
           </Group>
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <Component id="pnlMenu" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" min="-2" pref="284" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="pnlUserInfo" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="txtSearch" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" min="-2" pref="295" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="pnlUserInfo1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -48,10 +50,14 @@
                       <Component id="pnlMenu" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="pnlUserInfo" max="32767" attributes="0"/>
-                          <Component id="jScrollPane1" min="-2" pref="569" max="-2" attributes="0"/>
+                          <Component id="pnlUserInfo1" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="txtSearch" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                              <Component id="jScrollPane1" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
@@ -102,8 +108,8 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="607" max="-2" attributes="0"/>
-                      <Component id="lblAddUser" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="787" max="32767" attributes="0"/>
+                      <Component id="lblUpdateUser" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="752" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -111,14 +117,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace pref="12" max="32767" attributes="0"/>
-                      <Component id="lblAddUser" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblUpdateUser" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="lblAddUser">
+            <Component class="javax.swing.JLabel" name="lblUpdateUser">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="24" style="1"/>
@@ -126,7 +132,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Add User"/>
+                <Property name="text" type="java.lang.String" value="Update User"/>
                 <Property name="alignmentY" type="float" value="0.0"/>
               </Properties>
             </Component>
@@ -144,12 +150,12 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnViewUser" max="32767" attributes="0"/>
+                      <Component id="btnViewUser" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnAddUser" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnBack" alignment="1" max="32767" attributes="0"/>
+                      <Component id="btnBack" alignment="1" pref="138" max="32767" attributes="0"/>
                       <Component id="btnUpdateUser" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -216,7 +222,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Forms/Images/Add1_Red.png"/>
+              <Image iconType="3" name="/Forms/Images/Add1.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Add User"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -227,6 +233,9 @@
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="iconTextGap" type="int" value="30"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddUserActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnBack">
           <Properties>
@@ -270,7 +279,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Forms/Images/Edit1.png"/>
+              <Image iconType="3" name="/Forms/Images/Edit1_Red.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Update User"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -284,13 +293,35 @@
               <Image iconType="3" name="/Forms/Images/Edit1_Red.png"/>
             </Property>
           </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateUserActionPerformed"/>
-          </Events>
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JPanel" name="pnlUserInfo">
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JList" name="lbxUsers">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Century Gothic" size="16" style="0"/>
+            </Property>
+            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
+              <StringArray count="0"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lbxUsersValueChanged"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="pnlUserInfo1">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="2d" green="2d" red="2d" type="rgb"/>
@@ -311,31 +342,30 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                  <Component id="lblUserInfo" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblUserInfoUpdate" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="65" pref="77" max="32767" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <Component id="lblCampus" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
-                                          <Component id="txtCampus" min="-2" pref="192" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Component id="lblLastnameUpdate" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
+                                          <Component id="txtLastnameUpdate" min="-2" pref="192" max="-2" attributes="0"/>
                                       </Group>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="lblIDNumber" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="32767" attributes="0"/>
-                                              <Component id="txtIDNumber" min="-2" pref="192" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Component id="lblFirstnameUpdate" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
+                                          <Component id="txtFirstnameUpdate" min="-2" pref="192" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="lblIDNumber" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblCampusUpdate" alignment="0" min="-2" max="-2" attributes="0"/>
                                           </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="lblLastname" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
-                                              <Component id="txtLastname" min="-2" pref="192" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="lblFirstname" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
-                                              <Component id="txtFirstname" min="-2" pref="192" max="-2" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="cmbCampus" pref="192" max="32767" attributes="0"/>
+                                              <Component id="txtIDNumber" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
@@ -343,52 +373,51 @@
                           </Group>
                           <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           <Component id="pnlAddressInfo" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="pnlLoginInfo" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="528" max="32767" attributes="0"/>
+                  <Component id="pnlLoginInfo1" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                  <Component id="lblUserInfo" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblUserInfoUpdate" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblFirstname" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtFirstname" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblFirstnameUpdate" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtFirstnameUpdate" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblLastname" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtLastname" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblLastnameUpdate" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtLastnameUpdate" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblIDNumber" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtIDNumber" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="17" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblCampus" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtCampus" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblCampusUpdate" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cmbCampus" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="pnlAddressInfo" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
-              <Component id="pnlLoginInfo" max="32767" attributes="0"/>
+              <Component id="pnlLoginInfo1" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="lblUserInfo">
+        <Component class="javax.swing.JLabel" name="lblUserInfoUpdate">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="18" style="1"/>
@@ -399,7 +428,7 @@
             <Property name="text" type="java.lang.String" value="User Information"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblFirstname">
+        <Component class="javax.swing.JLabel" name="lblFirstnameUpdate">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="16" style="0"/>
@@ -410,7 +439,7 @@
             <Property name="text" type="java.lang.String" value="Firstname:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtFirstname">
+        <Component class="javax.swing.JTextField" name="txtFirstnameUpdate">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="16" style="0"/>
@@ -420,9 +449,12 @@
                 <BevelBorder/>
               </Border>
             </Property>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Default Cursor"/>
+            </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblLastname">
+        <Component class="javax.swing.JLabel" name="lblLastnameUpdate">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="16" style="0"/>
@@ -433,7 +465,7 @@
             <Property name="text" type="java.lang.String" value="Lastname:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtLastname">
+        <Component class="javax.swing.JTextField" name="txtLastnameUpdate">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="16" style="0"/>
@@ -443,9 +475,12 @@
                 <BevelBorder/>
               </Border>
             </Property>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Default Cursor"/>
+            </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblCampus">
+        <Component class="javax.swing.JLabel" name="lblCampusUpdate">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="16" style="0"/>
@@ -456,19 +491,7 @@
             <Property name="text" type="java.lang.String" value="Campus:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtCampus">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Century Gothic" size="16" style="0"/>
-            </Property>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
-                <BevelBorder/>
-              </Border>
-            </Property>
-          </Properties>
-        </Component>
-        <Container class="javax.swing.JPanel" name="pnlLoginInfo">
+        <Container class="javax.swing.JPanel" name="pnlLoginInfo1">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="2d" green="2d" red="2d" type="rgb"/>
@@ -484,84 +507,85 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <EmptySpace min="30" pref="30" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="txtSecQuestion" alignment="1" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                              <Component id="lblLoginInfo" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txtSecurityQuestion" min="-2" pref="311" max="-2" attributes="0"/>
-                                  <Component id="lblAccessLevel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtStatus" alignment="0" min="-2" pref="204" max="-2" attributes="0"/>
+                                  <Component id="lblLoginInfo1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblAccessLevel1" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Group type="103" alignment="0" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Component id="lblPassword" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblPassword1" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="101" max="-2" attributes="0"/>
                                       </Group>
-                                      <Component id="txtPassword" alignment="1" min="-2" pref="204" max="-2" attributes="0"/>
+                                      <Component id="txtPassword1" alignment="1" min="-2" pref="204" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="lblSecurityQuestion" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblAnswer" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtAccessLevel" alignment="0" min="-2" pref="204" max="-2" attributes="0"/>
-                                  <Component id="lblStatus" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblUsername" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtUsername" alignment="0" min="-2" pref="204" max="-2" attributes="0"/>
-                                  <Component id="txtAnswer" alignment="0" min="-2" pref="270" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="btnInsertUser" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-                                      <Component id="btnRejectUser" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="lblSecurityQuestion1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblAnswer1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblStatus1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblUsername1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtUsername1" alignment="0" min="-2" pref="204" max="-2" attributes="0"/>
+                                  <Component id="txtAnswer1" alignment="0" min="-2" pref="270" max="-2" attributes="0"/>
+                                  <Component id="cmbStatus" alignment="0" min="-2" pref="204" max="-2" attributes="0"/>
+                                  <Component id="cmbAccessLevel" alignment="0" min="-2" pref="204" max="-2" attributes="0"/>
                               </Group>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="25" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="pnlDepartmentInfo" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnEditUser" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="119" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                      <Component id="lblLoginInfo" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                      <Component id="lblUsername" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtUsername" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="lblPassword" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtPassword" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                      <Component id="lblAccessLevel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                      <Component id="txtAccessLevel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="lblStatus" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtStatus" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="lblSecurityQuestion" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                      <Component id="txtSecurityQuestion" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="lblAnswer" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtAnswer" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnlDepartmentInfo" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnRejectUser" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnInsertUser" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+                      <Component id="lblLoginInfo1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="lblUsername1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="txtUsername1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="lblPassword1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="txtPassword1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                      <Component id="lblAccessLevel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="cmbAccessLevel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                      <Component id="lblStatus1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                      <Component id="cmbStatus" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="lblSecurityQuestion1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="txtSecQuestion" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                      <Component id="lblAnswer1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="txtAnswer1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="btnEditUser" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="lblLoginInfo">
+            <Component class="javax.swing.JLabel" name="lblLoginInfo1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="18" style="1"/>
@@ -572,7 +596,7 @@
                 <Property name="text" type="java.lang.String" value="Login Information"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblUsername">
+            <Component class="javax.swing.JLabel" name="lblUsername1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="16" style="0"/>
@@ -583,7 +607,7 @@
                 <Property name="text" type="java.lang.String" value="Username:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtUsername">
+            <Component class="javax.swing.JTextField" name="txtUsername1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="16" style="0"/>
@@ -593,9 +617,12 @@
                     <BevelBorder/>
                   </Border>
                 </Property>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Default Cursor"/>
+                </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblPassword">
+            <Component class="javax.swing.JLabel" name="lblPassword1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="16" style="0"/>
@@ -606,7 +633,7 @@
                 <Property name="text" type="java.lang.String" value="Password:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtPassword">
+            <Component class="javax.swing.JTextField" name="txtPassword1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="16" style="0"/>
@@ -616,9 +643,12 @@
                     <BevelBorder/>
                   </Border>
                 </Property>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Default Cursor"/>
+                </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblAccessLevel">
+            <Component class="javax.swing.JLabel" name="lblAccessLevel1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="16" style="0"/>
@@ -629,7 +659,7 @@
                 <Property name="text" type="java.lang.String" value="Access Level:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblStatus">
+            <Component class="javax.swing.JLabel" name="lblStatus1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="16" style="0"/>
@@ -640,7 +670,7 @@
                 <Property name="text" type="java.lang.String" value="Status"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblSecurityQuestion">
+            <Component class="javax.swing.JLabel" name="lblSecurityQuestion1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="16" style="0"/>
@@ -651,31 +681,7 @@
                 <Property name="text" type="java.lang.String" value="Security Question"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtStatus">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Century Gothic" size="16" style="0"/>
-                </Property>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
-                    <BevelBorder/>
-                  </Border>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtAccessLevel">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Century Gothic" size="16" style="0"/>
-                </Property>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
-                    <BevelBorder/>
-                  </Border>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lblAnswer">
+            <Component class="javax.swing.JLabel" name="lblAnswer1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="16" style="0"/>
@@ -686,7 +692,7 @@
                 <Property name="text" type="java.lang.String" value="Answer"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtAnswer">
+            <Component class="javax.swing.JTextField" name="txtAnswer1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="16" style="0"/>
@@ -698,7 +704,53 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtSecurityQuestion">
+            <Component class="javax.swing.JButton" name="btnEditUser">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Century Gothic" size="16" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Update User"/>
+                <Property name="borderPainted" type="boolean" value="false"/>
+                <Property name="focusPainted" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditUserActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="cmbStatus">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Century Gothic" size="16" style="0"/>
+                </Property>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="3">
+                    <StringItem index="0" value="Active"/>
+                    <StringItem index="1" value="Pending"/>
+                    <StringItem index="2" value="Disabled"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="cmbAccessLevel">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Century Gothic" size="16" style="0"/>
+                </Property>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="2">
+                    <StringItem index="0" value="Administrator"/>
+                    <StringItem index="1" value="Standard"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txtSecQuestion">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="16" style="0"/>
@@ -708,34 +760,95 @@
                     <BevelBorder/>
                   </Border>
                 </Property>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnRejectUser">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Century Gothic" size="16" style="0"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Default Cursor"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Reject User"/>
-                <Property name="borderPainted" type="boolean" value="false"/>
-                <Property name="focusPainted" type="boolean" value="false"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRejectUserActionPerformed"/>
-              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnInsertUser">
+            <Container class="javax.swing.JPanel" name="pnlDepartmentInfo">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Century Gothic" size="16" style="0"/>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="2d" green="2d" red="2d" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Add User"/>
-                <Property name="borderPainted" type="boolean" value="false"/>
-                <Property name="focusPainted" type="boolean" value="false"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+                    <EtchetBorder/>
+                  </Border>
+                </Property>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInsertUserActionPerformed"/>
-              </Events>
-            </Component>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                          <Component id="lblDepartmentInfo" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace pref="34" max="32767" attributes="0"/>
+                          <Component id="lblDepartment" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="cmbDepartment" min="-2" pref="204" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="lblDepartmentInfo" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="cmbDepartment" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblDepartment" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="17" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JLabel" name="lblDepartmentInfo">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Century Gothic" size="18" style="1"/>
+                    </Property>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Department Information"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JComboBox" name="cmbDepartment">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Century Gothic" size="16" style="0"/>
+                    </Property>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="cmbDepartmentMouseClicked"/>
+                  </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JLabel" name="lblDepartment">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Century Gothic" size="16" style="0"/>
+                    </Property>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Department:"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="pnlAddressInfo">
@@ -780,13 +893,13 @@
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="lblFirstname1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblLastname1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblCellNo" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblEmail" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="txtEmail" pref="190" max="32767" attributes="0"/>
-                                          <Component id="txtCellphoneNo" max="32767" attributes="0"/>
+                                          <Component id="txtEmail" alignment="0" pref="190" max="32767" attributes="0"/>
+                                          <Component id="txtCellphoneNo" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -813,7 +926,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtLine2" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblLine2" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblLine2" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -827,13 +940,13 @@
                       </Group>
                       <EmptySpace pref="42" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblFirstname1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblCellNo" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtCellphoneNo" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="txtEmail" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblLastname1" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblEmail" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -944,7 +1057,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblFirstname1">
+            <Component class="javax.swing.JLabel" name="lblCellNo">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="16" style="0"/>
@@ -979,7 +1092,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblLastname1">
+            <Component class="javax.swing.JLabel" name="lblEmail">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="16" style="0"/>
@@ -1013,28 +1126,26 @@
                 <BevelBorder/>
               </Border>
             </Property>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Default Cursor"/>
+            </Property>
           </Properties>
         </Component>
-      </SubComponents>
-    </Container>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
-      <AuxValues>
-        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-      </AuxValues>
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-      <SubComponents>
-        <Component class="javax.swing.JList" name="lbxUsers">
+        <Component class="javax.swing.JComboBox" name="cmbCampus">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="16" style="0"/>
             </Property>
-            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="0"/>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="3">
+                <StringItem index="0" value="Pretoria"/>
+                <StringItem index="1" value="Ekurhuleni"/>
+                <StringItem index="2" value="Nelson Mandela Bay"/>
+              </StringArray>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lbxUsersValueChanged"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="cmbCampusMouseClicked"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -1042,5 +1153,18 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JTextField" name="txtSearch">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Century Gothic" size="16" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Search..."/>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+            <BevelBorder/>
+          </Border>
+        </Property>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

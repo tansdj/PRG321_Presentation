@@ -30,14 +30,14 @@
                   <Group type="102" attributes="0">
                       <Component id="pnlMenu" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
                               <Component id="pnlProjectInfo" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                               <Component id="pnlInStock" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="524" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="515" max="-2" attributes="0"/>
                               <Component id="btnInsertProduct" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -165,16 +165,10 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="btnAddProduct" alignment="1" max="32767" attributes="0"/>
-              <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnViewStock" alignment="0" pref="156" max="32767" attributes="0"/>
-                      <Component id="btnUpdateStock" alignment="1" max="32767" attributes="0"/>
-                      <Component id="btnAddStock" alignment="1" max="32767" attributes="0"/>
-                      <Component id="btnBack" alignment="0" max="32767" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
+              <Component id="btnAddStock" alignment="1" pref="181" max="32767" attributes="0"/>
+              <Component id="btnUpdateStock" alignment="1" max="32767" attributes="0"/>
+              <Component id="btnViewStock" alignment="1" max="32767" attributes="0"/>
+              <Component id="btnBack" alignment="1" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -217,7 +211,7 @@
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
             <Property name="focusPainted" type="boolean" value="false"/>
-            <Property name="iconTextGap" type="int" value="12"/>
+            <Property name="iconTextGap" type="int" value="30"/>
             <Property name="rolloverIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Forms/Images/Add1_Red.png"/>
             </Property>
@@ -237,7 +231,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Forms/Images/Edit1.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Update Stock"/>
+            <Property name="text" type="java.lang.String" value="Update Product"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="null"/>
             </Property>
@@ -245,7 +239,7 @@
             <Property name="contentAreaFilled" type="boolean" value="false"/>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="4"/>
-            <Property name="iconTextGap" type="int" value="6"/>
+            <Property name="iconTextGap" type="int" value="5"/>
             <Property name="rolloverIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Forms/Images/Edit1_Red.png"/>
             </Property>
@@ -276,7 +270,7 @@
             <Property name="contentAreaFilled" type="boolean" value="false"/>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="4"/>
-            <Property name="iconTextGap" type="int" value="25"/>
+            <Property name="iconTextGap" type="int" value="40"/>
             <Property name="rolloverIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Forms/Images/View_Red.png"/>
             </Property>
@@ -306,7 +300,7 @@
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
             <Property name="focusPainted" type="boolean" value="false"/>
-            <Property name="iconTextGap" type="int" value="30"/>
+            <Property name="iconTextGap" type="int" value="50"/>
             <Property name="rolloverIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Forms/Images/Add1_Red.png"/>
             </Property>
@@ -336,7 +330,7 @@
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
             <Property name="focusPainted" type="boolean" value="false"/>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="45"/>
             <Property name="rolloverIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Forms/Images/Back1_red.png"/>
             </Property>

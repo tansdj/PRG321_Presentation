@@ -9,6 +9,7 @@ import PersonManagement.Person;
 import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
+import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.Validation;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class frmLogin extends javax.swing.JFrame {
         btnRegister.setContentAreaFilled(false);
         btnRegister.setBorderPainted(false);
         
+        
     }
 
     /**
@@ -49,7 +51,6 @@ public class frmLogin extends javax.swing.JFrame {
         pnlLoginDetails = new javax.swing.JPanel();
         lblUsername = new javax.swing.JLabel();
         lblPassword = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JTextField();
         txtUsername = new javax.swing.JTextField();
         pnlLoginHeader = new javax.swing.JPanel();
         lblLogin = new javax.swing.JLabel();
@@ -58,6 +59,7 @@ public class frmLogin extends javax.swing.JFrame {
         btnLogin = new javax.swing.JButton();
         btnRegister = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        txtPassword = new javax.swing.JPasswordField();
         lblLoginBackground = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -74,19 +76,19 @@ public class frmLogin extends javax.swing.JFrame {
         lblBCLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/BC_Logo.png"))); // NOI18N
         lblBCLogo.setLabelFor(lblBCLogo);
         pnlLogin.add(lblBCLogo);
-        lblBCLogo.setBounds(40, 10, 220, 110);
+        lblBCLogo.setBounds(30, 10, 220, 110);
 
         lblStationary1.setFont(new java.awt.Font("Eraser", 1, 44)); // NOI18N
         lblStationary1.setForeground(new java.awt.Color(255, 255, 255));
         lblStationary1.setText("Stationary Management");
         pnlLogin.add(lblStationary1);
-        lblStationary1.setBounds(150, 30, 570, 60);
+        lblStationary1.setBounds(140, 30, 570, 60);
 
         lblSystem.setFont(new java.awt.Font("Eraser", 1, 44)); // NOI18N
         lblSystem.setForeground(new java.awt.Color(255, 255, 255));
         lblSystem.setText("System");
         pnlLogin.add(lblSystem);
-        lblSystem.setBounds(170, 80, 260, 40);
+        lblSystem.setBounds(150, 80, 260, 40);
 
         pnlLoginDetails.setBackground(new java.awt.Color(0, 0, 0));
         pnlLoginDetails.setLayout(null);
@@ -102,11 +104,6 @@ public class frmLogin extends javax.swing.JFrame {
         lblPassword.setText("Password:");
         pnlLoginDetails.add(lblPassword);
         lblPassword.setBounds(90, 140, 76, 21);
-
-        txtPassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtPassword.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        pnlLoginDetails.add(txtPassword);
-        txtPassword.setBounds(250, 140, 180, 25);
 
         txtUsername.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtUsername.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -205,6 +202,11 @@ public class frmLogin extends javax.swing.JFrame {
         pnlLoginDetails.add(jLabel1);
         jLabel1.setBounds(130, 280, 150, 30);
 
+        txtPassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtPassword.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        pnlLoginDetails.add(txtPassword);
+        txtPassword.setBounds(250, 140, 180, 25);
+
         pnlLogin.add(pnlLoginDetails);
         pnlLoginDetails.setBounds(90, 150, 520, 340);
 
@@ -243,12 +245,25 @@ public class frmLogin extends javax.swing.JFrame {
        
        User userLogin = new User(userName,passWord);
        allowAccess = userLogin.testLogin();
-
+       
        if(allowAccess == true)
        {
-            AdministratorMainDash adminDash = new AdministratorMainDash();
-            adminDash.setVisible(true);
-            this.setVisible(false);
+           User currentUser = userLogin.selectSpecUser();
+           String accessLevel = currentUser.getAccessLevel();
+           GenericSerializer gen = new GenericSerializer("loggedUser.txt",currentUser);
+           gen.Serialize();
+           if(accessLevel.equals("Administrator"))
+           {
+                AdministratorMainDash adminDash = new AdministratorMainDash();
+                adminDash.setVisible(true);
+                this.setVisible(false);
+           }
+           else if (accessLevel.equals("Standard"))
+           {
+                StandardMainDash standardDash = new StandardMainDash();
+                standardDash.setVisible(true);
+                this.setVisible(false);
+           }
        }
        else
        {
@@ -402,7 +417,7 @@ public class frmLogin extends javax.swing.JFrame {
     private javax.swing.JPanel pnlLoginDetails;
     private javax.swing.JPanel pnlLoginHeader;
     private javax.swing.JPanel pnlLoginHeader1;
-    private javax.swing.JTextField txtPassword;
+    private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }

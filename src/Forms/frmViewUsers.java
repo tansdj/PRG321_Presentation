@@ -13,14 +13,10 @@ import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
 import bc_stationary_bll.SoundEx;
 import java.awt.Color;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
-import javax.swing.JTextField;
-import javax.swing.ListModel;
 
 /**
  *
@@ -32,21 +28,21 @@ public class frmViewUsers extends javax.swing.JFrame {
      * Creates new form frmViewUsers
      */
     public ArrayList<User> userList;
+
     public frmViewUsers() {
         initComponents();
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45,45,45));
+        this.getContentPane().setBackground(new Color(45, 45, 45));
         User user = new User();
         userList = user.select();
-        
+
         DefaultListModel model = new DefaultListModel();
         // Populate Listbox
-        for(User u: userList)
-        {
+        for (User u : userList) {
             model.addElement(u);
         }
         lbxUsers.setModel(model);
-       
+
     }
 
     /**
@@ -65,6 +61,7 @@ public class frmViewUsers extends javax.swing.JFrame {
         btnViewUser = new javax.swing.JButton();
         btnAddUser = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        btnUpdateUser = new javax.swing.JButton();
         txtSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         lbxUsers = new javax.swing.JList<>();
@@ -202,11 +199,28 @@ public class frmViewUsers extends javax.swing.JFrame {
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
         btnBack.setFocusPainted(false);
-        btnBack.setIconTextGap(20);
+        btnBack.setIconTextGap(15);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
+            }
+        });
+
+        btnUpdateUser.setBackground(new java.awt.Color(204, 0, 0));
+        btnUpdateUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnUpdateUser.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdateUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1.png"))); // NOI18N
+        btnUpdateUser.setText("Update User");
+        btnUpdateUser.setBorder(null);
+        btnUpdateUser.setBorderPainted(false);
+        btnUpdateUser.setContentAreaFilled(false);
+        btnUpdateUser.setFocusPainted(false);
+        btnUpdateUser.setIconTextGap(5);
+        btnUpdateUser.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
+        btnUpdateUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateUserActionPerformed(evt);
             }
         });
 
@@ -217,10 +231,15 @@ public class frmViewUsers extends javax.swing.JFrame {
             .addGroup(pnlMenuLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnViewUser, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                    .addComponent(btnAddUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnBack, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addGroup(pnlMenuLayout.createSequentialGroup()
+                        .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnViewUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAddUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnBack, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMenuLayout.createSequentialGroup()
+                        .addComponent(btnUpdateUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(20, 20, 20))))
         );
         pnlMenuLayout.setVerticalGroup(
             pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,9 +248,11 @@ public class frmViewUsers extends javax.swing.JFrame {
                 .addComponent(btnViewUser, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(8, 8, 8)
+                .addComponent(btnUpdateUser, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(790, Short.MAX_VALUE))
+                .addContainerGap(738, Short.MAX_VALUE))
         );
 
         txtSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
@@ -594,7 +615,7 @@ public class frmViewUsers extends javax.swing.JFrame {
                     .addComponent(pnlRegisterHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
+                        .addGap(52, 52, 52)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -640,143 +661,135 @@ public class frmViewUsers extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
-    public User selectedUser;
-    private void lbxUsersValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxUsersValueChanged
-        int index= lbxUsers.getSelectedIndex();
-        selectedUser = userList.get(index);
-        Person person = selectedUser.getPerson();
-        
-        Address address = null;
-        Contact contact = null;
-        UserSecurityQuestions userSecQ = new UserSecurityQuestions(selectedUser,new SecurityQuestions(),"");
-        try
-        {
-            Person per = person.selectSpecPerson();
-            address = per.getAddress();
-            contact = per.getContact();
-            
-            userSecQ = userSecQ.selectSpecUserQuestions();
-        }
-        catch(SQLException se)
-        {
-        }
-        
-        txtSearch.setText(person.toString());
-        txtFirstname.setText(person.getName());
-        txtFirstname.setEditable(false);
-        
-        txtLastname.setText(person.getSurname());
-        txtLastname.setEditable(false);
-        
-        txtIDNumber.setText(person.getId());
-        txtIDNumber.setEditable(false);
-        
-        txtCampus.setText(person.getCampus());
-        txtCampus.setEditable(false);
-        
-        txtLine1.setText(address.getLine1());
-        txtLine1.setEditable(false);
-        
-        txtLine2.setText(address.getLine2());
-        txtLine2.setEditable(false);
-        
-        txtCity.setText(address.getCity());
-        txtCity.setEditable(false);
-        
-        txtPostalCode.setText(address.getPostalCode());
-        txtPostalCode.setEditable(false);
-        
-        txtCellphoneNo.setText(contact.getCell());
-        txtCellphoneNo.setEditable(false);
-        
-        txtEmail.setText(contact.getEmail());
-        txtEmail.setEditable(false);
-        
-        txtUsername.setText(selectedUser.getUsername());
-        txtFirstname.setEditable(false);
-        
-        txtPassword.setText(selectedUser.getPassword());
-        txtPassword.setEditable(false);
-        
-        txtAccessLevel.setText(selectedUser.getAccessLevel());
-        txtAccessLevel.setEditable(false);
-        
-        txtStatus.setText(selectedUser.getStatus());
-        txtStatus.setEditable(false);
-        
-        txtSecurityQuestion.setText(userSecQ.getQuestion().getQuestion());
-        txtSecurityQuestion.setEditable(false);
-        
-        txtAnswer.setText(userSecQ.getAnswer());
-        txtAnswer.setEditable(false);
-    }//GEN-LAST:event_lbxUsersValueChanged
-
+    
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
-         User user = new User();
-         ArrayList<User> usersThatFitCriteria = new ArrayList<User>();
-         String searchCode = "", userCode = "", searchText = txtSearch.getText();
-            if (searchText == "")
-            {
-                userList = user.select();
-                DefaultListModel model = new DefaultListModel();
-        
-                 for(User u: userList)
-                    {
-                     model.addElement(u);
-                    }
-                lbxUsers.setModel(model);
+        User user = new User();
+        ArrayList<User> usersThatFitCriteria = new ArrayList<User>();
+        String searchCode = "", userCode = "", searchText = txtSearch.getText();
+        if (searchText == "") {
+            userList = user.select();
+            DefaultListModel model = new DefaultListModel();
+
+            for (User u : userList) {
+                model.addElement(u);
             }
-            else
-            {
-                int numSearchChars; // amount of characters that are typed into the search box.
+            lbxUsers.setModel(model);
+        } else {
+            int numSearchChars; // amount of characters that are typed into the search box.
 
-                searchCode = SoundEx.Soundex(searchText);
+            searchCode = SoundEx.Soundex(searchText);
 
-                numSearchChars = searchText.length();
-                for(User u : userList)
-                {
-                    if (u.getPerson().getName().length() >= numSearchChars)
-                    {
+            numSearchChars = searchText.length();
+            for (User u : userList) {
+                if (u.getPerson().getName().length() >= numSearchChars) {
 
-                        userCode = SoundEx.Soundex(u.getPerson().getName().substring(0, numSearchChars));
+                    userCode = SoundEx.Soundex(u.getPerson().getName().substring(0, numSearchChars));
 
+                    if ((userCode.equals(searchCode))) {
 
-                        if ((userCode.equals(searchCode)))
-                        {
-                            
-                            Person p = u.getPerson();
-                            try
-                            {
-                                p = p.selectSpecPerson();
-                                u.setPerson(p);
-                                usersThatFitCriteria.add(u);
-                            }
-                            catch(SQLException se)
-                            {
-                                System.out.println(se);
-                            }
-                           
+                        Person p = u.getPerson();
+                        try {
+                            p = p.selectSpecPerson();
+                            u.setPerson(p);
+                            usersThatFitCriteria.add(u);
+                        } catch (SQLException se) {
+                            System.out.println(se);
                         }
 
-                    }                   
+                    }
+
                 }
-                lbxUsers.removeAll();
-                DefaultListModel model = new DefaultListModel();
-        
-                lbxUsers.setModel(model);
-                for(User u: usersThatFitCriteria)
-                {
-                    model.addElement(u);
-                }
-                lbxUsers.setModel(model);
-            }        
+            }
+            lbxUsers.removeAll();
+            DefaultListModel model = new DefaultListModel();
+
+            lbxUsers.setModel(model);
+            for (User u : usersThatFitCriteria) {
+                model.addElement(u);
+            }
+            lbxUsers.setModel(model);
+        }
     }//GEN-LAST:event_txtSearchKeyReleased
 
     private void txtSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchMouseClicked
         txtSearch.setText("");
     }//GEN-LAST:event_txtSearchMouseClicked
 
-                                                      
+    
+    private void btnUpdateUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateUserActionPerformed
+        frmUpdateUser updateUser = new frmUpdateUser();
+        updateUser.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnUpdateUserActionPerformed
+   
+    public User selectedUser;
+    private void lbxUsersValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxUsersValueChanged
+        int index = lbxUsers.getSelectedIndex();
+            selectedUser = userList.get(index);
+            Person person = selectedUser.getPerson();
+
+            Address address = null;
+            Contact contact = null;
+            UserSecurityQuestions userSecQ = new UserSecurityQuestions(selectedUser, new SecurityQuestions(), "");
+            try {
+                Person per = person.selectSpecPerson();
+                address = per.getAddress();
+                contact = per.getContact();
+
+                userSecQ = userSecQ.selectSpecUserQuestions();
+            } catch (SQLException se) {
+            }
+
+            txtSearch.setText(person.toString());
+            txtFirstname.setText(person.getName());
+            txtFirstname.setEditable(false);
+
+            txtLastname.setText(person.getSurname());
+            txtLastname.setEditable(false);
+
+            txtIDNumber.setText(person.getId());
+            txtIDNumber.setEditable(false);
+
+            txtCampus.setText(person.getCampus());
+            txtCampus.setEditable(false);
+
+            txtLine1.setText(address.getLine1());
+            txtLine1.setEditable(false);
+
+            txtLine2.setText(address.getLine2());
+            txtLine2.setEditable(false);
+
+            txtCity.setText(address.getCity());
+            txtCity.setEditable(false);
+
+            txtPostalCode.setText(address.getPostalCode());
+            txtPostalCode.setEditable(false);
+
+            txtCellphoneNo.setText(contact.getCell());
+            txtCellphoneNo.setEditable(false);
+
+            txtEmail.setText(contact.getEmail());
+            txtEmail.setEditable(false);
+
+            txtUsername.setText(selectedUser.getUsername());
+            txtFirstname.setEditable(false);
+
+            txtPassword.setText(selectedUser.getPassword());
+            txtPassword.setEditable(false);
+
+            txtAccessLevel.setText(selectedUser.getAccessLevel());
+            txtAccessLevel.setEditable(false);
+
+            txtStatus.setText(selectedUser.getStatus());
+            txtStatus.setEditable(false);
+
+            txtSecurityQuestion.setText(userSecQ.getQuestion().getQuestion());
+            txtSecurityQuestion.setEditable(false);
+
+            txtAnswer.setText(userSecQ.getAnswer());
+            txtAnswer.setEditable(false);
+    }//GEN-LAST:event_lbxUsersValueChanged
+
     /**
      * @param args the command line arguments
      */
@@ -815,6 +828,7 @@ public class frmViewUsers extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddUser;
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnUpdateUser;
     private javax.swing.JButton btnViewUser;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAccessLevel;
