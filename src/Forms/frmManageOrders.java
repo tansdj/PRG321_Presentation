@@ -5,6 +5,20 @@
  */
 package Forms;
 
+import PersonManagement.Person;
+import PersonManagement.User;
+import ProductManagement.Product;
+import ProductManagement.UserRequest;
+import bc_stationary_bll.genericSort;
+import java.awt.Color;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+
 /**
  *
  * @author Eldane
@@ -14,8 +28,25 @@ public class frmManageOrders extends javax.swing.JFrame {
     /**
      * Creates new form frmManageOrders
      */
+    public ArrayList<Product> products;
     public frmManageOrders() {
         initComponents();
+        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        this.getContentPane().setBackground(new Color(45,45,45));
+        
+         UserRequest request = new UserRequest();
+         products = request.productsOnRequest();
+         for(Product p:products){
+            cmbProduct.addItem(p.getName()+"("+ p.getDescription()+"-"+p.getModel().getDescription()+")");
+         }
+         
+        txtProductName.setEditable(false);
+        txtDescription.setEditable(false);
+        txtCategory.setEditable(false);
+        txtProductModel.setEditable(false);
+        txtQuantity.setEditable(false);
+        txtPriority.setEditable(false);
+        txtRequestDate.setEditable(false);
     }
 
     /**
@@ -35,6 +66,35 @@ public class frmManageOrders extends javax.swing.JFrame {
         btnAddRequest = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         btnEditRequest = new javax.swing.JButton();
+        lblSearchProducts = new javax.swing.JLabel();
+        cmbProduct = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lbxUsers = new javax.swing.JList<>();
+        pnlProjectInfo = new javax.swing.JPanel();
+        lblProductInfo = new javax.swing.JLabel();
+        lblProductName = new javax.swing.JLabel();
+        txtProductName = new javax.swing.JTextField();
+        txtDescription = new javax.swing.JTextField();
+        lblDescription = new javax.swing.JLabel();
+        lblCategory = new javax.swing.JLabel();
+        lblProductModel = new javax.swing.JLabel();
+        txtProductModel = new javax.swing.JTextField();
+        txtCategory = new javax.swing.JTextField();
+        pnlProjectInfo2 = new javax.swing.JPanel();
+        lblRequestInfo = new javax.swing.JLabel();
+        lblLoggedUser = new javax.swing.JLabel();
+        txtStaffMember = new javax.swing.JTextField();
+        lblRequestDate = new javax.swing.JLabel();
+        txtRequestDate = new javax.swing.JTextField();
+        lblQuantity = new javax.swing.JLabel();
+        lblPriority = new javax.swing.JLabel();
+        txtQuantity = new javax.swing.JTextField();
+        txtPriority = new javax.swing.JTextField();
+        pnlProjectInfo3 = new javax.swing.JPanel();
+        lblRequestInfo1 = new javax.swing.JLabel();
+        lblLoggedUser1 = new javax.swing.JLabel();
+        lblOrderStatus = new javax.swing.JLabel();
+        txtQuantityInStock = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -103,8 +163,8 @@ public class frmManageOrders extends javax.swing.JFrame {
         btnAddRequest.setBackground(new java.awt.Color(204, 0, 0));
         btnAddRequest.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnAddRequest.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1.png"))); // NOI18N
-        btnAddRequest.setText("Add Request");
+        btnAddRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
+        btnAddRequest.setText("Manage Request");
         btnAddRequest.setBorder(null);
         btnAddRequest.setBorderPainted(false);
         btnAddRequest.setContentAreaFilled(false);
@@ -136,7 +196,7 @@ public class frmManageOrders extends javax.swing.JFrame {
         btnEditRequest.setBackground(new java.awt.Color(204, 0, 0));
         btnEditRequest.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnEditRequest.setForeground(new java.awt.Color(255, 255, 255));
-        btnEditRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
+        btnEditRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1.png"))); // NOI18N
         btnEditRequest.setText("Edit Request");
         btnEditRequest.setBorder(null);
         btnEditRequest.setBorderPainted(false);
@@ -172,22 +232,288 @@ public class frmManageOrders extends javax.swing.JFrame {
                 .addContainerGap(762, Short.MAX_VALUE))
         );
 
+        lblSearchProducts.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblSearchProducts.setForeground(new java.awt.Color(255, 255, 255));
+        lblSearchProducts.setText("Select a Product:");
+
+        cmbProduct.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cmbProduct.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cmbProductMouseClicked(evt);
+            }
+        });
+
+        lbxUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxUsers.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lbxUsersValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(lbxUsers);
+
+        pnlProjectInfo.setBackground(new java.awt.Color(45, 45, 45));
+        pnlProjectInfo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        lblProductInfo.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        lblProductInfo.setForeground(new java.awt.Color(255, 255, 255));
+        lblProductInfo.setText("Product Information");
+
+        lblProductName.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblProductName.setForeground(new java.awt.Color(255, 255, 255));
+        lblProductName.setText("Product Name:");
+
+        txtProductName.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtProductName.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        txtDescription.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtDescription.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        lblDescription.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblDescription.setForeground(new java.awt.Color(255, 255, 255));
+        lblDescription.setText("Description:");
+
+        lblCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblCategory.setForeground(new java.awt.Color(255, 255, 255));
+        lblCategory.setText("Category:");
+
+        lblProductModel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblProductModel.setForeground(new java.awt.Color(255, 255, 255));
+        lblProductModel.setText("Model:");
+
+        txtProductModel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtProductModel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        txtCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtCategory.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        javax.swing.GroupLayout pnlProjectInfoLayout = new javax.swing.GroupLayout(pnlProjectInfo);
+        pnlProjectInfo.setLayout(pnlProjectInfoLayout);
+        pnlProjectInfoLayout.setHorizontalGroup(
+            pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProjectInfoLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblProductName)
+                    .addComponent(lblProductModel)
+                    .addComponent(lblProductInfo))
+                .addGap(10, 10, 10)
+                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlProjectInfoLayout.createSequentialGroup()
+                        .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblDescription))
+                    .addGroup(pnlProjectInfoLayout.createSequentialGroup()
+                        .addComponent(txtProductModel, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblCategory)))
+                .addGap(41, 41, 41)
+                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlProjectInfoLayout.createSequentialGroup()
+                        .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlProjectInfoLayout.createSequentialGroup()
+                        .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        pnlProjectInfoLayout.setVerticalGroup(
+            pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProjectInfoLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(lblProductInfo)
+                .addGap(18, 18, 18)
+                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblProductName)
+                    .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDescription)
+                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblProductModel)
+                    .addComponent(txtProductModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblCategory)
+                        .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        pnlProjectInfo2.setBackground(new java.awt.Color(45, 45, 45));
+        pnlProjectInfo2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        lblRequestInfo.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        lblRequestInfo.setForeground(new java.awt.Color(255, 255, 255));
+        lblRequestInfo.setText("Request Information");
+
+        lblLoggedUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblLoggedUser.setForeground(new java.awt.Color(255, 255, 255));
+        lblLoggedUser.setText("Staff member:");
+
+        txtStaffMember.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtStaffMember.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        lblRequestDate.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblRequestDate.setForeground(new java.awt.Color(255, 255, 255));
+        lblRequestDate.setText("Request Date:");
+
+        txtRequestDate.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtRequestDate.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        lblQuantity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblQuantity.setForeground(new java.awt.Color(255, 255, 255));
+        lblQuantity.setText("Quantity Requested:");
+
+        lblPriority.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblPriority.setForeground(new java.awt.Color(255, 255, 255));
+        lblPriority.setText("Priority of Request:");
+
+        txtQuantity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtQuantity.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        txtPriority.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtPriority.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        pnlProjectInfo3.setBackground(new java.awt.Color(45, 45, 45));
+        pnlProjectInfo3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        lblRequestInfo1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        lblRequestInfo1.setForeground(new java.awt.Color(255, 255, 255));
+        lblRequestInfo1.setText("Stock Information");
+
+        lblLoggedUser1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblLoggedUser1.setForeground(new java.awt.Color(255, 255, 255));
+        lblLoggedUser1.setText("Quantity In Stock:");
+
+        lblOrderStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblOrderStatus.setForeground(new java.awt.Color(255, 255, 0));
+        lblOrderStatus.setText("Status");
+
+        txtQuantityInStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtQuantityInStock.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        javax.swing.GroupLayout pnlProjectInfo3Layout = new javax.swing.GroupLayout(pnlProjectInfo3);
+        pnlProjectInfo3.setLayout(pnlProjectInfo3Layout);
+        pnlProjectInfo3Layout.setHorizontalGroup(
+            pnlProjectInfo3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProjectInfo3Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(pnlProjectInfo3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblRequestInfo1)
+                    .addComponent(lblLoggedUser1)
+                    .addComponent(lblOrderStatus)
+                    .addComponent(txtQuantityInStock, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(52, Short.MAX_VALUE))
+        );
+        pnlProjectInfo3Layout.setVerticalGroup(
+            pnlProjectInfo3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProjectInfo3Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(lblRequestInfo1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblLoggedUser1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtQuantityInStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(lblOrderStatus)
+                .addGap(61, 61, 61))
+        );
+
+        javax.swing.GroupLayout pnlProjectInfo2Layout = new javax.swing.GroupLayout(pnlProjectInfo2);
+        pnlProjectInfo2.setLayout(pnlProjectInfo2Layout);
+        pnlProjectInfo2Layout.setHorizontalGroup(
+            pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                        .addComponent(lblPriority)
+                        .addGap(64, 64, 64)
+                        .addComponent(txtPriority))
+                    .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                        .addComponent(lblLoggedUser)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtStaffMember, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblQuantity)
+                            .addComponent(lblRequestDate))
+                        .addGap(41, 41, 41)
+                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtRequestDate)
+                            .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lblRequestInfo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addComponent(pnlProjectInfo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(104, 104, 104))
+        );
+        pnlProjectInfo2Layout.setVerticalGroup(
+            pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                        .addComponent(pnlProjectInfo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                        .addComponent(lblRequestInfo)
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblLoggedUser)
+                            .addComponent(txtStaffMember, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblRequestDate)
+                            .addComponent(txtRequestDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblQuantity)
+                            .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
+                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblPriority)
+                            .addComponent(txtPriority, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(84, 84, 84))))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 20, Short.MAX_VALUE))
+                .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cmbProduct, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblSearchProducts))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnlProjectInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(466, 466, 466))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(67, 67, 67)
+                        .addComponent(lblSearchProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(pnlProjectInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -211,6 +537,91 @@ public class frmManageOrders extends javax.swing.JFrame {
         mainDash.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
+
+    public Product selectedProduct;
+    ArrayList<UserRequest> allRequests;
+    private void cmbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbProductMouseClicked
+        String selectedProductSearch = cmbProduct.getSelectedItem().toString();
+        String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
+        String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf("-"));
+        String searchedModel = selectedProductSearch.substring(selectedProductSearch.indexOf("-")+1,selectedProductSearch.indexOf(")"));
+
+        selectedProduct = new Product();
+        for(Product p : products)
+        {
+            if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))&&(p.getModel().getDescription().equals(searchedModel))))
+            {
+                selectedProduct = p;
+            }
+        }
+        UserRequest request = new UserRequest();
+         allRequests = request.selectUnprocessed();
+        try {
+            Collections.sort(allRequests,new genericSort(UserRequest.class.getField("priorityLevel")));
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchFieldException ex) {
+            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        DefaultListModel model = new DefaultListModel();
+        // Populate Listbox
+        for (UserRequest ur : allRequests) {
+            model.addElement(ur.getUser().getUsername());
+        }
+
+        lbxUsers.setModel(model);
+    }//GEN-LAST:event_cmbProductMouseClicked
+
+    public UserRequest selectedRequest;
+    private void lbxUsersValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxUsersValueChanged
+        int index = lbxUsers.getSelectedIndex();
+        String priority = "";
+        String userFullName = "";
+        int priorityLevel = 0;
+        
+        selectedRequest = allRequests.get(index);
+        
+        txtProductName.setText(selectedProduct.getName());
+        txtProductName.setEditable(false);
+
+        txtDescription.setText(selectedProduct.getDescription());
+        txtDescription.setEditable(false);
+
+        txtCategory.setText(selectedProduct.getCategory().getDescription());
+        txtCategory.setEditable(false);
+
+        txtProductModel.setText(selectedProduct.getModel().getDescription());
+        txtProductModel.setEditable(false);
+
+        Person p = new Person();
+        p = selectedRequest.getUser().getPerson();
+        userFullName = p.getName() +" "+ p.getSurname();
+        txtStaffMember.setText(userFullName);
+        txtQuantity.setText(Integer.toString(selectedRequest.getQuantity()));
+        txtQuantity.setEditable(false);
+
+        priorityLevel = selectedRequest.getPriorityLevel();
+        switch(priorityLevel)
+        {
+            case 1: priority = "Low";
+            break;
+            case 2: priority = "Medium";
+            break;
+            case 3: priority = "High";
+            break;
+            default:
+            break;
+        }
+
+        txtPriority.setText(priority);
+        txtPriority.setEditable(false);
+
+        txtRequestDate.setText(selectedRequest.getReqDate().toString());
+        txtRequestDate.setEditable(false);
+    }//GEN-LAST:event_lbxUsersValueChanged
 
     /**
      * @param args the command line arguments
@@ -252,9 +663,38 @@ public class frmManageOrders extends javax.swing.JFrame {
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnEditRequest;
     private javax.swing.JButton btnViewRequest;
+    private javax.swing.JComboBox<String> cmbProduct;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAddRequest;
+    private javax.swing.JLabel lblCategory;
+    private javax.swing.JLabel lblDescription;
+    private javax.swing.JLabel lblLoggedUser;
+    private javax.swing.JLabel lblLoggedUser1;
+    private javax.swing.JLabel lblOrderStatus;
+    private javax.swing.JLabel lblPriority;
+    private javax.swing.JLabel lblProductInfo;
+    private javax.swing.JLabel lblProductModel;
+    private javax.swing.JLabel lblProductName;
+    private javax.swing.JLabel lblQuantity;
+    private javax.swing.JLabel lblRequestDate;
+    private javax.swing.JLabel lblRequestInfo;
+    private javax.swing.JLabel lblRequestInfo1;
+    private javax.swing.JLabel lblSearchProducts;
+    private javax.swing.JList<String> lbxUsers;
     private javax.swing.JPanel pnlMainDashHeader;
     private javax.swing.JPanel pnlMenu;
+    private javax.swing.JPanel pnlProjectInfo;
+    private javax.swing.JPanel pnlProjectInfo2;
+    private javax.swing.JPanel pnlProjectInfo3;
     private javax.swing.JPanel pnlRegisterHeader1;
+    private javax.swing.JTextField txtCategory;
+    private javax.swing.JTextField txtDescription;
+    private javax.swing.JTextField txtPriority;
+    private javax.swing.JTextField txtProductModel;
+    private javax.swing.JTextField txtProductName;
+    private javax.swing.JTextField txtQuantity;
+    private javax.swing.JTextField txtQuantityInStock;
+    private javax.swing.JTextField txtRequestDate;
+    private javax.swing.JTextField txtStaffMember;
     // End of variables declaration//GEN-END:variables
 }

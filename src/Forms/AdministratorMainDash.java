@@ -220,7 +220,9 @@ public class AdministratorMainDash extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnManageRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageRequestsActionPerformed
-        // TODO add your handling code here:
+        frmManageOrders manageO = new frmManageOrders();
+        manageO.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnManageRequestsActionPerformed
 
     /**

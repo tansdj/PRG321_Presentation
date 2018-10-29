@@ -637,9 +637,12 @@ public class frmManageRequest extends javax.swing.JFrame {
                 {
                     String newProductName = uNew.getProduct().getName();
                     String existingProductName = uOld.getProduct().getName();
+                    String newUserName = uNew.getUser().getUsername();
+                    String existingUserName = uOld.getUser().getUsername();
+                    
                     int newQuantity=0, existingQuantity=0, newPriority=0, existingPriority=0;
  
-                    if(newProductName.equals(existingProductName))
+                    if((newProductName.equals(existingProductName))&&(newUserName.equals(existingUserName)))
                     {
                        newQuantity = uNew.getQuantity();
                        existingQuantity = uOld.getQuantity();
