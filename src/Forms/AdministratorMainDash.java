@@ -39,6 +39,7 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnManageStock = new javax.swing.JButton();
         btnManageUser = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        btnManageRequests = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -95,7 +96,7 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnManageStock.setBorderPainted(false);
         btnManageStock.setContentAreaFilled(false);
         btnManageStock.setFocusPainted(false);
-        btnManageStock.setIconTextGap(5);
+        btnManageStock.setIconTextGap(20);
         btnManageStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/products_Red.png"))); // NOI18N
         btnManageStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,7 +114,7 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnManageUser.setContentAreaFilled(false);
         btnManageUser.setFocusPainted(false);
         btnManageUser.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnManageUser.setIconTextGap(10);
+        btnManageUser.setIconTextGap(30);
         btnManageUser.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/clients_Red.png"))); // NOI18N
         btnManageUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -131,7 +132,7 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnExit.setContentAreaFilled(false);
         btnExit.setFocusPainted(false);
         btnExit.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnExit.setIconTextGap(90);
+        btnExit.setIconTextGap(110);
         btnExit.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/LogOut1_red.png"))); // NOI18N
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -139,16 +140,33 @@ public class AdministratorMainDash extends javax.swing.JFrame {
             }
         });
 
+        btnManageRequests.setBackground(new java.awt.Color(40, 40, 40));
+        btnManageRequests.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnManageRequests.setForeground(new java.awt.Color(255, 255, 255));
+        btnManageRequests.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View.png"))); // NOI18N
+        btnManageRequests.setText("Manage Orders");
+        btnManageRequests.setActionCommand("Manage Orders");
+        btnManageRequests.setBorder(null);
+        btnManageRequests.setBorderPainted(false);
+        btnManageRequests.setContentAreaFilled(false);
+        btnManageRequests.setFocusPainted(false);
+        btnManageRequests.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnManageRequests.setIconTextGap(10);
+        btnManageRequests.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
+        btnManageRequests.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageRequestsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMenuLayout = new javax.swing.GroupLayout(pnlMenu);
         pnlMenu.setLayout(pnlMenuLayout);
         pnlMenuLayout.setHorizontalGroup(
             pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnManageStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-            .addComponent(btnManageUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMenuLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(btnManageStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnManageUser, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+            .addComponent(btnManageRequests, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnExit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlMenuLayout.setVerticalGroup(
             pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -158,8 +176,10 @@ public class AdministratorMainDash extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnManageUser, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(btnManageRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(757, Short.MAX_VALUE))
+                .addContainerGap(700, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -199,6 +219,10 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnExitActionPerformed
 
+    private void btnManageRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageRequestsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnManageRequestsActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -236,6 +260,7 @@ public class AdministratorMainDash extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnManageRequests;
     private javax.swing.JButton btnManageStock;
     private javax.swing.JButton btnManageUser;
     private javax.swing.JLabel lblMainDashboard;

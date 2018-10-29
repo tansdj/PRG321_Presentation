@@ -80,8 +80,6 @@ public class frmManageProfile extends javax.swing.JFrame {
         lblLoginInfo1 = new javax.swing.JLabel();
         lblUsername1 = new javax.swing.JLabel();
         txtUsername1 = new javax.swing.JTextField();
-        lblPassword1 = new javax.swing.JLabel();
-        txtPassword1 = new javax.swing.JTextField();
         lblAccessLevel1 = new javax.swing.JLabel();
         lblStatus1 = new javax.swing.JLabel();
         lblSecurityQuestion1 = new javax.swing.JLabel();
@@ -114,6 +112,7 @@ public class frmManageProfile extends javax.swing.JFrame {
         cmbCampus = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         pnlRegisterHeader.setBackground(new java.awt.Color(255, 255, 0));
         pnlRegisterHeader.setPreferredSize(new java.awt.Dimension(1071, 530));
@@ -263,14 +262,6 @@ public class frmManageProfile extends javax.swing.JFrame {
         txtUsername1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         txtUsername1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        lblPassword1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblPassword1.setForeground(new java.awt.Color(255, 255, 255));
-        lblPassword1.setText("Password:");
-
-        txtPassword1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtPassword1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtPassword1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
         lblAccessLevel1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblAccessLevel1.setForeground(new java.awt.Color(255, 255, 255));
         lblAccessLevel1.setText("Access Level:");
@@ -376,11 +367,6 @@ public class frmManageProfile extends javax.swing.JFrame {
                         .addGroup(pnlLoginInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblLoginInfo1)
                             .addComponent(lblAccessLevel1)
-                            .addGroup(pnlLoginInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(pnlLoginInfo1Layout.createSequentialGroup()
-                                    .addComponent(lblPassword1)
-                                    .addGap(101, 101, 101))
-                                .addComponent(txtPassword1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lblSecurityQuestion1)
                             .addComponent(lblAnswer1)
                             .addComponent(lblStatus1)
@@ -406,10 +392,6 @@ public class frmManageProfile extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtUsername1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblPassword1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPassword1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
                 .addComponent(lblAccessLevel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtAccessLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -425,9 +407,9 @@ public class frmManageProfile extends javax.swing.JFrame {
                 .addComponent(lblAnswer1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtAnswer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(53, 53, 53)
                 .addComponent(btnEditUser)
-                .addGap(21, 21, 21))
+                .addGap(50, 50, 50))
         );
 
         pnlAddressInfo.setBackground(new java.awt.Color(45, 45, 45));
@@ -674,6 +656,7 @@ public class frmManageProfile extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     public User selectedUser;
+    public String userPassword;
     private void lbxUsersValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxUsersValueChanged
         int index = lbxUsers.getSelectedIndex();
         selectedUser = userList.get(index);
@@ -681,12 +664,13 @@ public class frmManageProfile extends javax.swing.JFrame {
 
         Address address = null;
         Contact contact = null;
+        Department dep = null;
         UserSecurityQuestions userSecQ = new UserSecurityQuestions(selectedUser, new SecurityQuestions(), "");
         try {
             Person per = person.selectSpecPerson();
             address = per.getAddress();
             contact = per.getContact();
-
+            dep = per.getDepartment();
             userSecQ = userSecQ.selectSpecUserQuestions();
         } catch (SQLException se) {
 
@@ -710,13 +694,9 @@ public class frmManageProfile extends javax.swing.JFrame {
         txtCellphoneNo.setText(contact.getCell());
         txtEmail.setText(contact.getEmail());
 
-        cmbDepartment.setSelectedItem(person.getDepartment().getName());
-        System.out.println(person.getDepartment());
+        cmbDepartment.setSelectedItem(dep);
         txtUsername1.setText(selectedUser.getUsername());
         txtUsername1.setEditable(false);
-
-        txtPassword1.setText(selectedUser.getPassword());
-        txtPassword1.setEditable(false);
 
         txtAccessLevel.setText(selectedUser.getAccessLevel());
         txtAccessLevel.setEditable(false);
@@ -728,13 +708,15 @@ public class frmManageProfile extends javax.swing.JFrame {
         txtSecQuestion.setEditable(false);
 
         txtAnswer1.setText(userSecQ.getAnswer());
+        
+        userPassword = selectedUser.getPassword();
     }//GEN-LAST:event_lbxUsersValueChanged
 
     private void btnEditUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditUserActionPerformed
         //Variable Declaration
         String userFirstName="", userLastName="", userIDNumber="", userCampus="", addressLine1="", addressLine2="", addressCity="",
         contactCell="", contactEmail="", addressPostal="",
-        userUsername="", userPassword="", userAccessLevel="", userStatus="", userSecQuestion="", userSecAnswer="",
+        userUsername="", userAccessLevel="", userStatus="", userSecQuestion="", userSecAnswer="",
         departmentName="";
         User userToUpdate;
         Person personToUpdate;
@@ -788,22 +770,21 @@ public class frmManageProfile extends javax.swing.JFrame {
                                                 departmentName = cmbDepartment.getSelectedItem().toString();
                                                 lblDepartment.setForeground(Color.white);
                                                 userUsername = txtUsername1.getText();
-                                                userPassword = txtPassword1.getText();
                                                 userAccessLevel = txtAccessLevel.getText();
                                                 userStatus = txtStatus.getText();
                                                 userSecQuestion = txtSecQuestion.getText();
                                                 if(!"".equals(txtAnswer1.getText()))
-                                                    {
+                                                {
                                                         userSecAnswer = txtAnswer1.getText();
                                                         lblAnswer1.setForeground(Color.white);
-                                                    }
-                                                    else
-                                                    {
+                                                }
+                                                else
+                                                {
                                                         JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Security Answer",JOptionPane.WARNING_MESSAGE);
                                                         lblAnswer1.setForeground(Color.red);
                                                         txtAnswer1.grabFocus();
                                                         txtAnswer1.setText("");
-                                                    }
+                                                }
                                             }
                                             else
                                             {
@@ -977,7 +958,6 @@ public class frmManageProfile extends javax.swing.JFrame {
     private javax.swing.JLabel lblLine1;
     private javax.swing.JLabel lblLine2;
     private javax.swing.JLabel lblLoginInfo1;
-    private javax.swing.JLabel lblPassword1;
     private javax.swing.JLabel lblPostalCode;
     private javax.swing.JLabel lblSecurityQuestion1;
     private javax.swing.JLabel lblStatus1;
@@ -1002,7 +982,6 @@ public class frmManageProfile extends javax.swing.JFrame {
     private javax.swing.JTextField txtLastnameUpdate;
     private javax.swing.JTextField txtLine1;
     private javax.swing.JTextField txtLine2;
-    private javax.swing.JTextField txtPassword1;
     private javax.swing.JTextField txtPostalCode;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtSecQuestion;

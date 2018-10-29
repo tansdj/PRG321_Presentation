@@ -238,7 +238,7 @@ public class frmLogin extends javax.swing.JFrame {
        
        String userName, passWord;
      
-       boolean allowAccess = false;
+       int allowAccess;
        
        userName = txtUsername.getText();
        passWord = txtPassword.getText();
@@ -246,7 +246,7 @@ public class frmLogin extends javax.swing.JFrame {
        User userLogin = new User(userName,passWord);
        allowAccess = userLogin.testLogin();
        
-       if(allowAccess == true)
+       if(allowAccess == 1)
        {
            User currentUser = userLogin.selectSpecUser();
            String accessLevel = currentUser.getAccessLevel();
@@ -265,12 +265,16 @@ public class frmLogin extends javax.swing.JFrame {
                 this.setVisible(false);
            }
        }
-       else
+       else if(allowAccess == 0)
        {
            JOptionPane.showMessageDialog(null, "You have provided incorrect login credentials! Please try again!","Incorrect Login Credentials",JOptionPane.WARNING_MESSAGE);
            txtUsername.setText("");
            txtPassword.setText("");
            txtUsername.grabFocus();
+       }
+       else if(allowAccess == -1)
+       {
+            JOptionPane.showMessageDialog(null, "Your account has not yet been approved, therefore no access privileges have been assigned!","Insufficient Access Privileges",JOptionPane.WARNING_MESSAGE);
        }
         
     }//GEN-LAST:event_btnLoginActionPerformed

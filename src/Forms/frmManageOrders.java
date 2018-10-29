@@ -5,37 +5,17 @@
  */
 package Forms;
 
-import ProductManagement.UserRequest;
-import java.awt.Color;
-import java.util.ArrayList;
-import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 /**
  *
  * @author Eldane
  */
-public class frmEditRequest extends javax.swing.JFrame {
+public class frmManageOrders extends javax.swing.JFrame {
 
     /**
-     * Creates new form frmEditRequest
+     * Creates new form frmManageOrders
      */
-    public ArrayList<UserRequest> requestItems;
-    public frmEditRequest() {
+    public frmManageOrders() {
         initComponents();
-        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45, 45, 45));
-        UserRequest request = new UserRequest();
-        requestItems = request.select();
-        
-        DefaultListModel model = new DefaultListModel();
-        // Populate Listbox
-            for (UserRequest u : requestItems) {
-                model.addElement(u);
-            }   
-
-        lbxRequestedItems.setModel(model);
     }
 
     /**
@@ -49,17 +29,15 @@ public class frmEditRequest extends javax.swing.JFrame {
 
         pnlMainDashHeader = new javax.swing.JPanel();
         pnlRegisterHeader1 = new javax.swing.JPanel();
-        lblEditRequest = new javax.swing.JLabel();
+        lblAddRequest = new javax.swing.JLabel();
         pnlMenu = new javax.swing.JPanel();
         btnViewRequest = new javax.swing.JButton();
         btnAddRequest = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         btnEditRequest = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        lbxRequestedItems = new javax.swing.JList<>();
-        lblProductName = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         pnlMainDashHeader.setBackground(new java.awt.Color(255, 255, 0));
         pnlMainDashHeader.setPreferredSize(new java.awt.Dimension(1071, 530));
@@ -67,10 +45,10 @@ public class frmEditRequest extends javax.swing.JFrame {
         pnlRegisterHeader1.setBackground(new java.awt.Color(204, 0, 0));
         pnlRegisterHeader1.setPreferredSize(new java.awt.Dimension(1307, 65));
 
-        lblEditRequest.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
-        lblEditRequest.setForeground(new java.awt.Color(255, 255, 255));
-        lblEditRequest.setText("Edit Request");
-        lblEditRequest.setAlignmentY(0.0F);
+        lblAddRequest.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
+        lblAddRequest.setForeground(new java.awt.Color(255, 255, 255));
+        lblAddRequest.setText("Manage Requests");
+        lblAddRequest.setAlignmentY(0.0F);
 
         javax.swing.GroupLayout pnlRegisterHeader1Layout = new javax.swing.GroupLayout(pnlRegisterHeader1);
         pnlRegisterHeader1.setLayout(pnlRegisterHeader1Layout);
@@ -78,14 +56,14 @@ public class frmEditRequest extends javax.swing.JFrame {
             pnlRegisterHeader1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlRegisterHeader1Layout.createSequentialGroup()
                 .addGap(607, 607, 607)
-                .addComponent(lblEditRequest)
-                .addContainerGap(753, Short.MAX_VALUE))
+                .addComponent(lblAddRequest)
+                .addContainerGap(684, Short.MAX_VALUE))
         );
         pnlRegisterHeader1Layout.setVerticalGroup(
             pnlRegisterHeader1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRegisterHeader1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblEditRequest)
+                .addComponent(lblAddRequest)
                 .addContainerGap())
         );
 
@@ -194,18 +172,6 @@ public class frmEditRequest extends javax.swing.JFrame {
                 .addContainerGap(762, Short.MAX_VALUE))
         );
 
-        lbxRequestedItems.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lbxRequestedItems.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lbxRequestedItemsValueChanged(evt);
-            }
-        });
-        jScrollPane1.setViewportView(lbxRequestedItems);
-
-        lblProductName.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        lblProductName.setForeground(new java.awt.Color(255, 255, 255));
-        lblProductName.setText("Select Item to delete from list:");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -213,29 +179,16 @@ public class frmEditRequest extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 994, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(68, 68, 68)
-                            .addComponent(lblProductName)
-                            .addGap(731, 731, 731))))
+                    .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(122, 122, 122)
-                        .addComponent(lblProductName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -259,22 +212,6 @@ public class frmEditRequest extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
-    private void lbxRequestedItemsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxRequestedItemsValueChanged
-        int index = lbxRequestedItems.getSelectedIndex();
-        UserRequest selectedRequest = requestItems.get(index);
-        int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove this request item?","Remove Request Item",JOptionPane.YES_NO_OPTION);
-        if(answer == 0)// if Yes
-        {
-            if(selectedRequest.delete() != -1)
-            {
-                JOptionPane.showMessageDialog(null, "The request item was successfully deleted","Deletion Successful",JOptionPane.INFORMATION_MESSAGE);
-                StandardMainDash mainDash = new StandardMainDash();
-                mainDash.setVisible(true);
-                this.setVisible(false);                                    
-            }
-        }
-    }//GEN-LAST:event_lbxRequestedItemsValueChanged
-
     /**
      * @param args the command line arguments
      */
@@ -292,20 +229,20 @@ public class frmEditRequest extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmEditRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmManageOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmEditRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmManageOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmEditRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmManageOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmEditRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmManageOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmEditRequest().setVisible(true);
+                new frmManageOrders().setVisible(true);
             }
         });
     }
@@ -315,10 +252,7 @@ public class frmEditRequest extends javax.swing.JFrame {
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnEditRequest;
     private javax.swing.JButton btnViewRequest;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblEditRequest;
-    private javax.swing.JLabel lblProductName;
-    private javax.swing.JList<String> lbxRequestedItems;
+    private javax.swing.JLabel lblAddRequest;
     private javax.swing.JPanel pnlMainDashHeader;
     private javax.swing.JPanel pnlMenu;
     private javax.swing.JPanel pnlRegisterHeader1;

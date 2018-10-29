@@ -560,11 +560,16 @@ public class frmAddProduct extends javax.swing.JFrame {
                     pDescription = txtDescription.getText();
                     lblDescription.setForeground(Color.white);
                     
-                    pStatus = txtStatus.getText();
-                    if((Integer)numQuantity.getValue() > 0)
+                    if((Integer)numQuantity.getValue() >= 0)
                     {
                         pQuantity = (Integer)numQuantity.getValue();
                         lblQuantity.setForeground(Color.white);
+                        
+                        if(pQuantity == 0)
+                        {
+                            txtStatus.setText("Not Available");
+                        }
+                        pStatus = txtStatus.getText();
                         if(txtProductModel.getText() != "")
                         {
                              pModel = txtProductModel.getText();
@@ -670,7 +675,7 @@ public class frmAddProduct extends javax.swing.JFrame {
                     }
                     else
                     {
-                        JOptionPane.showMessageDialog(null, "Quantity cannot be 0!","Incorrect Quantity",JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Quantity cannot be negative!","Incorrect Quantity",JOptionPane.WARNING_MESSAGE);
                         lblQuantity.setForeground(Color.red);
                     }
                 }

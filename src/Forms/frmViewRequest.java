@@ -6,45 +6,41 @@
 package Forms;
 
 import PersonManagement.User;
-import ProductManagement.Category;
-import ProductManagement.Model;
 import ProductManagement.Product;
-import ProductManagement.Stock;
 import ProductManagement.UserRequest;
 import bc_stationary_bll.GenericSerializer;
 import java.awt.Color;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Eldane
  */
-public class frmManageRequest extends javax.swing.JFrame {
+
+public class frmViewRequest extends javax.swing.JFrame {
 
     /**
-     * Creates new form frmManageRequest
+     * Creates new form frmViewRequest
      */
     public ArrayList<Product> products;
     public User loggedInuser;
-    public frmManageRequest() {
-        initComponents();
+    public frmViewRequest() {
+        initComponents(); 
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         this.getContentPane().setBackground(new Color(45,45,45));
-        Product product = new Product();
-         products = product.select();
+        
+         UserRequest request = new UserRequest();
+         products = request.productsOnRequest();
          for(Product p:products){
             cmbProduct.addItem(p.getName()+"("+ p.getDescription()+"-"+p.getModel().getDescription()+")");
-        }
+         }
         
         loggedInuser = new User(); 
         GenericSerializer gen = new GenericSerializer("loggedUser.txt",loggedInuser);
         loggedInuser = (User)gen.Deserialize();
-                
+        
         txtProductName.setEditable(false);
         txtCategory.setEditable(false);
         txtProductModel.setEditable(false);
@@ -52,10 +48,10 @@ public class frmManageRequest extends javax.swing.JFrame {
         
         txtLoggedUser.setText(loggedInuser.getPerson().getName() +" "+ loggedInuser.getPerson().getSurname() );
         txtLoggedUser.setEditable(false);
-        
-        LocalDate local = LocalDate.now();
-        Date date = Date.valueOf(local);
-        txtRequestDate.setText(date.toString());
+        txtQuantity.setEditable(false);
+        txtStatus.setEditable(false);
+        txtPriority.setEditable(false);
+        txtCompleteDate.setEditable(false);
         txtRequestDate.setEditable(false);
     }
 
@@ -70,7 +66,7 @@ public class frmManageRequest extends javax.swing.JFrame {
 
         pnlMainDashHeader = new javax.swing.JPanel();
         pnlRegisterHeader1 = new javax.swing.JPanel();
-        lblAddRequest = new javax.swing.JLabel();
+        lblViewRequest = new javax.swing.JLabel();
         pnlMenu = new javax.swing.JPanel();
         btnViewRequest = new javax.swing.JButton();
         btnAddRequest = new javax.swing.JButton();
@@ -95,13 +91,13 @@ public class frmManageRequest extends javax.swing.JFrame {
         lblRequestDate = new javax.swing.JLabel();
         txtRequestDate = new javax.swing.JTextField();
         lblQuantity = new javax.swing.JLabel();
-        numQuantity = new javax.swing.JSpinner();
         lblPriority = new javax.swing.JLabel();
-        cmbPriority = new javax.swing.JComboBox<>();
-        btnAddItem = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        lbxRequestedItems = new javax.swing.JList<>();
-        btnSubmitRequest = new javax.swing.JButton();
+        txtQuantity = new javax.swing.JTextField();
+        txtPriority = new javax.swing.JTextField();
+        lblRequestDate1 = new javax.swing.JLabel();
+        txtCompleteDate = new javax.swing.JTextField();
+        lblStatus = new javax.swing.JLabel();
+        txtStatus = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -112,10 +108,10 @@ public class frmManageRequest extends javax.swing.JFrame {
         pnlRegisterHeader1.setBackground(new java.awt.Color(204, 0, 0));
         pnlRegisterHeader1.setPreferredSize(new java.awt.Dimension(1307, 65));
 
-        lblAddRequest.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
-        lblAddRequest.setForeground(new java.awt.Color(255, 255, 255));
-        lblAddRequest.setText("Add Request");
-        lblAddRequest.setAlignmentY(0.0F);
+        lblViewRequest.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
+        lblViewRequest.setForeground(new java.awt.Color(255, 255, 255));
+        lblViewRequest.setText("View Request");
+        lblViewRequest.setAlignmentY(0.0F);
 
         javax.swing.GroupLayout pnlRegisterHeader1Layout = new javax.swing.GroupLayout(pnlRegisterHeader1);
         pnlRegisterHeader1.setLayout(pnlRegisterHeader1Layout);
@@ -123,14 +119,14 @@ public class frmManageRequest extends javax.swing.JFrame {
             pnlRegisterHeader1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlRegisterHeader1Layout.createSequentialGroup()
                 .addGap(607, 607, 607)
-                .addComponent(lblAddRequest)
-                .addContainerGap(744, Short.MAX_VALUE))
+                .addComponent(lblViewRequest)
+                .addContainerGap(737, Short.MAX_VALUE))
         );
         pnlRegisterHeader1Layout.setVerticalGroup(
             pnlRegisterHeader1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRegisterHeader1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblAddRequest)
+                .addComponent(lblViewRequest)
                 .addContainerGap())
         );
 
@@ -152,7 +148,7 @@ public class frmManageRequest extends javax.swing.JFrame {
         btnViewRequest.setBackground(new java.awt.Color(40, 40, 40));
         btnViewRequest.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnViewRequest.setForeground(new java.awt.Color(255, 255, 255));
-        btnViewRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View.png"))); // NOI18N
+        btnViewRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
         btnViewRequest.setText("View Request");
         btnViewRequest.setBorder(null);
         btnViewRequest.setBorderPainted(false);
@@ -170,7 +166,7 @@ public class frmManageRequest extends javax.swing.JFrame {
         btnAddRequest.setBackground(new java.awt.Color(204, 0, 0));
         btnAddRequest.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnAddRequest.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
+        btnAddRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1.png"))); // NOI18N
         btnAddRequest.setText("Add Request");
         btnAddRequest.setBorder(null);
         btnAddRequest.setBorderPainted(false);
@@ -289,11 +285,6 @@ public class frmManageRequest extends javax.swing.JFrame {
 
         txtCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtCategory.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtCategory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCategoryActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout pnlProjectInfoLayout = new javax.swing.GroupLayout(pnlProjectInfo);
         pnlProjectInfo.setLayout(pnlProjectInfoLayout);
@@ -365,27 +356,31 @@ public class frmManageRequest extends javax.swing.JFrame {
 
         lblQuantity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblQuantity.setForeground(new java.awt.Color(255, 255, 255));
-        lblQuantity.setText("Enter quantity:");
-
-        numQuantity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        numQuantity.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        lblQuantity.setText("Quantity Requested:");
 
         lblPriority.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblPriority.setForeground(new java.awt.Color(255, 255, 255));
-        lblPriority.setText("Assign Priority:");
+        lblPriority.setText("Priority of Request:");
 
-        cmbPriority.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        cmbPriority.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Low", "Medium", "High" }));
+        txtQuantity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtQuantity.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        btnAddItem.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnAddItem.setText("Add Item");
-        btnAddItem.setBorderPainted(false);
-        btnAddItem.setFocusPainted(false);
-        btnAddItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddItemActionPerformed(evt);
-            }
-        });
+        txtPriority.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtPriority.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        lblRequestDate1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblRequestDate1.setForeground(new java.awt.Color(255, 255, 255));
+        lblRequestDate1.setText("Completed Date:");
+
+        txtCompleteDate.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtCompleteDate.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        lblStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblStatus.setForeground(new java.awt.Color(255, 255, 255));
+        lblStatus.setText("Current Status:");
+
+        txtStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         javax.swing.GroupLayout pnlProjectInfo2Layout = new javax.swing.GroupLayout(pnlProjectInfo2);
         pnlProjectInfo2.setLayout(pnlProjectInfo2Layout);
@@ -395,30 +390,38 @@ public class frmManageRequest extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(lblRequestInfo)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlProjectInfo2Layout.createSequentialGroup()
-                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                .addGap(72, 72, 72)
+                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAddItem))
+                        .addComponent(lblPriority)
+                        .addGap(64, 64, 64)
+                        .addComponent(txtPriority))
                     .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
-                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                                .addComponent(lblStatus)
+                                .addGap(87, 87, 87)
+                                .addComponent(txtStatus))
                             .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
                                 .addComponent(lblQuantity)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(numQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(41, 41, 41)
+                                .addComponent(txtQuantity))
                             .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
                                 .addComponent(lblLoggedUser)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtLoggedUser, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtLoggedUser, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(135, 135, 135)
+                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                        .addComponent(lblRequestDate)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblRequestDate)
-                            .addComponent(lblPriority))
+                        .addComponent(txtRequestDate, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                        .addComponent(lblRequestDate1)
                         .addGap(18, 18, 18)
-                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtRequestDate)
-                            .addComponent(cmbPriority, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(txtCompleteDate, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(58, 58, 58))
         );
         pnlProjectInfo2Layout.setVerticalGroup(
@@ -435,26 +438,19 @@ public class frmManageRequest extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblQuantity)
-                    .addComponent(numQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblRequestDate1)
+                    .addComponent(txtCompleteDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPriority)
-                    .addComponent(cmbPriority, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAddItem)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtPriority, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblStatus)
+                    .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
-
-        lbxRequestedItems.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        jScrollPane1.setViewportView(lbxRequestedItems);
-
-        btnSubmitRequest.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnSubmitRequest.setText("Submit Request");
-        btnSubmitRequest.setBorderPainted(false);
-        btnSubmitRequest.setFocusPainted(false);
-        btnSubmitRequest.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSubmitRequestActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -465,17 +461,14 @@ public class frmManageRequest extends javax.swing.JFrame {
                     .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(67, 67, 67)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(lblSearchProducts)
-                                    .addGap(65, 65, 65)
-                                    .addComponent(cmbProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(pnlProjectInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 1018, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnSubmitRequest))))
+                        .addGap(123, 123, 123)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblSearchProducts)
+                                .addGap(65, 65, 65)
+                                .addComponent(cmbProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(pnlProjectInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -484,36 +477,31 @@ public class frmManageRequest extends javax.swing.JFrame {
                 .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
+                        .addGap(98, 98, 98)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblSearchProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addGap(82, 82, 82)
                         .addComponent(pnlProjectInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSubmitRequest)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnViewRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRequestActionPerformed
-        frmViewRequest viewR = new frmViewRequest();
-        viewR.setVisible(true);
-        this.setVisible(false);           
+
     }//GEN-LAST:event_btnViewRequestActionPerformed
 
-    
     private void btnAddRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRequestActionPerformed
-        
+        frmManageRequest manageRequest = new frmManageRequest();
+        manageRequest.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnAddRequestActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -522,8 +510,21 @@ public class frmManageRequest extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
+    private void btnEditRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditRequestActionPerformed
+        frmEditRequest editR = new frmEditRequest();
+        editR.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnEditRequestActionPerformed
+
     public Product selectedProduct;
+    public UserRequest selectedRequest;
     private void cmbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbProductMouseClicked
+        String priority = "";
+        String currentStatus = "";
+        int priorityLevel = 0;
+        Date requestDate;
+        Date completedDate;
+        
         String selectedProductSearch = cmbProduct.getSelectedItem().toString();
         String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
         String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf("-"));
@@ -537,164 +538,90 @@ public class frmManageRequest extends javax.swing.JFrame {
                 selectedProduct = p;
             }
         }
+        UserRequest request = new UserRequest(loggedInuser);
+        ArrayList<UserRequest> allRequests = request.selectSpecUserRequest();
+        
+        for(UserRequest ur: allRequests)
+        {
+            if(ur.getProduct().getName().equals(selectedProduct.getName()))
+            {
+                selectedRequest = ur;
+            }
+        }
         
         txtProductName.setText(selectedProduct.getName());
         txtProductName.setEditable(false);
 
         txtDescription.setText(selectedProduct.getDescription());
         txtDescription.setEditable(false);
-        
-        txtCategory.setText(selectedProduct.getCategory().getDescription()); 
+
+        txtCategory.setText(selectedProduct.getCategory().getDescription());
         txtCategory.setEditable(false);
 
         txtProductModel.setText(selectedProduct.getModel().getDescription());
         txtProductModel.setEditable(false);
+        
+        txtQuantity.setText(Integer.toString(selectedRequest.getQuantity()));
+        txtQuantity.setEditable(false);
+
+        priorityLevel = selectedRequest.getPriorityLevel();
+        switch(priorityLevel)
+        {
+            case 1: priority = "Low";
+                break;
+            case 2: priority = "Medium";
+                break;
+            case 3: priority = "High";
+                break;
+            default:
+                break;
+        }
+        
+        txtPriority.setText(priority);
+        txtPriority.setEditable(false);
+        
+        currentStatus = selectedRequest.getStatus();
+        
+        if(currentStatus.equals("Unprocessed"))
+        {
+            txtStatus.setForeground(Color.red);
+        }
+        else if(currentStatus.equals("Partially Processed"))
+        {
+            txtStatus.setForeground(Color.blue);
+        }
+        else if(currentStatus.equals("Back Ordered"))
+        {
+            txtStatus.setForeground(Color.blue);
+        }
+        else if(currentStatus.equals("Ready for Delivery"))
+        {
+            txtStatus.setForeground(Color.green);
+        }
+              
+        txtStatus.setText(currentStatus);
+        txtStatus.setEditable(false);
+        
+        requestDate = (Date)selectedRequest.getReqDate();
+        completedDate = (Date)selectedRequest.getCompletedDate();
+        
+        if(requestDate.after(completedDate))
+        {
+            txtRequestDate.setText(requestDate.toString());
+            txtRequestDate.setEditable(false);
+        
+            txtCompleteDate.setText("Not yet specified");
+            txtCompleteDate.setEditable(false);
+        }
+        else
+        {
+            txtRequestDate.setText(requestDate.toString());
+            txtRequestDate.setEditable(false);
+        
+            txtCompleteDate.setText(completedDate.toString());
+            txtCompleteDate.setEditable(false);
+        }
     }//GEN-LAST:event_cmbProductMouseClicked
-
-    private void txtCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCategoryActionPerformed
-
-    }//GEN-LAST:event_txtCategoryActionPerformed
-
-    public ArrayList<UserRequest> requestItems = new ArrayList<UserRequest>();
-    private void btnAddItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddItemActionPerformed
-        String priority, requestDate;
-        int quantity, priorityLevel=0;
-        UserRequest request = null;
-        LocalDate completeDate;
-        if(!"".equals(txtProductName.getText()))
-        {
-            lblSearchProducts.setForeground(Color.white);   
-            if((Integer)numQuantity.getValue() > 0)
-            {
-                lblQuantity.setForeground(Color.white);
-                priority = cmbPriority.getSelectedItem().toString();
-                requestDate = txtRequestDate.getText();
-                quantity = (Integer)numQuantity.getValue();
-                if(priority.toLowerCase().equals("low"))
-                {
-                    priorityLevel = 1;
-                }
-                else if(priority.toLowerCase().equals("medium"))
-                {
-                    priorityLevel = 2;
-                }
-                else if(priority.toLowerCase().equals("high"))
-                {
-                    priorityLevel = 3;
-                }
-                completeDate = LocalDate.now().minusDays(1);
-                
-                request = new UserRequest(loggedInuser,selectedProduct,quantity,priorityLevel,"Unprocessed",Date.valueOf(requestDate),Date.valueOf(completeDate));
-                requestItems.add(request);
-               
-                if(requestItems.size() > 0)
-                {
-                    DefaultListModel model = new DefaultListModel();
-                    // Populate Listbox
-                    for (UserRequest u : requestItems) {
-                        model.addElement(u);
-                    }   
-
-                    lbxRequestedItems.setModel(model);
-                    
-                    cmbProduct.setSelectedIndex(0);
-                    txtProductName.setText("");
-                    txtProductModel.setText("");
-                    txtCategory.setText("");
-                    txtDescription.setText("");
-                    numQuantity.setValue(0);
-                    cmbPriority.setSelectedIndex(0);
-                    cmbProduct.grabFocus();
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(null, "There are no items to add to the request!","Insufficient Items",JOptionPane.WARNING_MESSAGE);
-                }
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "Quantity cannot be 0!","Incorrect Quantity",JOptionPane.WARNING_MESSAGE);
-                lblQuantity.setForeground(Color.red); 
-            }
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Please select a product that you want to request!","Incorrect Product",JOptionPane.WARNING_MESSAGE);
-            lblSearchProducts.setForeground(Color.red);      
-        }
-    }//GEN-LAST:event_btnAddItemActionPerformed
-
-    private void btnSubmitRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitRequestActionPerformed
-        boolean success = true;
-         UserRequest request = new UserRequest();
-         ArrayList<UserRequest> loggedRequests = request.selectUnprocessed();
-         
-        for(UserRequest uNew : requestItems)
-        {
-            if(loggedRequests.size() > 0)
-            {
-                for(UserRequest uOld : loggedRequests)
-                {
-                    String newProductName = uNew.getProduct().getName();
-                    String existingProductName = uOld.getProduct().getName();
-                    int newQuantity=0, existingQuantity=0, newPriority=0, existingPriority=0;
- 
-                    if(newProductName.equals(existingProductName))
-                    {
-                       newQuantity = uNew.getQuantity();
-                       existingQuantity = uOld.getQuantity();
-                       uNew.setQuantity(newQuantity + existingQuantity); // add quantities of the same Unprocessed Product
-                       
-                       newPriority = uNew.getPriorityLevel();
-                       existingPriority = uOld.getPriorityLevel();
-                       if(newPriority < existingPriority) // check if new priority is now higher or not
-                       {
-                           uNew.setPriorityLevel(existingPriority);
-                       }
-                       
-                       if(uNew.update() == -1) // update existing Unprocessed Product
-                       {
-                            success = false;
-                       }
-                    }
-                    else
-                    {
-                        if(uNew.insert() == -1)
-                        {
-                            success = false;
-                        }
-                    }
-                }  
-            }
-            else
-            {
-                if(uNew.insert() == -1)
-                {
-                    success = false;
-                }
-            }
-        }
-        
-        if(success)
-        {
-            JOptionPane.showMessageDialog(null, "Request was successfully submitted!", "Successful Submission", JOptionPane.INFORMATION_MESSAGE);
-            StandardMainDash mainDash = new StandardMainDash();
-            mainDash.setVisible(true);
-            this.setVisible(false);
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Error occured during this process!", "Unsuccessful Submission", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        
-    }//GEN-LAST:event_btnSubmitRequestActionPerformed
-
-    private void btnEditRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditRequestActionPerformed
-        frmEditRequest editR = new frmEditRequest();
-        editR.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnEditRequestActionPerformed
 
     /**
      * @param args the command line arguments
@@ -713,35 +640,30 @@ public class frmManageRequest extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmManageRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmViewRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmManageRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmViewRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmManageRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmViewRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmManageRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmViewRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmManageRequest().setVisible(true);
+                new frmViewRequest().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddItem;
     private javax.swing.JButton btnAddRequest;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnEditRequest;
-    private javax.swing.JButton btnSubmitRequest;
     private javax.swing.JButton btnViewRequest;
-    private javax.swing.JComboBox<String> cmbPriority;
     private javax.swing.JComboBox<String> cmbProduct;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblAddRequest;
     private javax.swing.JLabel lblCategory;
     private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblLoggedUser;
@@ -751,20 +673,25 @@ public class frmManageRequest extends javax.swing.JFrame {
     private javax.swing.JLabel lblProductName;
     private javax.swing.JLabel lblQuantity;
     private javax.swing.JLabel lblRequestDate;
+    private javax.swing.JLabel lblRequestDate1;
     private javax.swing.JLabel lblRequestInfo;
     private javax.swing.JLabel lblSearchProducts;
-    private javax.swing.JList<String> lbxRequestedItems;
-    private javax.swing.JSpinner numQuantity;
+    private javax.swing.JLabel lblStatus;
+    private javax.swing.JLabel lblViewRequest;
     private javax.swing.JPanel pnlMainDashHeader;
     private javax.swing.JPanel pnlMenu;
     private javax.swing.JPanel pnlProjectInfo;
     private javax.swing.JPanel pnlProjectInfo2;
     private javax.swing.JPanel pnlRegisterHeader1;
     private javax.swing.JTextField txtCategory;
+    private javax.swing.JTextField txtCompleteDate;
     private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtLoggedUser;
+    private javax.swing.JTextField txtPriority;
     private javax.swing.JTextField txtProductModel;
     private javax.swing.JTextField txtProductName;
+    private javax.swing.JTextField txtQuantity;
     private javax.swing.JTextField txtRequestDate;
+    private javax.swing.JTextField txtStatus;
     // End of variables declaration//GEN-END:variables
 }

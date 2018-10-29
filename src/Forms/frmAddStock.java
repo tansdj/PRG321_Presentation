@@ -586,7 +586,9 @@ public class frmAddStock extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbProductSearchMouseClicked
 
     private void btnUpdateStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStockActionPerformed
-
+        frmUpdateStock updateS = new frmUpdateStock();
+        updateS.setVisible(true);
+        this.setVisible(false);               
     }//GEN-LAST:event_btnUpdateStockActionPerformed
 
     private void btnViewStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStockActionPerformed

@@ -77,16 +77,10 @@ public class frmViewUsers extends javax.swing.JFrame {
         lblLoginInfo = new javax.swing.JLabel();
         lblUsername = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
-        lblPassword = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JTextField();
         lblAccessLevel = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
-        lblSecurityQuestion = new javax.swing.JLabel();
         txtStatus = new javax.swing.JTextField();
         txtAccessLevel = new javax.swing.JTextField();
-        lblAnswer = new javax.swing.JLabel();
-        txtAnswer = new javax.swing.JTextField();
-        txtSecurityQuestion = new javax.swing.JTextField();
         pnlAddressInfo = new javax.swing.JPanel();
         lblAddressInfo = new javax.swing.JLabel();
         lblLine1 = new javax.swing.JLabel();
@@ -319,13 +313,6 @@ public class frmViewUsers extends javax.swing.JFrame {
         txtUsername.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtUsername.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        lblPassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblPassword.setForeground(new java.awt.Color(255, 255, 255));
-        lblPassword.setText("Password:");
-
-        txtPassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtPassword.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
         lblAccessLevel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblAccessLevel.setForeground(new java.awt.Color(255, 255, 255));
         lblAccessLevel.setText("Access Level:");
@@ -334,25 +321,11 @@ public class frmViewUsers extends javax.swing.JFrame {
         lblStatus.setForeground(new java.awt.Color(255, 255, 255));
         lblStatus.setText("Status");
 
-        lblSecurityQuestion.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblSecurityQuestion.setForeground(new java.awt.Color(255, 255, 255));
-        lblSecurityQuestion.setText("Security Question");
-
         txtStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         txtAccessLevel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtAccessLevel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        lblAnswer.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblAnswer.setForeground(new java.awt.Color(255, 255, 255));
-        lblAnswer.setText("Answer");
-
-        txtAnswer.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtAnswer.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        txtSecurityQuestion.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtSecurityQuestion.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         javax.swing.GroupLayout pnlLoginInfoLayout = new javax.swing.GroupLayout(pnlLoginInfo);
         pnlLoginInfo.setLayout(pnlLoginInfoLayout);
@@ -365,27 +338,18 @@ public class frmViewUsers extends javax.swing.JFrame {
             .addGroup(pnlLoginInfoLayout.createSequentialGroup()
                 .addGap(58, 58, 58)
                 .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtSecurityQuestion)
                     .addGroup(pnlLoginInfoLayout.createSequentialGroup()
                         .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblAccessLevel)
-                            .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(pnlLoginInfoLayout.createSequentialGroup()
-                                    .addComponent(lblPassword)
-                                    .addGap(101, 101, 101))
-                                .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(154, Short.MAX_VALUE))
+                            .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(65, Short.MAX_VALUE))
                     .addGroup(pnlLoginInfoLayout.createSequentialGroup()
                         .addGroup(pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblSecurityQuestion)
-                            .addComponent(lblAnswer)
                             .addComponent(txtAccessLevel, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblStatus)
                             .addComponent(lblUsername)
-                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 88, Short.MAX_VALUE))))
+                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         pnlLoginInfoLayout.setVerticalGroup(
             pnlLoginInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -397,10 +361,6 @@ public class frmViewUsers extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblPassword)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
                 .addComponent(lblAccessLevel)
                 .addGap(1, 1, 1)
                 .addComponent(txtAccessLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -408,14 +368,6 @@ public class frmViewUsers extends javax.swing.JFrame {
                 .addComponent(lblStatus)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblSecurityQuestion)
-                .addGap(3, 3, 3)
-                .addComponent(txtSecurityQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblAnswer)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -577,7 +529,7 @@ public class frmViewUsers extends javax.swing.JFrame {
                         .addComponent(pnlAddressInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(31, 31, 31)
                 .addComponent(pnlLoginInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(528, Short.MAX_VALUE))
+                .addContainerGap(689, Short.MAX_VALUE))
         );
         pnlUserInfoLayout.setVerticalGroup(
             pnlUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -774,20 +726,11 @@ public class frmViewUsers extends javax.swing.JFrame {
             txtUsername.setText(selectedUser.getUsername());
             txtFirstname.setEditable(false);
 
-            txtPassword.setText(selectedUser.getPassword());
-            txtPassword.setEditable(false);
-
             txtAccessLevel.setText(selectedUser.getAccessLevel());
             txtAccessLevel.setEditable(false);
 
             txtStatus.setText(selectedUser.getStatus());
             txtStatus.setEditable(false);
-
-            txtSecurityQuestion.setText(userSecQ.getQuestion().getQuestion());
-            txtSecurityQuestion.setEditable(false);
-
-            txtAnswer.setText(userSecQ.getAnswer());
-            txtAnswer.setEditable(false);
     }//GEN-LAST:event_lbxUsersValueChanged
 
     /**
@@ -833,7 +776,6 @@ public class frmViewUsers extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAccessLevel;
     private javax.swing.JLabel lblAddressInfo;
-    private javax.swing.JLabel lblAnswer;
     private javax.swing.JLabel lblCampus;
     private javax.swing.JLabel lblCity;
     private javax.swing.JLabel lblFirstname;
@@ -844,9 +786,7 @@ public class frmViewUsers extends javax.swing.JFrame {
     private javax.swing.JLabel lblLine1;
     private javax.swing.JLabel lblLine2;
     private javax.swing.JLabel lblLoginInfo;
-    private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblPostalCode;
-    private javax.swing.JLabel lblSecurityQuestion;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblUserInfo;
     private javax.swing.JLabel lblUsername;
@@ -859,7 +799,6 @@ public class frmViewUsers extends javax.swing.JFrame {
     private javax.swing.JPanel pnlRegisterHeader1;
     private javax.swing.JPanel pnlUserInfo;
     private javax.swing.JTextField txtAccessLevel;
-    private javax.swing.JTextField txtAnswer;
     private javax.swing.JTextField txtCampus;
     private javax.swing.JTextField txtCellphoneNo;
     private javax.swing.JTextField txtCity;
@@ -869,10 +808,8 @@ public class frmViewUsers extends javax.swing.JFrame {
     private javax.swing.JTextField txtLastname;
     private javax.swing.JTextField txtLine1;
     private javax.swing.JTextField txtLine2;
-    private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtPostalCode;
     private javax.swing.JTextField txtSearch;
-    private javax.swing.JTextField txtSecurityQuestion;
     private javax.swing.JTextField txtStatus;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
