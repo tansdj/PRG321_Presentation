@@ -320,9 +320,13 @@ public class frmAddStock extends javax.swing.JFrame {
         );
 
         cmbProductSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        cmbProductSearch.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cmbProductSearchMouseClicked(evt);
+        cmbProductSearch.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                cmbProductSearchPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
 
@@ -542,8 +546,39 @@ public class frmAddStock extends javax.swing.JFrame {
             }      
     }//GEN-LAST:event_btnInsertStockActionPerformed
 
-    private void cmbProductSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbProductSearchMouseClicked
-        String selectedProductSearch = cmbProductSearch.getSelectedItem().toString();
+    private void btnUpdateStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStockActionPerformed
+        frmUpdateStock updateS = new frmUpdateStock();
+        updateS.setVisible(true);
+        this.setVisible(false);               
+    }//GEN-LAST:event_btnUpdateStockActionPerformed
+
+    private void btnViewStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStockActionPerformed
+        frmViewStock viewStock = new frmViewStock();
+        viewStock.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnViewStockActionPerformed
+
+    private void btnAddStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStockActionPerformed
+        frmAddStock addStock = new frmAddStock();
+        addStock.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnAddStockActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        AdministratorMainDash mainDash = new AdministratorMainDash();
+        mainDash.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
+        frmAddProduct addProduct = new frmAddProduct();
+        addProduct.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnAddProductActionPerformed
+
+    private void cmbProductSearchPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductSearchPopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+         String selectedProductSearch = cmbProductSearch.getSelectedItem().toString();
         String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
         String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf(")"));
         
@@ -583,37 +618,7 @@ public class frmAddStock extends javax.swing.JFrame {
         txtProductSale.setEditable(false);
         
         numQuantity.setValue(stock.getQuantity());
-    }//GEN-LAST:event_cmbProductSearchMouseClicked
-
-    private void btnUpdateStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStockActionPerformed
-        frmUpdateStock updateS = new frmUpdateStock();
-        updateS.setVisible(true);
-        this.setVisible(false);               
-    }//GEN-LAST:event_btnUpdateStockActionPerformed
-
-    private void btnViewStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStockActionPerformed
-        frmViewStock viewStock = new frmViewStock();
-        viewStock.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnViewStockActionPerformed
-
-    private void btnAddStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStockActionPerformed
-        frmAddStock addStock = new frmAddStock();
-        addStock.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnAddStockActionPerformed
-
-    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        AdministratorMainDash mainDash = new AdministratorMainDash();
-        mainDash.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnBackActionPerformed
-
-    private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
-        frmAddProduct addProduct = new frmAddProduct();
-        addProduct.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnAddProductActionPerformed
+    }//GEN-LAST:event_cmbProductSearchPopupMenuWillBecomeInvisible
 
     /**
      * @param args the command line arguments

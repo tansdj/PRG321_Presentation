@@ -11,7 +11,6 @@ import PersonManagement.Person;
 import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
-import bc_stationary_bll.InputValidation;
 import java.awt.Color;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -619,7 +618,6 @@ public class frmAddUser extends javax.swing.JFrame {
         String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail, addressPostal;
         User userToUpdate;
         Person selectedPerson = selectedUser.getPerson();
-        InputValidation inValidation = new InputValidation();
         Person person;
         
             //Assigning values to variables
@@ -652,7 +650,6 @@ public class frmAddUser extends javax.swing.JFrame {
         String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail, addressPostal;
         User userToUpdate;
         Person selectedPerson = selectedUser.getPerson();
-        InputValidation inValidation = new InputValidation();
         Person person;
         
             //Assigning values to variables

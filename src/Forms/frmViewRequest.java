@@ -245,9 +245,13 @@ public class frmViewRequest extends javax.swing.JFrame {
         lblSearchProducts.setText("Select a Product:");
 
         cmbProduct.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        cmbProduct.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cmbProductMouseClicked(evt);
+        cmbProduct.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                cmbProductPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
 
@@ -516,9 +520,9 @@ public class frmViewRequest extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnEditRequestActionPerformed
 
-    public Product selectedProduct;
+        public Product selectedProduct;
     public UserRequest selectedRequest;
-    private void cmbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbProductMouseClicked
+    private void cmbProductPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductPopupMenuWillBecomeInvisible
         String priority = "";
         String currentStatus = "";
         int priorityLevel = 0;
@@ -621,7 +625,7 @@ public class frmViewRequest extends javax.swing.JFrame {
             txtCompleteDate.setText(completedDate.toString());
             txtCompleteDate.setEditable(false);
         }
-    }//GEN-LAST:event_cmbProductMouseClicked
+    }//GEN-LAST:event_cmbProductPopupMenuWillBecomeInvisible
 
     /**
      * @param args the command line arguments

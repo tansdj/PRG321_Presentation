@@ -97,7 +97,7 @@ public class StandardMainDash extends javax.swing.JFrame {
         btnManageRequest.setBorderPainted(false);
         btnManageRequest.setContentAreaFilled(false);
         btnManageRequest.setFocusPainted(false);
-        btnManageRequest.setIconTextGap(5);
+        btnManageRequest.setIconTextGap(34);
         btnManageRequest.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/products_Red.png"))); // NOI18N
         btnManageRequest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -115,7 +115,7 @@ public class StandardMainDash extends javax.swing.JFrame {
         btnManageProfile.setContentAreaFilled(false);
         btnManageProfile.setFocusPainted(false);
         btnManageProfile.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnManageProfile.setIconTextGap(21);
+        btnManageProfile.setIconTextGap(55);
         btnManageProfile.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/clients_Red.png"))); // NOI18N
         btnManageProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -133,7 +133,7 @@ public class StandardMainDash extends javax.swing.JFrame {
         btnExit.setContentAreaFilled(false);
         btnExit.setFocusPainted(false);
         btnExit.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnExit.setIconTextGap(107);
+        btnExit.setIconTextGap(145);
         btnExit.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/LogOut1_red.png"))); // NOI18N
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -145,7 +145,7 @@ public class StandardMainDash extends javax.swing.JFrame {
         btnViewUserDetails.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnViewUserDetails.setForeground(new java.awt.Color(255, 255, 255));
         btnViewUserDetails.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View.png"))); // NOI18N
-        btnViewUserDetails.setText("View User Details");
+        btnViewUserDetails.setText("View Product Details");
         btnViewUserDetails.setActionCommand("View Details");
         btnViewUserDetails.setBorder(null);
         btnViewUserDetails.setBorderPainted(false);
@@ -154,9 +154,9 @@ public class StandardMainDash extends javax.swing.JFrame {
         btnViewUserDetails.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewUserDetails.setIconTextGap(10);
         btnViewUserDetails.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
-        btnViewUserDetails.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewUserDetailsActionPerformed(evt);
+        btnViewUserDetails.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnViewUserDetailsMouseClicked(evt);
             }
         });
 
@@ -164,7 +164,7 @@ public class StandardMainDash extends javax.swing.JFrame {
         pnlMenu.setLayout(pnlMenuLayout);
         pnlMenuLayout.setHorizontalGroup(
             pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnManageRequest, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+            .addComponent(btnManageRequest, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnManageProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnViewUserDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnlMenuLayout.createSequentialGroup()
@@ -222,13 +222,14 @@ public class StandardMainDash extends javax.swing.JFrame {
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_btnExitActionPerformed
 
-    private void btnViewUserDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewUserDetailsActionPerformed
-        frmViewUsers viewUser = new frmViewUsers();
-        viewUser.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnViewUserDetailsActionPerformed
+    private void btnViewUserDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewUserDetailsMouseClicked
+       frmViewProducts viewP = new frmViewProducts();
+       viewP.setVisible(true);
+       this.setVisible(false);
+    }//GEN-LAST:event_btnViewUserDetailsMouseClicked
 
     /**
      * @param args the command line arguments

@@ -134,6 +134,11 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnExit.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnExit.setIconTextGap(110);
         btnExit.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/LogOut1_red.png"))); // NOI18N
+        btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnExitMouseClicked(evt);
+            }
+        });
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExitActionPerformed(evt);
@@ -145,7 +150,6 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnManageRequests.setForeground(new java.awt.Color(255, 255, 255));
         btnManageRequests.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View.png"))); // NOI18N
         btnManageRequests.setText("Manage Orders");
-        btnManageRequests.setActionCommand("Manage Orders");
         btnManageRequests.setBorder(null);
         btnManageRequests.setBorderPainted(false);
         btnManageRequests.setContentAreaFilled(false);
@@ -224,6 +228,11 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         manageO.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnManageRequestsActionPerformed
+
+    private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_btnExitMouseClicked
 
     /**
      * @param args the command line arguments

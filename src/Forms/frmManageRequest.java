@@ -249,9 +249,13 @@ public class frmManageRequest extends javax.swing.JFrame {
         lblSearchProducts.setText("Select a Product:");
 
         cmbProduct.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        cmbProduct.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cmbProductMouseClicked(evt);
+        cmbProduct.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                cmbProductPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
 
@@ -522,35 +526,7 @@ public class frmManageRequest extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
-    public Product selectedProduct;
-    private void cmbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbProductMouseClicked
-        String selectedProductSearch = cmbProduct.getSelectedItem().toString();
-        String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
-        String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf("-"));
-        String searchedModel = selectedProductSearch.substring(selectedProductSearch.indexOf("-")+1,selectedProductSearch.indexOf(")"));
-
-        selectedProduct = new Product();
-        for(Product p : products)
-        {
-            if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))&&(p.getModel().getDescription().equals(searchedModel))))
-            {
-                selectedProduct = p;
-            }
-        }
-        
-        txtProductName.setText(selectedProduct.getName());
-        txtProductName.setEditable(false);
-
-        txtDescription.setText(selectedProduct.getDescription());
-        txtDescription.setEditable(false);
-        
-        txtCategory.setText(selectedProduct.getCategory().getDescription()); 
-        txtCategory.setEditable(false);
-
-        txtProductModel.setText(selectedProduct.getModel().getDescription());
-        txtProductModel.setEditable(false);
-    }//GEN-LAST:event_cmbProductMouseClicked
-
+    
     private void txtCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCategoryActionPerformed
 
     }//GEN-LAST:event_txtCategoryActionPerformed
@@ -627,7 +603,7 @@ public class frmManageRequest extends javax.swing.JFrame {
     private void btnSubmitRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitRequestActionPerformed
         boolean success = true;
          UserRequest request = new UserRequest();
-         ArrayList<UserRequest> loggedRequests = request.selectUnprocessed();
+         ArrayList<UserRequest> loggedRequests = request.selectUnprocessed_BackOrder();
          
         for(UserRequest uNew : requestItems)
         {
@@ -698,6 +674,36 @@ public class frmManageRequest extends javax.swing.JFrame {
         editR.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnEditRequestActionPerformed
+
+    public Product selectedProduct;
+    private void cmbProductPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductPopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+        String selectedProductSearch = cmbProduct.getSelectedItem().toString();
+        String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
+        String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf("-"));
+        String searchedModel = selectedProductSearch.substring(selectedProductSearch.indexOf("-")+1,selectedProductSearch.indexOf(")"));
+
+        selectedProduct = new Product();
+        for(Product p : products)
+        {
+            if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))&&(p.getModel().getDescription().equals(searchedModel))))
+            {
+                selectedProduct = p;
+            }
+        }
+        
+        txtProductName.setText(selectedProduct.getName());
+        txtProductName.setEditable(false);
+
+        txtDescription.setText(selectedProduct.getDescription());
+        txtDescription.setEditable(false);
+        
+        txtCategory.setText(selectedProduct.getCategory().getDescription()); 
+        txtCategory.setEditable(false);
+
+        txtProductModel.setText(selectedProduct.getModel().getDescription());
+        txtProductModel.setEditable(false);
+    }//GEN-LAST:event_cmbProductPopupMenuWillBecomeInvisible
 
     /**
      * @param args the command line arguments

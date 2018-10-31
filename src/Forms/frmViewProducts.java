@@ -21,13 +21,13 @@ import javax.swing.JFrame;
  *
  * @author Eldane
  */
-public class frmViewStock extends javax.swing.JFrame {
+public class frmViewProducts extends javax.swing.JFrame {
 
     /**
-     * Creates new form frmViewStock
+     * Creates new form frmViewProducts
      */
     ArrayList<Product> productList;
-    public frmViewStock() {
+    public frmViewProducts() {
         initComponents();
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         this.getContentPane().setBackground(new Color(45,45,45));
@@ -56,19 +56,17 @@ public class frmViewStock extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup2 = new javax.swing.ButtonGroup();
         pnlRegisterHeader = new javax.swing.JPanel();
         pnlRegisterHeader1 = new javax.swing.JPanel();
         lblAddProduct = new javax.swing.JLabel();
         pnlMenu = new javax.swing.JPanel();
-        btnAddProduct = new javax.swing.JButton();
-        btnUpdateStock = new javax.swing.JButton();
-        btnViewStock = new javax.swing.JButton();
-        btnAddStock = new javax.swing.JButton();
+        btnViewProduct = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         lbxProducts = new javax.swing.JList<>();
-        txtSearch = new javax.swing.JTextField();
+        rbtnSortQuantity = new javax.swing.JRadioButton();
+        rbtnSortProductName = new javax.swing.JRadioButton();
         pnlProductInfo = new javax.swing.JPanel();
         lblProductInfo2 = new javax.swing.JLabel();
         lblProductName2 = new javax.swing.JLabel();
@@ -87,11 +85,8 @@ public class frmViewStock extends javax.swing.JFrame {
         txtProductModel = new javax.swing.JTextField();
         txtProductCost = new javax.swing.JTextField();
         txtProductSale = new javax.swing.JTextField();
-        rbtnSortQuantity = new javax.swing.JRadioButton();
-        rbtnSortProductName = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
 
         pnlRegisterHeader.setBackground(new java.awt.Color(255, 255, 0));
         pnlRegisterHeader.setPreferredSize(new java.awt.Dimension(1071, 530));
@@ -101,7 +96,7 @@ public class frmViewStock extends javax.swing.JFrame {
 
         lblAddProduct.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
         lblAddProduct.setForeground(new java.awt.Color(255, 255, 255));
-        lblAddProduct.setText("View Stock");
+        lblAddProduct.setText("View Product");
         lblAddProduct.setAlignmentY(0.0F);
 
         javax.swing.GroupLayout pnlRegisterHeader1Layout = new javax.swing.GroupLayout(pnlRegisterHeader1);
@@ -142,72 +137,20 @@ public class frmViewStock extends javax.swing.JFrame {
 
         pnlMenu.setBackground(new java.awt.Color(40, 40, 40));
 
-        btnAddProduct.setBackground(new java.awt.Color(204, 0, 0));
-        btnAddProduct.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnAddProduct.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1.png"))); // NOI18N
-        btnAddProduct.setText("Add Product");
-        btnAddProduct.setBorder(null);
-        btnAddProduct.setBorderPainted(false);
-        btnAddProduct.setContentAreaFilled(false);
-        btnAddProduct.setFocusPainted(false);
-        btnAddProduct.setIconTextGap(12);
-        btnAddProduct.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
-        btnAddProduct.addActionListener(new java.awt.event.ActionListener() {
+        btnViewProduct.setBackground(new java.awt.Color(40, 40, 40));
+        btnViewProduct.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnViewProduct.setForeground(new java.awt.Color(255, 255, 255));
+        btnViewProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
+        btnViewProduct.setText("View Product");
+        btnViewProduct.setBorder(null);
+        btnViewProduct.setBorderPainted(false);
+        btnViewProduct.setContentAreaFilled(false);
+        btnViewProduct.setFocusPainted(false);
+        btnViewProduct.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnViewProduct.setIconTextGap(5);
+        btnViewProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddProductActionPerformed(evt);
-            }
-        });
-
-        btnUpdateStock.setBackground(new java.awt.Color(40, 40, 40));
-        btnUpdateStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnUpdateStock.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdateStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1.png"))); // NOI18N
-        btnUpdateStock.setText("Update Stock");
-        btnUpdateStock.setBorder(null);
-        btnUpdateStock.setBorderPainted(false);
-        btnUpdateStock.setContentAreaFilled(false);
-        btnUpdateStock.setFocusPainted(false);
-        btnUpdateStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnUpdateStock.setIconTextGap(6);
-        btnUpdateStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
-        btnUpdateStock.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateStockActionPerformed(evt);
-            }
-        });
-
-        btnViewStock.setBackground(new java.awt.Color(40, 40, 40));
-        btnViewStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnViewStock.setForeground(new java.awt.Color(255, 255, 255));
-        btnViewStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
-        btnViewStock.setText("View Stock");
-        btnViewStock.setBorder(null);
-        btnViewStock.setBorderPainted(false);
-        btnViewStock.setContentAreaFilled(false);
-        btnViewStock.setFocusPainted(false);
-        btnViewStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnViewStock.setIconTextGap(25);
-        btnViewStock.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewStockActionPerformed(evt);
-            }
-        });
-
-        btnAddStock.setBackground(new java.awt.Color(204, 0, 0));
-        btnAddStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnAddStock.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1.png"))); // NOI18N
-        btnAddStock.setText("Add Stock");
-        btnAddStock.setBorder(null);
-        btnAddStock.setBorderPainted(false);
-        btnAddStock.setContentAreaFilled(false);
-        btnAddStock.setFocusPainted(false);
-        btnAddStock.setIconTextGap(30);
-        btnAddStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
-        btnAddStock.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddStockActionPerformed(evt);
+                btnViewProductActionPerformed(evt);
             }
         });
 
@@ -232,39 +175,22 @@ public class frmViewStock extends javax.swing.JFrame {
         pnlMenu.setLayout(pnlMenuLayout);
         pnlMenuLayout.setHorizontalGroup(
             pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnAddProduct, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnlMenuLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnViewStock, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                    .addComponent(btnUpdateStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAddStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnBack, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnViewProduct, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+                    .addComponent(btnBack, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlMenuLayout.setVerticalGroup(
             pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMenuLayout.createSequentialGroup()
-                .addGap(69, 69, 69)
-                .addComponent(btnAddProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAddStock, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addComponent(btnUpdateStock, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnViewStock, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(88, 88, 88)
+                .addComponent(btnViewProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(693, Short.MAX_VALUE))
+                .addContainerGap(802, Short.MAX_VALUE))
         );
-
-        lbxProducts.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lbxProducts.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lbxProductsValueChanged(evt);
-            }
-        });
-        jScrollPane1.setViewportView(lbxProducts);
 
         txtSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtSearch.setText("Search...");
@@ -277,6 +203,36 @@ public class frmViewStock extends javax.swing.JFrame {
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtSearchKeyReleased(evt);
+            }
+        });
+
+        lbxProducts.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxProducts.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lbxProductsValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(lbxProducts);
+
+        rbtnSortQuantity.setBackground(new java.awt.Color(45, 45, 45));
+        rbtnSortQuantity.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        rbtnSortQuantity.setForeground(new java.awt.Color(255, 255, 255));
+        rbtnSortQuantity.setText("Sort via Quantity (High to Low)");
+        rbtnSortQuantity.setFocusPainted(false);
+        rbtnSortQuantity.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rbtnSortQuantityMouseClicked(evt);
+            }
+        });
+
+        rbtnSortProductName.setBackground(new java.awt.Color(45, 45, 45));
+        rbtnSortProductName.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        rbtnSortProductName.setForeground(new java.awt.Color(255, 255, 255));
+        rbtnSortProductName.setText("Sort via Product Name (Alphabetically)");
+        rbtnSortProductName.setFocusPainted(false);
+        rbtnSortProductName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rbtnSortProductNameMouseClicked(evt);
             }
         });
 
@@ -426,54 +382,30 @@ public class frmViewStock extends javax.swing.JFrame {
                 .addGroup(pnlProductInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblQuantity))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        rbtnSortQuantity.setBackground(new java.awt.Color(45, 45, 45));
-        buttonGroup2.add(rbtnSortQuantity);
-        rbtnSortQuantity.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        rbtnSortQuantity.setForeground(new java.awt.Color(255, 255, 255));
-        rbtnSortQuantity.setText("Sort via Quantity (High to Low)");
-        rbtnSortQuantity.setFocusPainted(false);
-        rbtnSortQuantity.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rbtnSortQuantityMouseClicked(evt);
-            }
-        });
-
-        rbtnSortProductName.setBackground(new java.awt.Color(45, 45, 45));
-        buttonGroup2.add(rbtnSortProductName);
-        rbtnSortProductName.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        rbtnSortProductName.setForeground(new java.awt.Color(255, 255, 255));
-        rbtnSortProductName.setText("Sort via Product Name (Alphabetically)");
-        rbtnSortProductName.setFocusPainted(false);
-        rbtnSortProductName.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rbtnSortProductNameMouseClicked(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlRegisterHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 20, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(116, 116, 116)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(65, 65, 65)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlProductInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnlRegisterHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(rbtnSortQuantity)
-                        .addGap(27, 27, 27)
-                        .addComponent(rbtnSortProductName)))
-                .addContainerGap(313, Short.MAX_VALUE))
+                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(65, 65, 65)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pnlProductInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(rbtnSortQuantity)
+                                .addGap(27, 27, 27)
+                                .addComponent(rbtnSortProductName)))))
+                .addGap(0, 20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -484,7 +416,7 @@ public class frmViewStock extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(173, 173, 173)
+                        .addGap(104, 104, 104)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(rbtnSortQuantity)
@@ -492,140 +424,29 @@ public class frmViewStock extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(pnlProductInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1))))
-                .addContainerGap(2059, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnUpdateStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStockActionPerformed
-        frmUpdateStock updateStock = new frmUpdateStock();
-        updateStock.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnUpdateStockActionPerformed
-
-    private void btnViewStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStockActionPerformed
+    private void btnViewProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewProductActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnViewStockActionPerformed
-
-    private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
-        frmAddProduct addProduct = new frmAddProduct();
-        addProduct.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnAddProductActionPerformed
-
-    private void btnAddStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStockActionPerformed
-        frmAddStock addStock = new frmAddStock();
-        addStock.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnAddStockActionPerformed
+    }//GEN-LAST:event_btnViewProductActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        AdministratorMainDash mainDash = new AdministratorMainDash();
+        StandardMainDash mainDash = new StandardMainDash();
         mainDash.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
-
-    public Product selectedProduct;
-    private void lbxProductsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxProductsValueChanged
-        int index= lbxProducts.getSelectedIndex();
-        if(index == -1){
-            index = 0;
-        }else{
-        selectedProduct = productList.get(index);
-        
-        Stock stock = new Stock(selectedProduct,0);
-        stock = stock.selectSpecStock();
-        
-        txtSearch.setText(selectedProduct.toString());
-        txtProductName2.setText(selectedProduct.getName());
-        txtProductName2.setEditable(false);
-        
-        txtDescription2.setText(selectedProduct.getDescription());
-        txtDescription2.setEditable(false);
-        
-        txtStatus.setText(selectedProduct.getStatus());
-        txtStatus.setEditable(false);
-        
-        txtProductModel.setText(selectedProduct.getModel().getDescription());
-        txtProductModel.setEditable(false);
-        
-        txtCategory.setText(selectedProduct.getCategory().getDescription());
-        txtCategory.setEditable(false);
-        
-        txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
-        txtProductCost.setEditable(false);
-        
-        txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
-        txtProductSale.setEditable(false);
-        
-        txtQuantity.setText(Integer.toString(stock.getQuantity()));
-        txtQuantity.setEditable(false);
-        }
-    }//GEN-LAST:event_lbxProductsValueChanged
-
-    private void rbtnSortQuantityMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtnSortQuantityMouseClicked
-        Stock stock = null;
-        ArrayList<Stock> allStockItems = new ArrayList<Stock>();
-        ArrayList<Product> newProductList = new ArrayList<Product>();
-        for(Product p : productList)
-        {
-            stock = new Stock(p,0);
-            allStockItems.add(stock.selectSpecStock());
-        }
-        
-        try {
-            Collections.sort(allStockItems,new genericSort(Stock.class.getField("quantity")));
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchFieldException ex) {
-            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        for(Stock s: allStockItems)
-        {
-            newProductList.add(s.getProduct());
-        }
-        
-        productList = newProductList;
-        DefaultListModel model = new DefaultListModel();
-        // Populate Listbox
-        for(Product p: productList)
-        {
-            model.addElement(p);
-        }
-        lbxProducts.setModel(model);
-    }//GEN-LAST:event_rbtnSortQuantityMouseClicked
-
-    private void rbtnSortProductNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtnSortProductNameMouseClicked
-        try {
-            Collections.sort(productList,new genericSort(Product.class.getField("name")));
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchFieldException ex) {
-            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        DefaultListModel model = new DefaultListModel();
-        // Populate Listbox
-        for(Product p: productList)
-        {
-            model.addElement(p);
-        }
-        lbxProducts.setModel(model);
-    }//GEN-LAST:event_rbtnSortProductNameMouseClicked
 
     private void txtSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchMouseClicked
         // TODO add your handling code here:
         txtSearch.setText("");
         initializeForm();
     }//GEN-LAST:event_txtSearchMouseClicked
-
+   
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         Product product = new Product();
         ArrayList<Product> productsThatFitCriteria = new ArrayList<Product>();
@@ -669,20 +490,107 @@ public class frmViewStock extends javax.swing.JFrame {
             if(productList.size()==0){
                 model.addElement(new String("No Results Found"));
             }else{
-            for (Product p : productList) {
-                model.addElement(p);
-            }
+                for (Product p : productList) {
+                    model.addElement(p);
+                }
             }
             lbxProducts.setModel(model);
         }
     }//GEN-LAST:event_txtSearchKeyReleased
-   
-     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
-        //To be added
-    }                                             
 
-    
+    public Product selectedProduct;
+    private void lbxProductsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxProductsValueChanged
+        int index= lbxProducts.getSelectedIndex();
+        if(index == -1){
+            index = 0;
+        }else{
+            selectedProduct = productList.get(index);
+
+            Stock stock = new Stock(selectedProduct,0);
+            stock = stock.selectSpecStock();
+
+            txtSearch.setText(selectedProduct.toString());
+            txtProductName2.setText(selectedProduct.getName());
+            txtProductName2.setEditable(false);
+
+            txtDescription2.setText(selectedProduct.getDescription());
+            txtDescription2.setEditable(false);
+
+            txtStatus.setText(selectedProduct.getStatus());
+            txtStatus.setEditable(false);
+
+            txtProductModel.setText(selectedProduct.getModel().getDescription());
+            txtProductModel.setEditable(false);
+
+            txtCategory.setText(selectedProduct.getCategory().getDescription());
+            txtCategory.setEditable(false);
+
+            txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
+            txtProductCost.setEditable(false);
+
+            txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
+            txtProductSale.setEditable(false);
+
+            txtQuantity.setText(Integer.toString(stock.getQuantity()));
+            txtQuantity.setEditable(false);
+        }
+    }//GEN-LAST:event_lbxProductsValueChanged
+
+    private void rbtnSortQuantityMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtnSortQuantityMouseClicked
+        Stock stock = null;
+        ArrayList<Stock> allStockItems = new ArrayList<Stock>();
+        ArrayList<Product> newProductList = new ArrayList<Product>();
+        for(Product p : productList)
+        {
+            stock = new Stock(p,0);
+            allStockItems.add(stock.selectSpecStock());
+        }
+
+        try {
+            Collections.sort(allStockItems,new genericSort(Stock.class.getField("quantity")));
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchFieldException ex) {
+            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        for(Stock s: allStockItems)
+        {
+            newProductList.add(s.getProduct());
+        }
+
+        productList = newProductList;
+        DefaultListModel model = new DefaultListModel();
+        // Populate Listbox
+        for(Product p: productList)
+        {
+            model.addElement(p);
+        }
+        lbxProducts.setModel(model);
+    }//GEN-LAST:event_rbtnSortQuantityMouseClicked
+
+    private void rbtnSortProductNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtnSortProductNameMouseClicked
+        try {
+            Collections.sort(productList,new genericSort(Product.class.getField("name")));
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchFieldException ex) {
+            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        DefaultListModel model = new DefaultListModel();
+        // Populate Listbox
+        for(Product p: productList)
+        {
+            model.addElement(p);
+        }
+        lbxProducts.setModel(model);
+    }//GEN-LAST:event_rbtnSortProductNameMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -700,31 +608,27 @@ public class frmViewStock extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmViewStock.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmViewProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmViewStock.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmViewProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmViewStock.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmViewProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmViewStock.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmViewProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmViewStock().setVisible(true);
+                new frmViewProducts().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddProduct;
-    private javax.swing.JButton btnAddStock;
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnUpdateStock;
-    private javax.swing.JButton btnViewStock;
-    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JButton btnViewProduct;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAddProduct;
     private javax.swing.JLabel lblCategory2;

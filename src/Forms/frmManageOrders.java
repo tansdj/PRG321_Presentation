@@ -7,17 +7,26 @@ package Forms;
 
 import PersonManagement.Person;
 import PersonManagement.User;
+import ProductManagement.Order;
+import ProductManagement.OrderItems;
 import ProductManagement.Product;
+import ProductManagement.Stock;
 import ProductManagement.UserRequest;
+import bc_stationary_bll.Email;
+import bc_stationary_bll.Reporting;
 import bc_stationary_bll.genericSort;
 import java.awt.Color;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.converter.LocalDateStringConverter;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -29,17 +38,21 @@ public class frmManageOrders extends javax.swing.JFrame {
      * Creates new form frmManageOrders
      */
     public ArrayList<Product> products;
+
     public frmManageOrders() {
         initComponents();
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45,45,45));
+        this.getContentPane().setBackground(new Color(45, 45, 45));
+        btnPurchase.setVisible(false);
+        btnOrder.setVisible(false);
         
-         UserRequest request = new UserRequest();
-         products = request.productsOnRequest();
-         for(Product p:products){
-            cmbProduct.addItem(p.getName()+"("+ p.getDescription()+"-"+p.getModel().getDescription()+")");
-         }
-         
+        UserRequest request = new UserRequest();
+        products = request.productsOnRequest();
+        cmbProduct.addItem("Select a Product:");
+        for (Product p : products) {
+            cmbProduct.addItem(p.getName() + "(" + p.getDescription() + "-" + p.getModel().getDescription() + ")");
+        }
+
         txtProductName.setEditable(false);
         txtDescription.setEditable(false);
         txtCategory.setEditable(false);
@@ -62,11 +75,10 @@ public class frmManageOrders extends javax.swing.JFrame {
         pnlRegisterHeader1 = new javax.swing.JPanel();
         lblAddRequest = new javax.swing.JLabel();
         pnlMenu = new javax.swing.JPanel();
-        btnViewRequest = new javax.swing.JButton();
         btnAddRequest = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         btnEditRequest = new javax.swing.JButton();
-        lblSearchProducts = new javax.swing.JLabel();
+        lblSearchUsers = new javax.swing.JLabel();
         cmbProduct = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         lbxUsers = new javax.swing.JList<>();
@@ -95,6 +107,8 @@ public class frmManageOrders extends javax.swing.JFrame {
         lblLoggedUser1 = new javax.swing.JLabel();
         lblOrderStatus = new javax.swing.JLabel();
         txtQuantityInStock = new javax.swing.JTextField();
+        btnOrder = new javax.swing.JButton();
+        btnPurchase = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -142,39 +156,17 @@ public class frmManageOrders extends javax.swing.JFrame {
 
         pnlMenu.setBackground(new java.awt.Color(40, 40, 40));
 
-        btnViewRequest.setBackground(new java.awt.Color(40, 40, 40));
-        btnViewRequest.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnViewRequest.setForeground(new java.awt.Color(255, 255, 255));
-        btnViewRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View.png"))); // NOI18N
-        btnViewRequest.setText("View Request");
-        btnViewRequest.setBorder(null);
-        btnViewRequest.setBorderPainted(false);
-        btnViewRequest.setContentAreaFilled(false);
-        btnViewRequest.setFocusPainted(false);
-        btnViewRequest.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnViewRequest.setIconTextGap(16);
-        btnViewRequest.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
-        btnViewRequest.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewRequestActionPerformed(evt);
-            }
-        });
-
         btnAddRequest.setBackground(new java.awt.Color(204, 0, 0));
         btnAddRequest.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnAddRequest.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
-        btnAddRequest.setText("Manage Request");
+        btnAddRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/reactivate_Red.png"))); // NOI18N
+        btnAddRequest.setText("Manage Requests");
         btnAddRequest.setBorder(null);
         btnAddRequest.setBorderPainted(false);
         btnAddRequest.setContentAreaFilled(false);
         btnAddRequest.setFocusPainted(false);
-        btnAddRequest.setIconTextGap(20);
-        btnAddRequest.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddRequestActionPerformed(evt);
-            }
-        });
+        btnAddRequest.setIconTextGap(10);
+        btnAddRequest.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/reactivate_Red.png"))); // NOI18N
 
         btnBack.setBackground(new java.awt.Color(204, 0, 0));
         btnBack.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
@@ -185,7 +177,7 @@ public class frmManageOrders extends javax.swing.JFrame {
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
         btnBack.setFocusPainted(false);
-        btnBack.setIconTextGap(38);
+        btnBack.setIconTextGap(68);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -196,14 +188,15 @@ public class frmManageOrders extends javax.swing.JFrame {
         btnEditRequest.setBackground(new java.awt.Color(204, 0, 0));
         btnEditRequest.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnEditRequest.setForeground(new java.awt.Color(255, 255, 255));
-        btnEditRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1.png"))); // NOI18N
-        btnEditRequest.setText("Edit Request");
+        btnEditRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View.png"))); // NOI18N
+        btnEditRequest.setText("Manage Orders");
+        btnEditRequest.setActionCommand("Manage Orders");
         btnEditRequest.setBorder(null);
         btnEditRequest.setBorderPainted(false);
         btnEditRequest.setContentAreaFilled(false);
         btnEditRequest.setFocusPainted(false);
-        btnEditRequest.setIconTextGap(22);
-        btnEditRequest.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
+        btnEditRequest.setIconTextGap(25);
+        btnEditRequest.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
 
         javax.swing.GroupLayout pnlMenuLayout = new javax.swing.GroupLayout(pnlMenu);
         pnlMenu.setLayout(pnlMenuLayout);
@@ -212,7 +205,6 @@ public class frmManageOrders extends javax.swing.JFrame {
             .addGroup(pnlMenuLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnViewRequest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAddRequest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnBack, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEditRequest, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -226,20 +218,22 @@ public class frmManageOrders extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnEditRequest, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnViewRequest, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(762, Short.MAX_VALUE))
+                .addContainerGap(812, Short.MAX_VALUE))
         );
 
-        lblSearchProducts.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblSearchProducts.setForeground(new java.awt.Color(255, 255, 255));
-        lblSearchProducts.setText("Select a Product:");
+        lblSearchUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblSearchUsers.setForeground(new java.awt.Color(255, 255, 255));
+        lblSearchUsers.setText("Select a User:");
 
         cmbProduct.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        cmbProduct.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cmbProductMouseClicked(evt);
+        cmbProduct.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                cmbProductPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
 
@@ -308,13 +302,9 @@ public class frmManageOrders extends javax.swing.JFrame {
                         .addComponent(lblCategory)))
                 .addGap(41, 41, 41)
                 .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlProjectInfoLayout.createSequentialGroup()
-                        .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(pnlProjectInfoLayout.createSequentialGroup()
-                        .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlProjectInfoLayout.setVerticalGroup(
             pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -328,12 +318,13 @@ public class frmManageOrders extends javax.swing.JFrame {
                     .addComponent(lblDescription)
                     .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblProductModel)
-                    .addComponent(txtProductModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lblCategory)
-                        .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblProductModel)
+                        .addComponent(txtProductModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -383,7 +374,7 @@ public class frmManageOrders extends javax.swing.JFrame {
         lblLoggedUser1.setForeground(new java.awt.Color(255, 255, 255));
         lblLoggedUser1.setText("Quantity In Stock:");
 
-        lblOrderStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblOrderStatus.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         lblOrderStatus.setForeground(new java.awt.Color(255, 255, 0));
         lblOrderStatus.setText("Status");
 
@@ -395,13 +386,17 @@ public class frmManageOrders extends javax.swing.JFrame {
         pnlProjectInfo3Layout.setHorizontalGroup(
             pnlProjectInfo3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlProjectInfo3Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
                 .addGroup(pnlProjectInfo3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblRequestInfo1)
-                    .addComponent(lblLoggedUser1)
-                    .addComponent(lblOrderStatus)
-                    .addComponent(txtQuantityInStock, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(52, Short.MAX_VALUE))
+                    .addGroup(pnlProjectInfo3Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(pnlProjectInfo3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblRequestInfo1)
+                            .addComponent(lblLoggedUser1)
+                            .addComponent(txtQuantityInStock, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(pnlProjectInfo3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblOrderStatus)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         pnlProjectInfo3Layout.setVerticalGroup(
             pnlProjectInfo3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -412,38 +407,69 @@ public class frmManageOrders extends javax.swing.JFrame {
                 .addComponent(lblLoggedUser1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtQuantityInStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addGap(48, 48, 48)
                 .addComponent(lblOrderStatus)
-                .addGap(61, 61, 61))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
+
+        btnOrder.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnOrder.setText("Order");
+        btnOrder.setBorderPainted(false);
+        btnOrder.setFocusPainted(false);
+        btnOrder.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnOrderMouseClicked(evt);
+            }
+        });
+
+        btnPurchase.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnPurchase.setText("Send Purchase Order");
+        btnPurchase.setBorderPainted(false);
+        btnPurchase.setFocusPainted(false);
+        btnPurchase.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPurchaseMouseClicked(evt);
+            }
+        });
+        btnPurchase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPurchaseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlProjectInfo2Layout = new javax.swing.GroupLayout(pnlProjectInfo2);
         pnlProjectInfo2.setLayout(pnlProjectInfo2Layout);
         pnlProjectInfo2Layout.setHorizontalGroup(
             pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlProjectInfo2Layout.createSequentialGroup()
+                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
-                        .addComponent(lblPriority)
-                        .addGap(64, 64, 64)
-                        .addComponent(txtPriority))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
-                        .addComponent(lblLoggedUser)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtStaffMember, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnPurchase))
                     .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
-                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblQuantity)
-                            .addComponent(lblRequestDate))
-                        .addGap(41, 41, 41)
-                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtRequestDate)
-                            .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(lblRequestInfo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                .addComponent(pnlProjectInfo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(104, 104, 104))
+                        .addGap(28, 28, 28)
+                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                                .addComponent(lblPriority)
+                                .addGap(64, 64, 64)
+                                .addComponent(txtPriority))
+                            .addComponent(lblRequestInfo)
+                            .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblQuantity)
+                                    .addComponent(lblRequestDate)
+                                    .addComponent(lblLoggedUser))
+                                .addGap(41, 41, 41)
+                                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtStaffMember, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtRequestDate)
+                                    .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                        .addComponent(pnlProjectInfo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(120, 120, 120))
         );
         pnlProjectInfo2Layout.setVerticalGroup(
             pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -451,11 +477,8 @@ public class frmManageOrders extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
-                        .addComponent(pnlProjectInfo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
                         .addComponent(lblRequestInfo)
-                        .addGap(18, 18, 18)
+                        .addGap(32, 32, 32)
                         .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblLoggedUser)
                             .addComponent(txtStaffMember, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -471,7 +494,15 @@ public class frmManageOrders extends javax.swing.JFrame {
                         .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblPriority)
                             .addComponent(txtPriority, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(84, 84, 84))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(pnlProjectInfo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnPurchase)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                        .addComponent(btnOrder)))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -487,8 +518,8 @@ public class frmManageOrders extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cmbProduct, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSearchProducts))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                    .addComponent(lblSearchUsers))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pnlProjectInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -503,87 +534,47 @@ public class frmManageOrders extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addComponent(lblSearchProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(84, 84, 84)
                         .addComponent(cmbProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblSearchUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(pnlProjectInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane1))))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnViewRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRequestActionPerformed
-        frmViewRequest viewR = new frmViewRequest();
-        viewR.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnViewRequestActionPerformed
-
-    private void btnAddRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRequestActionPerformed
-        frmManageRequest manageRequest = new frmManageRequest();
-        manageRequest.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnAddRequestActionPerformed
-
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        StandardMainDash mainDash = new StandardMainDash();
+        AdministratorMainDash mainDash = new AdministratorMainDash();
         mainDash.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
     public Product selectedProduct;
     ArrayList<UserRequest> allRequests;
-    private void cmbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbProductMouseClicked
-        String selectedProductSearch = cmbProduct.getSelectedItem().toString();
-        String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
-        String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf("-"));
-        String searchedModel = selectedProductSearch.substring(selectedProductSearch.indexOf("-")+1,selectedProductSearch.indexOf(")"));
-
-        selectedProduct = new Product();
-        for(Product p : products)
-        {
-            if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))&&(p.getModel().getDescription().equals(searchedModel))))
-            {
-                selectedProduct = p;
-            }
-        }
-        UserRequest request = new UserRequest();
-         allRequests = request.selectUnprocessed();
-        try {
-            Collections.sort(allRequests,new genericSort(UserRequest.class.getField("priorityLevel")));
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchFieldException ex) {
-            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        DefaultListModel model = new DefaultListModel();
-        // Populate Listbox
-        for (UserRequest ur : allRequests) {
-            model.addElement(ur.getUser().getUsername());
-        }
-
-        lbxUsers.setModel(model);
-    }//GEN-LAST:event_cmbProductMouseClicked
-
     public UserRequest selectedRequest;
+    public int stockQuantity = 0, requestQuantity = 0;
     private void lbxUsersValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxUsersValueChanged
         int index = lbxUsers.getSelectedIndex();
         String priority = "";
         String userFullName = "";
         int priorityLevel = 0;
+        btnOrder.setVisible(false);
+        btnPurchase.setVisible(false);
         
+        if (index == -1) {
+            index = 0;
+        }
+
         selectedRequest = allRequests.get(index);
-        
+
         txtProductName.setText(selectedProduct.getName());
         txtProductName.setEditable(false);
 
@@ -597,23 +588,28 @@ public class frmManageOrders extends javax.swing.JFrame {
         txtProductModel.setEditable(false);
 
         Person p = new Person();
-        p = selectedRequest.getUser().getPerson();
-        userFullName = p.getName() +" "+ p.getSurname();
+        p = selectedRequest.getUser().selectSpecUser().getPerson();
+        userFullName = p.getName() + " " + p.getSurname();
         txtStaffMember.setText(userFullName);
-        txtQuantity.setText(Integer.toString(selectedRequest.getQuantity()));
+        txtStaffMember.setEditable(false);
+
+        requestQuantity = selectedRequest.getQuantity();
+        txtQuantity.setText(Integer.toString(requestQuantity));
         txtQuantity.setEditable(false);
 
         priorityLevel = selectedRequest.getPriorityLevel();
-        switch(priorityLevel)
-        {
-            case 1: priority = "Low";
-            break;
-            case 2: priority = "Medium";
-            break;
-            case 3: priority = "High";
-            break;
+        switch (priorityLevel) {
+            case 1:
+                priority = "Low";
+                break;
+            case 2:
+                priority = "Medium";
+                break;
+            case 3:
+                priority = "High";
+                break;
             default:
-            break;
+                break;
         }
 
         txtPriority.setText(priority);
@@ -621,7 +617,309 @@ public class frmManageOrders extends javax.swing.JFrame {
 
         txtRequestDate.setText(selectedRequest.getReqDate().toString());
         txtRequestDate.setEditable(false);
+
+        Stock stock = new Stock(selectedProduct, 0);
+        stockQuantity = stock.selectSpecStock().getQuantity();
+
+        txtQuantityInStock.setText(Integer.toString(stockQuantity));
+        txtQuantityInStock.setEditable(false);
+
+        if (stockQuantity == 0) {
+            lblOrderStatus.setText("        Out of Stock");
+            btnPurchase.setVisible(true);
+        } 
+        else if (requestQuantity > stockQuantity) {
+            lblOrderStatus.setText("Insufficient quantity to fully fill order");
+            btnOrder.setVisible(true);
+        }
+        else if(requestQuantity <= stockQuantity)
+        {
+            lblOrderStatus.setText("Enough quantity items to fill this order.");
+            btnOrder.setVisible(true);
+        }
     }//GEN-LAST:event_lbxUsersValueChanged
+
+    private void btnPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPurchaseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPurchaseActionPerformed
+
+    private void cmbProductPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductPopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+        if (cmbProduct.getSelectedIndex() > 0) {
+            String selectedProductSearch = cmbProduct.getSelectedItem().toString();
+            String searchedProduct = selectedProductSearch.substring(0, selectedProductSearch.indexOf("("));
+            String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(") + 1, selectedProductSearch.indexOf("-"));
+            String searchedModel = selectedProductSearch.substring(selectedProductSearch.indexOf("-") + 1, selectedProductSearch.indexOf(")"));
+
+            selectedProduct = new Product();
+            for (Product p : products) {
+                if ((p.getName().equals(searchedProduct) && (p.getDescription().equals(searchedDescription)) && (p.getModel().getDescription().equals(searchedModel)))) {
+                    selectedProduct = p;
+                }
+            }
+            UserRequest request = new UserRequest();
+            allRequests = request.selectUnprocessed_BackOrder(selectedProduct.name);
+            try {
+                Collections.sort(allRequests, new genericSort(UserRequest.class.getField("priorityLevel")));
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchFieldException ex) {
+                Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SecurityException ex) {
+                Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            DefaultListModel model = new DefaultListModel();
+            // Populate Listbox
+            for (UserRequest ur : allRequests) {
+                model.addElement(ur.getUser().getUsername());
+            }
+
+            lbxUsers.setModel(model);
+        } else {
+            frmManageOrders orders = new frmManageOrders();
+            orders.setVisible(true);
+            this.setVisible(false);
+        }
+    }//GEN-LAST:event_cmbProductPopupMenuWillBecomeInvisible
+
+    private void btnOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnOrderMouseClicked
+        User selectedUser = selectedRequest.getUser();
+        LocalDate localOrder = LocalDate.now();
+        Date orderDate = Date.valueOf(localOrder);
+        LocalDate localReceive = LocalDate.now().minusDays(1);
+        Date receiveDate = Date.valueOf(localReceive);
+        UserRequest requestToUpdate;
+        Stock stockToUpdate;
+        Product productToUpdate;
+        Order orderToUpdate;
+        int newStockQuantity, initialRequestQuantity = 0, remainingRequestQuantity;
+        boolean stockInsufficient = false; // Not out of stock, but also not enough to fill whole order.
+        
+        if((stockQuantity > 0)&&(stockQuantity < requestQuantity))
+        {
+            initialRequestQuantity = requestQuantity;
+            requestQuantity = stockQuantity;
+            stockInsufficient = true;
+        }
+        
+        ArrayList<OrderItems> items = new ArrayList<OrderItems>();
+        items.add(new OrderItems(selectedProduct,requestQuantity));
+
+        Order order = new Order(selectedUser);
+        orderToUpdate = order.selectUserOpenOrder();
+        if(orderToUpdate != null)
+        {
+            OrderItems orderItem = new OrderItems(selectedProduct,requestQuantity,orderToUpdate);
+            try {
+                if(orderItem.insert() != -1)
+                {
+                    requestToUpdate = new UserRequest(selectedUser,selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
+                    selectedRequest.getCompletedDate());
+                    
+                    if(requestToUpdate.update() != -1)
+                    {
+                        newStockQuantity = stockQuantity - requestQuantity;
+                        if(newStockQuantity == 0)
+                        {
+                            stockToUpdate = new Stock(selectedProduct,newStockQuantity);
+                            if(stockToUpdate.update() != -1)
+                            {
+                                productToUpdate = new Product(selectedProduct.getName(),selectedProduct.getDescription(),selectedProduct.getCategory(),"Unavailable",selectedProduct.getModel(),
+                                selectedProduct.getCostPrice(), selectedProduct.getSalesPrice(), selectedProduct.getEntryDate());
+                                
+                                if(productToUpdate.update() != -1)
+                                {
+                                    if(stockInsufficient)
+                                    {
+                                         remainingRequestQuantity = initialRequestQuantity - requestQuantity;
+                                         UserRequest newRequest = new UserRequest(selectedUser,selectedProduct,remainingRequestQuantity,selectedRequest.getPriorityLevel(),"Unprocessed",orderDate,receiveDate);
+                                         
+                                         if(newRequest.insert() != -1)
+                                         {
+                                             String message = requestQuantity + " items out of a total of "+initialRequestQuantity+" items was ordered. The remaining "+ remainingRequestQuantity+" items should be purchased in order to fully fill this order.";
+                                             JOptionPane.showMessageDialog(null, message, "Notice of partial order fufillment", JOptionPane.INFORMATION_MESSAGE);                          
+                                             
+                                             JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);                                   
+                                             frmManageOrders manageOrders = new frmManageOrders();
+                                             manageOrders.setVisible(true);
+                                             this.setVisible(false);
+                                         }
+                                         
+                                    }
+                                    else
+                                    {
+                                        JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);                                   
+                                        frmManageOrders manageOrders = new frmManageOrders();
+                                        manageOrders.setVisible(true);
+                                        this.setVisible(false);
+                                    }
+                                   
+                                }
+                                else
+                                {
+                                    JOptionPane.showMessageDialog(null, "Something went wrong! Item was not successfully ordered.", "Unsuccessful Order Upload", JOptionPane.WARNING_MESSAGE);
+                                    frmManageOrders manageOrders = new frmManageOrders();
+                                    manageOrders.setVisible(true);
+                                    this.setVisible(false);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            stockToUpdate = new Stock(selectedProduct,newStockQuantity);
+                            if(stockToUpdate.update() != -1)
+                            {
+                                if(stockInsufficient)
+                                    {
+                                         remainingRequestQuantity = initialRequestQuantity - requestQuantity;
+                                         UserRequest newRequest = new UserRequest(selectedUser,selectedProduct,remainingRequestQuantity,selectedRequest.getPriorityLevel(),"Unprocessed",orderDate,receiveDate);
+                                         
+                                         if(newRequest.insert() != -1)
+                                         {
+                                             String message = requestQuantity + " items out of a total of "+initialRequestQuantity+" items was ordered. The remaining "+ remainingRequestQuantity+" items should be purchased in order to fully fill this order.";
+                                             JOptionPane.showMessageDialog(null, message, "Notice of partial order fufillment", JOptionPane.INFORMATION_MESSAGE);                          
+                                             
+                                             JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);                                   
+                                             frmManageOrders manageOrders = new frmManageOrders();
+                                             manageOrders.setVisible(true);
+                                             this.setVisible(false);
+                                         }
+                                         
+                                    }
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null, "Something went wrong! Item was not successfully ordered.", "Unsuccessful Order Upload", JOptionPane.WARNING_MESSAGE);
+                                frmManageOrders manageOrders = new frmManageOrders();
+                                manageOrders.setVisible(true);
+                                this.setVisible(false);
+                            }
+                        }
+                    }
+                    
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
+        {
+            order = new Order(selectedUser,orderDate,receiveDate,items);
+            if(order.insert() != -1)
+            {
+               requestToUpdate = new UserRequest(selectedUser,selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
+               selectedRequest.getCompletedDate());
+                    
+                    if(requestToUpdate.update() != -1)
+                    {
+                        newStockQuantity = stockQuantity - requestQuantity;
+                        if(newStockQuantity == 0)
+                        {
+                            stockToUpdate = new Stock(selectedProduct,newStockQuantity);
+                            if(stockToUpdate.update() != -1)
+                            {
+                                productToUpdate = new Product(selectedProduct.getName(),selectedProduct.getDescription(),selectedProduct.getCategory(),"Not Available",selectedProduct.getModel(),
+                                selectedProduct.getCostPrice(), selectedProduct.getSalesPrice(), selectedProduct.getEntryDate());
+                                
+                                if(productToUpdate.update() != -1)
+                                {
+                                    JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);
+                                    frmManageOrders manageOrders = new frmManageOrders();
+                                    manageOrders.setVisible(true);
+                                    this.setVisible(false);
+                                }
+                                else
+                                {
+                                    JOptionPane.showMessageDialog(null, "Something went wrong! Item was not successfully ordered.", "Unsuccessful Order Upload", JOptionPane.WARNING_MESSAGE);
+                                    frmManageOrders manageOrders = new frmManageOrders();
+                                    manageOrders.setVisible(true);
+                                    this.setVisible(false);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            stockToUpdate = new Stock(selectedProduct,newStockQuantity);
+                            if(stockToUpdate.update() != -1)
+                            {
+                                JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);
+                                frmManageOrders manageOrders = new frmManageOrders();
+                                manageOrders.setVisible(true);
+                                this.setVisible(false);
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null, "Something went wrong! Item was not successfully ordered.", "Unsuccessful Order Upload", JOptionPane.WARNING_MESSAGE);
+                                frmManageOrders manageOrders = new frmManageOrders();
+                                manageOrders.setVisible(true);
+                                this.setVisible(false);
+                            }
+                        }
+                    }
+            }
+        }
+        
+    }//GEN-LAST:event_btnOrderMouseClicked
+
+    private void btnPurchaseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPurchaseMouseClicked
+        // TODO add your handling code here:
+        ArrayList<Stock> stockItems = new ArrayList<Stock>();
+        UserRequest requestToUpdate = new UserRequest(selectedRequest.getUser(),selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Back Ordered",selectedRequest.getReqDate(),selectedRequest.getCompletedDate());
+        
+        int answer = JOptionPane.showConfirmDialog(null, "Do you want to purchase more items than the requested amount?","Order Additional Quantity",JOptionPane.YES_NO_OPTION);
+        if(answer == 0)// yes
+        {
+            int quantity = Integer.parseInt(JOptionPane.showInputDialog(null,"How many items do you want to purchase?","Specify Quantity",JOptionPane.QUESTION_MESSAGE));
+            stockItems.add(new Stock(selectedProduct,quantity));
+            
+            if(requestToUpdate.update() != -1)
+            {
+                String docName = "stockPurchaseOrder_"+selectedProduct.getName()+".pdf";
+                Reporting report = new Reporting(stockItems, docName);
+                report.generatePurchaseOrder();
+                String message = "Please find attached, to this mail, the purchase order for Product Name: " + selectedProduct.getName();
+                String path = null;//"C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\";
+                Email email = new Email("eldanefer1@gmail.com", message, "Purchase Order Form", path);
+                email.sendEmail();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Something went wrong! Purchase order was not successfully sent.", "Purchase Order Unsuccessfully Send ", JOptionPane.WARNING_MESSAGE);
+                frmManageOrders manageOrders = new frmManageOrders();
+                manageOrders.setVisible(true);
+                this.setVisible(false);
+            }
+           
+        }
+        else
+        {
+            if(requestToUpdate.update() != -1)
+            {
+                //JOptionPane.showMessageDialog(null, "The requested quantity was send for purchase", "Purchase Order Send", JOptionPane.INFORMATION_MESSAGE);
+                stockItems.add(new Stock(selectedProduct,requestQuantity));
+                String docName = "stockPurchaseOrder_"+selectedProduct.getName()+".pdf";
+                Reporting report = new Reporting(stockItems, docName);
+                report.generatePurchaseOrder();
+                String message = "Please find attached, to this mail, the purchase order for Product Name: " + selectedProduct.getName();
+                String path = null;//"C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\";
+                Email email = new Email("eldanefer1@gmail.com", message, "Purchase Order Form", path);
+                email.sendEmail();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Something went wrong! Purchase order was not successfully sent.", "Purchase Order Unsuccessfully Send ", JOptionPane.WARNING_MESSAGE);
+                frmManageOrders manageOrders = new frmManageOrders();
+                manageOrders.setVisible(true);
+                this.setVisible(false);
+            }
+            
+            
+        }
+        
+        
+        
+    }//GEN-LAST:event_btnPurchaseMouseClicked
 
     /**
      * @param args the command line arguments
@@ -662,7 +960,8 @@ public class frmManageOrders extends javax.swing.JFrame {
     private javax.swing.JButton btnAddRequest;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnEditRequest;
-    private javax.swing.JButton btnViewRequest;
+    private javax.swing.JButton btnOrder;
+    private javax.swing.JButton btnPurchase;
     private javax.swing.JComboBox<String> cmbProduct;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAddRequest;
@@ -679,7 +978,7 @@ public class frmManageOrders extends javax.swing.JFrame {
     private javax.swing.JLabel lblRequestDate;
     private javax.swing.JLabel lblRequestInfo;
     private javax.swing.JLabel lblRequestInfo1;
-    private javax.swing.JLabel lblSearchProducts;
+    private javax.swing.JLabel lblSearchUsers;
     private javax.swing.JList<String> lbxUsers;
     private javax.swing.JPanel pnlMainDashHeader;
     private javax.swing.JPanel pnlMenu;

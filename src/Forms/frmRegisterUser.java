@@ -14,7 +14,6 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import bc_stationary_bll.InputValidation;
 import bc_stationary_bll.Validation;
 import com.mysql.jdbc.exceptions.DeadlockTimeoutRollbackMarker;
 import java.sql.Array;

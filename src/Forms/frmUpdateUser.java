@@ -8,6 +8,7 @@ package Forms;
 import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.*;
+import bc_stationary_bll.SoundEx;
 import bc_stationary_bll.Validation;
 import java.awt.Color;
 import java.sql.SQLException;
@@ -615,6 +616,16 @@ public class frmUpdateUser extends javax.swing.JFrame {
         txtSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtSearch.setText("Search...");
         txtSearch.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtSearchMouseClicked(evt);
+            }
+        });
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -907,6 +918,65 @@ public class frmUpdateUser extends javax.swing.JFrame {
         addUser.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnAddUserActionPerformed
+
+    private void txtSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchMouseClicked
+        // TODO add your handling code here:
+        txtSearch.setText("");
+    }//GEN-LAST:event_txtSearchMouseClicked
+
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        // TODO add your handling code here:
+        User user = new User();
+        ArrayList<User> usersThatFitCriteria = new ArrayList<User>();
+        String searchCode = "", userCode = "", searchText = txtSearch.getText();
+        if (searchText == "") {
+            userList = user.select();
+            DefaultListModel model = new DefaultListModel();
+
+            for (User u : userList) {
+                model.addElement(u);
+            }
+            lbxUsers.setModel(model);
+        } else {
+            int numSearchChars; // amount of characters that are typed into the search box.
+
+            searchCode = SoundEx.Soundex(searchText);
+
+            numSearchChars = searchText.length();
+            for (User u : userList) {
+                if (u.getPerson().getName().length() >= numSearchChars) {
+
+                    userCode = SoundEx.Soundex(u.getPerson().getName().substring(0, numSearchChars));
+
+                    if ((userCode.equals(searchCode))) {
+
+                        Person p = u.getPerson();
+                        try {
+                            p = p.selectSpecPerson();
+                            u.setPerson(p);
+                            usersThatFitCriteria.add(u);
+                        } catch (SQLException se) {
+                            System.out.println(se);
+                        }
+
+                    }
+
+                }
+            }
+            lbxUsers.removeAll();
+            DefaultListModel model = new DefaultListModel();
+
+            lbxUsers.setModel(model);
+            if(usersThatFitCriteria.size()==0){
+                model.addElement(new String("No Results Found"));
+            }else{
+            for (User u : usersThatFitCriteria) {
+                model.addElement(u);
+            }
+            }
+            lbxUsers.setModel(model);
+        }
+    }//GEN-LAST:event_txtSearchKeyReleased
 
     /**
      * @param args the command line arguments

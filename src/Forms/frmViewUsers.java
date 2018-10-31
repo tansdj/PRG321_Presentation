@@ -618,7 +618,7 @@ public class frmViewUsers extends javax.swing.JFrame {
         User user = new User();
         ArrayList<User> usersThatFitCriteria = new ArrayList<User>();
         String searchCode = "", userCode = "", searchText = txtSearch.getText();
-        if (searchText == "") {
+        if (searchText.equals("")) {
             userList = user.select();
             DefaultListModel model = new DefaultListModel();
 
@@ -656,8 +656,12 @@ public class frmViewUsers extends javax.swing.JFrame {
             DefaultListModel model = new DefaultListModel();
 
             lbxUsers.setModel(model);
+            if(usersThatFitCriteria.size()==0){
+                model.addElement(new String("No Results Found"));
+            }else{
             for (User u : usersThatFitCriteria) {
                 model.addElement(u);
+            }
             }
             lbxUsers.setModel(model);
         }
