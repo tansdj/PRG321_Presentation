@@ -5,6 +5,17 @@
  */
 package Forms;
 
+import PersonManagement.User;
+import ProductManagement.Order;
+import ProductManagement.OrderItems;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Eldane
@@ -14,8 +25,16 @@ public class frmEditOrders extends javax.swing.JFrame {
     /**
      * Creates new form frmEditOrders
      */
+    public ArrayList<User> users;
     public frmEditOrders() {
         initComponents();
+        
+        users = new User().select();
+        cmbUsers.addItem("Select a User");
+        for(User u:users){
+            cmbUsers.addItem(u.toString());
+        }
+        
     }
 
     /**
@@ -36,24 +55,12 @@ public class frmEditOrders extends javax.swing.JFrame {
         cmbUsers = new javax.swing.JComboBox<>();
         lblSearchUsers = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lbxProducts = new javax.swing.JList<>();
+        lbxOrders = new javax.swing.JList<>();
         pnlProjectInfo = new javax.swing.JPanel();
         lblProductInfo = new javax.swing.JLabel();
-        lblProductName = new javax.swing.JLabel();
-        txtProductName = new javax.swing.JTextField();
-        txtDescription = new javax.swing.JTextField();
-        lblDescription = new javax.swing.JLabel();
-        lblCategory = new javax.swing.JLabel();
-        lblProductModel = new javax.swing.JLabel();
-        txtProductModel = new javax.swing.JTextField();
-        txtCategory = new javax.swing.JTextField();
-        lblQuantity = new javax.swing.JLabel();
-        txtQuantity = new javax.swing.JTextField();
         btnFinalizeOrder = new javax.swing.JButton();
-        lblRequestDate = new javax.swing.JLabel();
-        txtRequestDate = new javax.swing.JTextField();
-        lblRequestDate1 = new javax.swing.JLabel();
-        txtCompleteDate = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        lbxOrderInfo = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -163,57 +170,22 @@ public class frmEditOrders extends javax.swing.JFrame {
 
         lblSearchUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblSearchUsers.setForeground(new java.awt.Color(255, 255, 255));
-        lblSearchUsers.setText("Select a Product to view details:");
+        lblSearchUsers.setText("Select a User to view orders:");
 
-        lbxProducts.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lbxProducts.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        lbxOrders.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxOrders.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lbxProductsValueChanged(evt);
+                lbxOrdersValueChanged(evt);
             }
         });
-        jScrollPane1.setViewportView(lbxProducts);
+        jScrollPane1.setViewportView(lbxOrders);
 
         pnlProjectInfo.setBackground(new java.awt.Color(45, 45, 45));
         pnlProjectInfo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lblProductInfo.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         lblProductInfo.setForeground(new java.awt.Color(255, 255, 255));
-        lblProductInfo.setText("Product Information");
-
-        lblProductName.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblProductName.setForeground(new java.awt.Color(255, 255, 255));
-        lblProductName.setText("Product Name:");
-
-        txtProductName.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtProductName.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        txtDescription.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtDescription.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        lblDescription.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblDescription.setForeground(new java.awt.Color(255, 255, 255));
-        lblDescription.setText("Description:");
-
-        lblCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblCategory.setForeground(new java.awt.Color(255, 255, 255));
-        lblCategory.setText("Category:");
-
-        lblProductModel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblProductModel.setForeground(new java.awt.Color(255, 255, 255));
-        lblProductModel.setText("Model:");
-
-        txtProductModel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtProductModel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        txtCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtCategory.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        lblQuantity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblQuantity.setForeground(new java.awt.Color(255, 255, 255));
-        lblQuantity.setText("Quantity Requested:");
-
-        txtQuantity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtQuantity.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        lblProductInfo.setText("Order Information");
 
         btnFinalizeOrder.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnFinalizeOrder.setText("Finalize Order");
@@ -225,92 +197,48 @@ public class frmEditOrders extends javax.swing.JFrame {
             }
         });
 
+        lbxOrderInfo.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxOrderInfo.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lbxOrderInfoValueChanged(evt);
+            }
+        });
+        jScrollPane2.setViewportView(lbxOrderInfo);
+
         javax.swing.GroupLayout pnlProjectInfoLayout = new javax.swing.GroupLayout(pnlProjectInfo);
         pnlProjectInfo.setLayout(pnlProjectInfoLayout);
         pnlProjectInfoLayout.setHorizontalGroup(
             pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlProjectInfoLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlProjectInfoLayout.createSequentialGroup()
-                        .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblProductName)
-                            .addComponent(lblProductModel)
+                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnFinalizeOrder)
+                    .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlProjectInfoLayout.createSequentialGroup()
+                            .addGap(28, 28, 28)
                             .addComponent(lblProductInfo))
-                        .addGap(10, 10, 10)
-                        .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtProductModel, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(pnlProjectInfoLayout.createSequentialGroup()
-                        .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlProjectInfoLayout.createSequentialGroup()
-                                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblDescription)
-                                    .addComponent(lblCategory))
-                                .addGap(92, 92, 92))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlProjectInfoLayout.createSequentialGroup()
-                                .addComponent(lblQuantity)
-                                .addGap(18, 18, 18)))
-                        .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(29, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlProjectInfoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnFinalizeOrder)
-                .addGap(132, 132, 132))
+                        .addGroup(pnlProjectInfoLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 872, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlProjectInfoLayout.setVerticalGroup(
             pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlProjectInfoLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(lblProductInfo)
+                .addGap(25, 25, 25)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblProductName)
-                    .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblProductModel)
-                    .addComponent(txtProductModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDescription)
-                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCategory)
-                    .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblQuantity)
-                    .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnFinalizeOrder)
-                .addGap(40, 40, 40))
+                .addContainerGap(339, Short.MAX_VALUE))
         );
-
-        lblRequestDate.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblRequestDate.setForeground(new java.awt.Color(255, 255, 255));
-        lblRequestDate.setText("Request Date:");
-
-        txtRequestDate.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtRequestDate.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        lblRequestDate1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblRequestDate1.setForeground(new java.awt.Color(255, 255, 255));
-        lblRequestDate1.setText("Completed Date:");
-
-        txtCompleteDate.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtCompleteDate.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -319,18 +247,8 @@ public class frmEditOrders extends javax.swing.JFrame {
                             .addComponent(cmbUsers, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblSearchUsers))
-                        .addGap(66, 66, 66)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlProjectInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(lblRequestDate)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtRequestDate, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(lblRequestDate1)
-                                    .addGap(74, 74, 74)
-                                    .addComponent(txtCompleteDate, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addGap(46, 46, 46)
+                        .addComponent(pnlProjectInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(0, 20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -343,23 +261,15 @@ public class frmEditOrders extends javax.swing.JFrame {
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(71, 71, 71)
-                        .addComponent(cmbUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblSearchUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pnlProjectInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lblRequestDate)
-                                    .addComponent(txtRequestDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(cmbUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lblRequestDate1)
-                                    .addComponent(txtCompleteDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(36, 36, 36)
-                                .addComponent(pnlProjectInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(lblSearchUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(0, 90, Short.MAX_VALUE))
         );
 
         pack();
@@ -370,19 +280,54 @@ public class frmEditOrders extends javax.swing.JFrame {
         mainDash.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
-
+    ArrayList<Order> userOrders;
     private void cmbUsersPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbUsersPopupMenuWillBecomeInvisible
         // TODO add your handling code here:
+        User selectedUser = null;
+        if(cmbUsers.getSelectedIndex()>-1){
+        for(User u:users){
+            if(cmbUsers.getSelectedItem().toString().equals(u.toString())){
+                selectedUser = u;
+            }
+        }
+        userOrders = new Order(selectedUser,null,null,null).selectUserOrders();
+        DefaultListModel model = new DefaultListModel();
+        for(Order o:userOrders){
+            model.addElement(o.toString());
+        }
+        lbxOrders.setModel(model);
+        }
        
     }//GEN-LAST:event_cmbUsersPopupMenuWillBecomeInvisible
-
-    private void lbxProductsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxProductsValueChanged
-        
-    }//GEN-LAST:event_lbxProductsValueChanged
+    public Order selectedOrder;
+    private void lbxOrdersValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxOrdersValueChanged
+        if(lbxOrders.getSelectedIndex()>-1){
+            int index = lbxOrders.getSelectedIndex();
+            selectedOrder= userOrders.get(index);
+            DefaultListModel model = new DefaultListModel();
+            for(OrderItems oi:selectedOrder.getOrderItems()){
+                model.addElement(oi.toString());
+            }
+            lbxOrderInfo.setModel(model);
+        }
+    }//GEN-LAST:event_lbxOrdersValueChanged
 
     private void btnFinalizeOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFinalizeOrderMouseClicked
-        
+        if(lbxOrders.getSelectedIndex()>-1){
+            LocalDate localOrder = LocalDate.now();
+            Date receiveDate = Date.valueOf(localOrder);
+            selectedOrder.setReceivedDate(receiveDate);
+            if(selectedOrder.update()>=0){
+                JOptionPane.showMessageDialog(null, "Order Added!","Success!",JOptionPane.OK_OPTION);
+            }else{
+                JOptionPane.showMessageDialog(null, "Order Could not be finalized. Please try again later.","Failure!",JOptionPane.WARNING_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_btnFinalizeOrderMouseClicked
+
+    private void lbxOrderInfoValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxOrderInfoValueChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lbxOrderInfoValueChanged
 
     /**
      * @param args the command line arguments
@@ -425,27 +370,15 @@ public class frmEditOrders extends javax.swing.JFrame {
     private javax.swing.JButton btnFinalizeOrder;
     private javax.swing.JComboBox<String> cmbUsers;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAddRequest;
-    private javax.swing.JLabel lblCategory;
-    private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblProductInfo;
-    private javax.swing.JLabel lblProductModel;
-    private javax.swing.JLabel lblProductName;
-    private javax.swing.JLabel lblQuantity;
-    private javax.swing.JLabel lblRequestDate;
-    private javax.swing.JLabel lblRequestDate1;
     private javax.swing.JLabel lblSearchUsers;
-    private javax.swing.JList<String> lbxProducts;
+    private javax.swing.JList<String> lbxOrderInfo;
+    private javax.swing.JList<String> lbxOrders;
     private javax.swing.JPanel pnlMainDashHeader;
     private javax.swing.JPanel pnlMenu;
     private javax.swing.JPanel pnlProjectInfo;
     private javax.swing.JPanel pnlRegisterHeader1;
-    private javax.swing.JTextField txtCategory;
-    private javax.swing.JTextField txtCompleteDate;
-    private javax.swing.JTextField txtDescription;
-    private javax.swing.JTextField txtProductModel;
-    private javax.swing.JTextField txtProductName;
-    private javax.swing.JTextField txtQuantity;
-    private javax.swing.JTextField txtRequestDate;
     // End of variables declaration//GEN-END:variables
 }
