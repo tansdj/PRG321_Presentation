@@ -6,11 +6,14 @@
 package Forms;
 
 import PersonManagement.Person;
+import PersonManagement.PersonManagement_Methods;
 import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
+import bc_stationary_bll.Communication;
 import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.Validation;
+import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -233,7 +236,7 @@ public class frmLogin extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    Communication c;
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
        
        String userName, passWord;
@@ -244,11 +247,15 @@ public class frmLogin extends javax.swing.JFrame {
        passWord = txtPassword.getText();
        
        User userLogin = new User(userName,passWord);
-       allowAccess = userLogin.testLogin();
+       c = new Communication(PersonManagement_Methods.USER_TEST_LOGIN.methodIdentifier,userLogin);
+       allowAccess = new ClientHandler(c).request().intResult;
+       //allowAccess = userLogin.testLogin();
        
        if(allowAccess == 1)
        {
-           User currentUser = userLogin.selectSpecUser();
+           //User currentUser = userLogin.selectSpecUser();
+           c = new Communication(PersonManagement_Methods.USER_SELECT_SPEC.methodIdentifier,userLogin);
+           User currentUser = (User) new ClientHandler(c).request().objectResult;
            String accessLevel = currentUser.getAccessLevel();
            GenericSerializer gen = new GenericSerializer("loggedUser.txt",currentUser);
            gen.Serialize();
@@ -291,8 +298,9 @@ public class frmLogin extends javax.swing.JFrame {
         {
             String username = txtUsername.getText();
             User user = new User(username,"");      
-            boolean existingUser = user.testForExistingUser();
-            
+            //boolean existingUser = user.testForExistingUser();
+            c = new Communication(PersonManagement_Methods.USER_TEST_EXISTING.methodIdentifier,user);
+            boolean existingUser = new ClientHandler(c).request().boolResult;
             if(username.equals("") || (!existingUser))
             {
                 JOptionPane.showMessageDialog(null, "Please provide the correct username!","Incorrect Username",JOptionPane.WARNING_MESSAGE);
@@ -302,7 +310,9 @@ public class frmLogin extends javax.swing.JFrame {
             else
             {  
                 UserSecurityQuestions uQuestion = new UserSecurityQuestions(user);
-                UserSecurityQuestions specUQuestion = uQuestion.selectSpecUserQuestions();
+                c = new Communication(PersonManagement_Methods.USQ_SELECT_SPEC.methodIdentifier,uQuestion);
+                UserSecurityQuestions specUQuestion = (UserSecurityQuestions) new ClientHandler(c).request().objectResult;
+                //UserSecurityQuestions specUQuestion = uQuestion.selectSpecUserQuestions();
                 SecurityQuestions questions = specUQuestion.getQuestion();
                 String question = questions.getQuestion();
                 String answer = specUQuestion.getAnswer();
@@ -319,7 +329,9 @@ public class frmLogin extends javax.swing.JFrame {
                         {
                             if(validation.testLength(newPassword, 8, 15))
                             {
-                                ArrayList<User> allUsers = user.select();
+                                c = new Communication(PersonManagement_Methods.USER_SELECT_ALL.methodIdentifier,user);
+                                ArrayList<User> allUsers = new ClientHandler(c).request().listResult;
+                                //ArrayList<User> allUsers = user.select();
                                 User currentUser = null;
                                 
                                 for(User u : allUsers)
@@ -330,8 +342,10 @@ public class frmLogin extends javax.swing.JFrame {
                                     }
                                 }
                                 User userToUpdate = new User(currentUser.getUsername(), newPassword,currentUser.getAccessLevel(),currentUser.getStatus());
+                                c = new Communication(PersonManagement_Methods.USER_UPDATE.methodIdentifier,userToUpdate);
+                                int result = new ClientHandler(c).request().intResult;
                                 boolean success = true;
-                                if (userToUpdate.update() == -1) 
+                                if (result == -1) 
                                 {
                                     success = false;
                                 }

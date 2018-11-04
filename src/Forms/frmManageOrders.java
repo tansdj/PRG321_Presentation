@@ -658,7 +658,8 @@ public class frmManageOrders extends javax.swing.JFrame {
                 }
             }
             UserRequest request = new UserRequest();
-            allRequests = request.selectUnprocessed_BackOrder(selectedProduct.name);
+            request.setProduct(selectedProduct);
+            allRequests = request.selectUnprocessed_Product_BackOrder();
             try {
                 Collections.sort(allRequests, new genericSort(UserRequest.class.getField("priorityLevel")));
             } catch (ClassNotFoundException ex) {

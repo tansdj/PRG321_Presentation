@@ -603,7 +603,7 @@ public class frmManageRequest extends javax.swing.JFrame {
     private void btnSubmitRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitRequestActionPerformed
         boolean success = true;
          UserRequest request = new UserRequest();
-         ArrayList<UserRequest> loggedRequests = request.selectUnprocessed_BackOrder();
+         ArrayList<UserRequest> loggedRequests = request.selectUnprocessed_ProductBackOrder();
          
         for(UserRequest uNew : requestItems)
         {
