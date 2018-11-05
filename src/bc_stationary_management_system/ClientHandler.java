@@ -18,20 +18,28 @@ import java.util.logging.Logger;
  * @author Tanya
  */
 public class ClientHandler<T> {
+    final private static String host = "127.0.0.1";
+    final private static int port = 5000;
     public Communication comm;
 
     public ClientHandler(Communication comm) {
         this.comm = comm;
     }
     
-    public Communication request(){
-        try {
-            Socket s = new Socket("localhost",5000);
-            ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
+    public Communication request() throws IOException{
+        ObjectOutputStream oos = null;
+        ObjectInputStream ois = null;
+        try (Socket s = new Socket(host,port)){
+            oos = new ObjectOutputStream(s.getOutputStream());
             oos.writeObject(comm);
-            
-            ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+            ois = new ObjectInputStream(s.getInputStream());
             Communication result = (Communication)ois.readObject();
+            
+            oos.flush();
+            oos.close();
+            ois.close();
+            s.close();
+            
             return result;
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);

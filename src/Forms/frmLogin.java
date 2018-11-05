@@ -15,7 +15,10 @@ import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.Validation;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.event.ChangeEvent;
 
@@ -239,50 +242,49 @@ public class frmLogin extends javax.swing.JFrame {
     Communication c;
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
        
-       String userName, passWord;
-     
-       int allowAccess;
-       
-       userName = txtUsername.getText();
-       passWord = txtPassword.getText();
-       
-       User userLogin = new User(userName,passWord);
-       c = new Communication(PersonManagement_Methods.USER_TEST_LOGIN.methodIdentifier,userLogin);
-       allowAccess = new ClientHandler(c).request().intResult;
-       //allowAccess = userLogin.testLogin();
-       
-       if(allowAccess == 1)
-       {
-           //User currentUser = userLogin.selectSpecUser();
-           c = new Communication(PersonManagement_Methods.USER_SELECT_SPEC.methodIdentifier,userLogin);
-           User currentUser = (User) new ClientHandler(c).request().objectResult;
-           String accessLevel = currentUser.getAccessLevel();
-           GenericSerializer gen = new GenericSerializer("loggedUser.txt",currentUser);
-           gen.Serialize();
-           if(accessLevel.equals("Administrator"))
-           {
-                AdministratorMainDash adminDash = new AdministratorMainDash();
-                adminDash.setVisible(true);
-                this.setVisible(false);
-           }
-           else if (accessLevel.equals("Standard"))
-           {
-                StandardMainDash standardDash = new StandardMainDash();
-                standardDash.setVisible(true);
-                this.setVisible(false);
-           }
-       }
-       else if(allowAccess == 0)
-       {
-           JOptionPane.showMessageDialog(null, "You have provided incorrect login credentials! Please try again!","Incorrect Login Credentials",JOptionPane.WARNING_MESSAGE);
-           txtUsername.setText("");
-           txtPassword.setText("");
-           txtUsername.grabFocus();
-       }
-       else if(allowAccess == -1)
-       {
-            JOptionPane.showMessageDialog(null, "Your account has not yet been approved, therefore no access privileges have been assigned!","Insufficient Access Privileges",JOptionPane.WARNING_MESSAGE);
-       }
+        try {
+            String userName, passWord;
+            int allowAccess;
+            userName = txtUsername.getText();
+            passWord = txtPassword.getText();
+            User userLogin = new User(userName,passWord);
+            c = new Communication(PersonManagement_Methods.USER_TEST_LOGIN.methodIdentifier,userLogin);
+            allowAccess = new ClientHandler(c).request().intResult;
+            //allowAccess = userLogin.testLogin();
+            if(allowAccess == 1)
+            {
+                //User currentUser = userLogin.selectSpecUser();
+                c = new Communication(PersonManagement_Methods.USER_SELECT_SPEC.methodIdentifier,userLogin);
+                User currentUser = (User) new ClientHandler(c).request().objectResult;
+                String accessLevel = currentUser.getAccessLevel();
+                GenericSerializer gen = new GenericSerializer("loggedUser.txt",currentUser);
+                gen.Serialize();
+                if(accessLevel.equals("Administrator"))
+                {
+                    AdministratorMainDash adminDash = new AdministratorMainDash();
+                    adminDash.setVisible(true);
+                    this.setVisible(false);
+                }
+                else if (accessLevel.equals("Standard"))
+                {
+                    StandardMainDash standardDash = new StandardMainDash();
+                    standardDash.setVisible(true);
+                    this.setVisible(false);
+                }
+            }
+            else if(allowAccess == 0)
+            {
+                JOptionPane.showMessageDialog(null, "You have provided incorrect login credentials! Please try again!","Incorrect Login Credentials",JOptionPane.WARNING_MESSAGE);
+                txtUsername.setText("");
+                txtPassword.setText("");
+                txtUsername.grabFocus();
+            }
+            else if(allowAccess == -1)
+            {
+                JOptionPane.showMessageDialog(null, "Your account has not yet been approved, therefore no access privileges have been assigned!","Insufficient Access Privileges",JOptionPane.WARNING_MESSAGE);
+            }} catch (IOException ex) {
+            Logger.getLogger(frmLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }//GEN-LAST:event_btnLoginActionPerformed
 
@@ -296,88 +298,96 @@ public class frmLogin extends javax.swing.JFrame {
         Validation validation = new Validation();
         if(cbxForgotPassword.isSelected())
         {
-            String username = txtUsername.getText();
-            User user = new User(username,"");      
-            //boolean existingUser = user.testForExistingUser();
-            c = new Communication(PersonManagement_Methods.USER_TEST_EXISTING.methodIdentifier,user);
-            boolean existingUser = new ClientHandler(c).request().boolResult;
-            if(username.equals("") || (!existingUser))
-            {
-                JOptionPane.showMessageDialog(null, "Please provide the correct username!","Incorrect Username",JOptionPane.WARNING_MESSAGE);
-                txtUsername.grabFocus();
-                txtUsername.setText("");
-            }
-            else
-            {  
-                UserSecurityQuestions uQuestion = new UserSecurityQuestions(user);
-                c = new Communication(PersonManagement_Methods.USQ_SELECT_SPEC.methodIdentifier,uQuestion);
-                UserSecurityQuestions specUQuestion = (UserSecurityQuestions) new ClientHandler(c).request().objectResult;
-                //UserSecurityQuestions specUQuestion = uQuestion.selectSpecUserQuestions();
-                SecurityQuestions questions = specUQuestion.getQuestion();
-                String question = questions.getQuestion();
-                String answer = specUQuestion.getAnswer();
-                
-                String securityAnswerInput = JOptionPane.showInputDialog(null,question,"Security Question",JOptionPane.QUESTION_MESSAGE);
-                if(securityAnswerInput.equals(answer))
+            try {
+                String username = txtUsername.getText();
+                User user = new User(username,"");
+                //boolean existingUser = user.testForExistingUser();
+                c = new Communication(PersonManagement_Methods.USER_TEST_EXISTING.methodIdentifier,user);
+                boolean existingUser = new ClientHandler(c).request().boolResult;
+                if(username.equals("") || (!existingUser))
                 {
-                    String newPassword = JOptionPane.showInputDialog(null,"Enter New Password:","Reset Password",JOptionPane.QUESTION_MESSAGE);
-                    String newRePassword = JOptionPane.showInputDialog(null,"Re-Enter New Password:","Reset Password",JOptionPane.QUESTION_MESSAGE);
-                
-                    if((!"".equals(newPassword))&&(!"".equals(newRePassword)))
-                    {
-                        if(newPassword.equals(newRePassword))
+                    JOptionPane.showMessageDialog(null, "Please provide the correct username!","Incorrect Username",JOptionPane.WARNING_MESSAGE);
+                    txtUsername.grabFocus();
+                    txtUsername.setText("");
+                }
+                else
+                {
+                    try {
+                        UserSecurityQuestions uQuestion = new UserSecurityQuestions(user);
+                        c = new Communication(PersonManagement_Methods.USQ_SELECT_SPEC.methodIdentifier,uQuestion);
+                        UserSecurityQuestions specUQuestion = (UserSecurityQuestions) new ClientHandler(c).request().objectResult;
+                        //UserSecurityQuestions specUQuestion = uQuestion.selectSpecUserQuestions();
+                        SecurityQuestions questions = specUQuestion.getQuestion();
+                        String question = questions.getQuestion();
+                        String answer = specUQuestion.getAnswer();
+                        
+                        String securityAnswerInput = JOptionPane.showInputDialog(null,question,"Security Question",JOptionPane.QUESTION_MESSAGE);
+                        if(securityAnswerInput.equals(answer))
                         {
-                            if(validation.testLength(newPassword, 8, 15))
+                            String newPassword = JOptionPane.showInputDialog(null,"Enter New Password:","Reset Password",JOptionPane.QUESTION_MESSAGE);
+                            String newRePassword = JOptionPane.showInputDialog(null,"Re-Enter New Password:","Reset Password",JOptionPane.QUESTION_MESSAGE);
+                            
+                            if((!"".equals(newPassword))&&(!"".equals(newRePassword)))
                             {
-                                c = new Communication(PersonManagement_Methods.USER_SELECT_ALL.methodIdentifier,user);
-                                ArrayList<User> allUsers = new ClientHandler(c).request().listResult;
-                                //ArrayList<User> allUsers = user.select();
-                                User currentUser = null;
-                                
-                                for(User u : allUsers)
+                                if(newPassword.equals(newRePassword))
                                 {
-                                    if(u.getUsername().equals(username))
+                                    if(validation.testLength(newPassword, 8, 15))
                                     {
-                                        currentUser = u;
+                                        c = new Communication(PersonManagement_Methods.USER_SELECT_ALL.methodIdentifier,user);
+                                        ArrayList<User> allUsers = new ClientHandler(c).request().listResult;
+                                        //ArrayList<User> allUsers = user.select();
+                                        User currentUser = null;
+                                        
+                                        for(User u : allUsers)
+                                        {
+                                            if(u.getUsername().equals(username))
+                                            {
+                                                currentUser = u;
+                                            }
+                                        }
+                                        User userToUpdate = new User(currentUser.getUsername(), newPassword,currentUser.getAccessLevel(),currentUser.getStatus());
+                                        c = new Communication(PersonManagement_Methods.USER_UPDATE.methodIdentifier,userToUpdate);
+                                        int result = new ClientHandler(c).request().intResult;
+                                        boolean success = true;
+                                        if (result == -1)
+                                        {
+                                            success = false;
+                                        }
+                                        
+                                        if(success)
+                                        {
+                                            JOptionPane.showMessageDialog(null, "The password reset was a success! Please login with new password.","Successful Password Reset",JOptionPane.INFORMATION_MESSAGE);
+                                        }
+                                        else
+                                        {
+                                            JOptionPane.showMessageDialog(null, "A problem occured during this process!","Unsuccessful Password Reset",JOptionPane.WARNING_MESSAGE);
+                                        }
                                     }
-                                }
-                                User userToUpdate = new User(currentUser.getUsername(), newPassword,currentUser.getAccessLevel(),currentUser.getStatus());
-                                c = new Communication(PersonManagement_Methods.USER_UPDATE.methodIdentifier,userToUpdate);
-                                int result = new ClientHandler(c).request().intResult;
-                                boolean success = true;
-                                if (result == -1) 
-                                {
-                                    success = false;
-                                }
-                                
-                                if(success)
-                                {
-                                    JOptionPane.showMessageDialog(null, "The password reset was a success! Please login with new password.","Successful Password Reset",JOptionPane.INFORMATION_MESSAGE);
+                                    else
+                                    {
+                                        JOptionPane.showMessageDialog(null, "The password must be at least 8 characters long and no greater than 15 characters","Reset Password Process Failed",JOptionPane.WARNING_MESSAGE);
+                                    }
                                 }
                                 else
                                 {
-                                    JOptionPane.showMessageDialog(null, "A problem occured during this process!","Unsuccessful Password Reset",JOptionPane.WARNING_MESSAGE);
+                                    JOptionPane.showMessageDialog(null, "There was a password mismatch!","Reset Password Process Failed",JOptionPane.WARNING_MESSAGE);
                                 }
                             }
                             else
                             {
-                                JOptionPane.showMessageDialog(null, "The password must be at least 8 characters long and no greater than 15 characters","Reset Password Process Failed",JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "The password may not be empty!","Reset Password Process Failed",JOptionPane.WARNING_MESSAGE);
                             }
                         }
                         else
                         {
-                            JOptionPane.showMessageDialog(null, "There was a password mismatch!","Reset Password Process Failed",JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "That answer is incorrect!","Incorrect Answer",JOptionPane.WARNING_MESSAGE);
                         }
+                    } catch (IOException ex) {
+                        Logger.getLogger(frmLogin.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null, "The password may not be empty!","Reset Password Process Failed",JOptionPane.WARNING_MESSAGE);
-                    }
-                }  
-                else
-                {
-                    JOptionPane.showMessageDialog(null, "That answer is incorrect!","Incorrect Answer",JOptionPane.WARNING_MESSAGE);
                 }
+            } catch (IOException ex) {
+                Logger.getLogger(frmLogin.class.getName()).log(Level.SEVERE, null, ex);
             }
             
         }
