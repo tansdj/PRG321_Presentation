@@ -8,12 +8,18 @@ package Forms;
 import PersonManagement.Address;
 import PersonManagement.Contact;
 import PersonManagement.Person;
+import PersonManagement.PersonManagement_Methods;
 import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
+import bc_stationary_bll.Communication;
+import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -29,35 +35,41 @@ public class frmAddUser extends javax.swing.JFrame {
      * Creates new form frmAddUser
      */
     public ArrayList<User> userList;
+    Communication c;
     public frmAddUser() {
-        initComponents();
-        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45,45,45));
-        
-        User user = new User();
-        userList = user.selectPending();
-        
-        DefaultListModel model = new DefaultListModel();
-        
-        for(User u: userList)
-        {
-            model.addElement(u);
+        try {
+            initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45,45,45));
+            
+            User user = new User();
+            c = new Communication(PersonManagement_Methods.USER_SELECT_PENDING.methodIdentifier, user);
+            userList = new ClientHandler(c).request().listResult;
+            
+            DefaultListModel model = new DefaultListModel();
+            
+            for(User u: userList)
+            {
+                model.addElement(u);
+            }
+            lbxUsers.setModel(model);
+            
+            txtFirstname.setEditable(false);
+            txtLastname.setEditable(false);
+            txtIDNumber.setEditable(false);
+            txtCampus.setEditable(false);
+            txtLine1.setEditable(false);
+            txtLine2.setEditable(false);
+            txtCity.setEditable(false);
+            txtPostalCode.setEditable(false);
+            txtCellphoneNo.setEditable(false);
+            txtEmail.setEditable(false);
+            txtFirstname.setEditable(false);
+            txtAccessLevel.setEditable(false);
+            txtStatus.setEditable(false);
+        } catch (IOException ex) {
+            Logger.getLogger(frmAddUser.class.getName()).log(Level.SEVERE, null, ex);
         }
-        lbxUsers.setModel(model);
-
-        txtFirstname.setEditable(false);
-        txtLastname.setEditable(false);
-        txtIDNumber.setEditable(false);
-        txtCampus.setEditable(false);
-        txtLine1.setEditable(false);
-        txtLine2.setEditable(false);
-        txtCity.setEditable(false);
-        txtPostalCode.setEditable(false);
-        txtCellphoneNo.setEditable(false);
-        txtEmail.setEditable(false);
-        txtFirstname.setEditable(false);
-        txtAccessLevel.setEditable(false);
-        txtStatus.setEditable(false);
     }
 
     /**
@@ -614,12 +626,11 @@ public class frmAddUser extends javax.swing.JFrame {
     }//GEN-LAST:event_btnViewUserActionPerformed
 
     private void btnRejectUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRejectUserActionPerformed
-         //Variable Declaration
-        String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail, addressPostal;
-        User userToUpdate;
-        Person selectedPerson = selectedUser.getPerson();
-        Person person;
-        
+        try {
+            String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail, addressPostal;
+            User userToUpdate;
+            Person selectedPerson = selectedUser.getPerson();
+            Person person;
             //Assigning values to variables
             userFirstName = txtFirstname.getText();
             userLastName = txtLastname.getText();
@@ -630,10 +641,11 @@ public class frmAddUser extends javax.swing.JFrame {
             addressPostal = txtPostalCode.getText();
             contactCell =  txtCellphoneNo.getText();
             contactEmail = txtEmail.getText();
-            
             userToUpdate = new User(selectedPerson, selectedUser.getUsername(), selectedUser.getPassword(), selectedUser.getAccessLevel(), "Disabled");
-               
-            if(userToUpdate.update()!=-1){
+            c = new Communication(PersonManagement_Methods.USER_UPDATE.methodIdentifier, userToUpdate);
+            int userUpdateSuccess = new ClientHandler(c).request().intResult;
+            
+            if(userUpdateSuccess != -1){
                 JOptionPane.showMessageDialog(null, "User was successfully inserted!","Successful Insert",JOptionPane.INFORMATION_MESSAGE);
                 AdministratorMainDash mainDash = new AdministratorMainDash();
                 mainDash.setVisible(true);
@@ -643,15 +655,17 @@ public class frmAddUser extends javax.swing.JFrame {
             {
                 JOptionPane.showMessageDialog(null, "Error occured during this process!","Unsuccessful Insertation",JOptionPane.ERROR_MESSAGE);
             }     
+        } catch (IOException ex) {
+            Logger.getLogger(frmAddUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnRejectUserActionPerformed
 
     private void btnInsertUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertUserActionPerformed
-        //Variable Declaration
-        String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail, addressPostal;
-        User userToUpdate;
-        Person selectedPerson = selectedUser.getPerson();
-        Person person;
-        
+        try {
+            String userFirstName, userLastName, userCampus, addressLine1, addressLine2, addressCity, contactCell, contactEmail, addressPostal;
+            User userToUpdate;
+            Person selectedPerson = selectedUser.getPerson();
+            Person person;
             //Assigning values to variables
             userFirstName = txtFirstname.getText();
             userLastName = txtLastname.getText();
@@ -662,10 +676,11 @@ public class frmAddUser extends javax.swing.JFrame {
             addressPostal = txtPostalCode.getText();
             contactCell =  txtCellphoneNo.getText();
             contactEmail = txtEmail.getText();
-            
             userToUpdate = new User(selectedPerson, selectedUser.getUsername(), selectedUser.getPassword(), selectedUser.getAccessLevel(), "Active");
-               
-            if(userToUpdate.update()!=-1){
+            c = new Communication(PersonManagement_Methods.USER_UPDATE.methodIdentifier, userToUpdate);
+            int userUpdateSuccess = new ClientHandler(c).request().intResult;
+            
+            if(userUpdateSuccess != -1){
                 JOptionPane.showMessageDialog(null, "User was successfully inserted!","Successful Insert",JOptionPane.INFORMATION_MESSAGE);
                 AdministratorMainDash mainDash = new AdministratorMainDash();
                 mainDash.setVisible(true);
@@ -675,6 +690,9 @@ public class frmAddUser extends javax.swing.JFrame {
             {
                 JOptionPane.showMessageDialog(null, "Error occured during this process!","Unsuccessful Insertation",JOptionPane.ERROR_MESSAGE);
             }     
+        } catch (IOException ex) {
+            Logger.getLogger(frmAddUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnInsertUserActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -694,15 +712,18 @@ public class frmAddUser extends javax.swing.JFrame {
         UserSecurityQuestions userSecQ = new UserSecurityQuestions(selectedUser,new SecurityQuestions(),"");
         try
         {
-            Person per = person.selectSpecPerson();
+            c = new Communication(PersonManagement_Methods.PERSON_SELECT_SPECIFIC.methodIdentifier, person);
+            Person per = (Person) new ClientHandler(c).request().objectResult;
             address = per.getAddress();
             contact = per.getContact();
             
-            userSecQ = userSecQ.selectSpecUserQuestions();
+            c = new Communication(PersonManagement_Methods.USQ_SELECT_SPEC.methodIdentifier, userSecQ);
+            userSecQ = (UserSecurityQuestions)new ClientHandler(c).request().objectResult;
             System.out.println(per+"*");
         }
-        catch(SQLException se)
+        catch(IOException io)
         {
+            
         }
         
         txtFirstname.setText(person.getName());

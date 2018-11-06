@@ -8,11 +8,17 @@ package Forms;
 import ProductManagement.Category;
 import ProductManagement.Model;
 import ProductManagement.Product;
+import ProductManagement.ProductManagement_Methods;
 import ProductManagement.Stock;
+import bc_stationary_bll.Communication;
+import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -26,14 +32,20 @@ public class frmAddStock extends javax.swing.JFrame {
      * Creates new form frmAddStock
      */
     public ArrayList<Product> products;
+    Communication c;
     public frmAddStock() {
-        initComponents();
-         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-         this.getContentPane().setBackground(new Color(45,45,45));
-         Product product = new Product();
-         products = product.select();
-         for(Product p:products){
-            cmbProductSearch.addItem(p.getName()+"("+ p.getDescription()+")");
+        try {
+            initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45,45,45));
+            Product product = new Product();
+            c = new Communication(ProductManagement_Methods.PRODUCT_SELECT_ALL.methodIdentifier,product);
+            products = new ClientHandler(c).request().listResult;
+            for(Product p:products){
+                cmbProductSearch.addItem(p.getName()+"("+ p.getDescription()+")");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmAddStock.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -511,6 +523,7 @@ public class frmAddStock extends javax.swing.JFrame {
         //Assigning variables values            
             if((Integer)numQuantity.getValue() > 0)
             {
+            try {
                 pName =  txtProductName.getText();
                 pDescription = txtDescription.getText();
                 pStatus = txtStatus.getText();
@@ -526,7 +539,9 @@ public class frmAddStock extends javax.swing.JFrame {
                 product = new Product(pName, pDescription, category, pStatus, model, costPrice, salePrice, d); 
                 stockToUpdate = new Stock(product, pQuantity);
                 
-                if(stockToUpdate.update() != -1)
+                c = new Communication(ProductManagement_Methods.STOCK_UPDATE.methodIdentifier, stockToUpdate);
+                int stockUpdateSuccess = new ClientHandler(c).request().intResult;
+                if(stockUpdateSuccess != -1)
                 {
                     JOptionPane.showMessageDialog(null, "The stock was successfully updated","Update Successful",JOptionPane.INFORMATION_MESSAGE);
                                         
@@ -538,6 +553,9 @@ public class frmAddStock extends javax.swing.JFrame {
                 {
                     JOptionPane.showMessageDialog(null, "Something went wrong during the update process. Stock Update was unsuccessful!","Registration Failed",JOptionPane.WARNING_MESSAGE);
                 }
+            } catch (IOException ex) {
+                Logger.getLogger(frmAddStock.class.getName()).log(Level.SEVERE, null, ex);
+            }
             }
             else
             {
@@ -577,47 +595,52 @@ public class frmAddStock extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddProductActionPerformed
 
     private void cmbProductSearchPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductSearchPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
-         String selectedProductSearch = cmbProductSearch.getSelectedItem().toString();
-        String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
-        String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf(")"));
-        
-        Product selectedProduct = new Product();
-        for(Product p : products)
-        {
-            if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))))
+        try {
+            // TODO add your handling code here:
+            String selectedProductSearch = cmbProductSearch.getSelectedItem().toString();
+            String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
+            String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf(")"));
+            
+            Product selectedProduct = new Product();
+            for(Product p : products)
             {
-                selectedProduct = p;
+                if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))))
+                {
+                    selectedProduct = p;
+                }
             }
+            
+            Model model = selectedProduct.getModel();
+            Category category = selectedProduct.getCategory();
+            Stock stock = new Stock(selectedProduct,0);
+            c = new Communication(ProductManagement_Methods.STOCK_SELECT_SPEC.methodIdentifier, stock);
+            stock = (Stock) new ClientHandler(c).request().objectResult;
+            
+            txtProductName.setText(selectedProduct.getName());
+            txtProductName.setEditable(false);
+            
+            txtDescription.setText(selectedProduct.getDescription());
+            txtDescription.setEditable(false);
+            
+            txtStatus.setText(selectedProduct.getStatus());
+            txtStatus.setEditable(false);
+            
+            txtCategory.setText(category.getDescription());
+            txtCategory.setEditable(false);
+            
+            txtProductModel.setText(model.getDescription());
+            txtProductModel.setEditable(false);
+            
+            txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
+            txtProductCost.setEditable(false);
+            
+            txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
+            txtProductSale.setEditable(false);
+            
+            numQuantity.setValue(stock.getQuantity());
+        } catch (IOException ex) {
+            Logger.getLogger(frmAddStock.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        Model model = selectedProduct.getModel(); // Tanya
-        Category category = selectedProduct.getCategory(); // Tanya
-        Stock stock = new Stock(selectedProduct,0);
-        stock = stock.selectSpecStock();
-        
-        txtProductName.setText(selectedProduct.getName());
-        txtProductName.setEditable(false);
-        
-        txtDescription.setText(selectedProduct.getDescription());
-        txtDescription.setEditable(false);
-        
-        txtStatus.setText(selectedProduct.getStatus());
-        txtStatus.setEditable(false);
-        
-        txtCategory.setText(category.getDescription());
-        txtCategory.setEditable(false);
-        
-        txtProductModel.setText(model.getDescription());
-        txtProductModel.setEditable(false);
-        
-        txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
-        txtProductCost.setEditable(false);
-        
-        txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
-        txtProductSale.setEditable(false);
-        
-        numQuantity.setValue(stock.getQuantity());
     }//GEN-LAST:event_cmbProductSearchPopupMenuWillBecomeInvisible
 
     /**

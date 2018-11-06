@@ -8,11 +8,17 @@ package Forms;
 import ProductManagement.Category;
 import ProductManagement.Model;
 import ProductManagement.Product;
+import ProductManagement.ProductManagement_Methods;
 import ProductManagement.Stock;
+import bc_stationary_bll.Communication;
+import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.Animation;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -28,20 +34,29 @@ public class frmUpdateStock extends javax.swing.JFrame {
      */
     public ArrayList<Product> products;
     public ArrayList<Category> categories;
+    Communication c;
     public frmUpdateStock() {
-        initComponents();
-        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45,45,45));
-        Product product = new Product();
-         products = product.select();
-         for(Product p :products){
-            cmbProductSearch.addItem(p.getName()+"("+ p.getDescription()+")");
-        }
-         
-        Category category = new Category();
-        categories = category.select();
-        for(Category c :categories){
-            cmbCategory.addItem(c.getDescription());
+        try {
+            initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45,45,45));
+            Product product = new Product();
+            c = new Communication(ProductManagement_Methods.PRODUCT_SELECT_ALL.methodIdentifier, product);
+            products = new ClientHandler(c).request().listResult;
+            
+            for(Product p :products){
+                cmbProductSearch.addItem(p.getName()+"("+ p.getDescription()+")");
+            }
+            
+            Category category = new Category();
+            c = new Communication(ProductManagement_Methods.CAT_SELECT_ALL.methodIdentifier, category);
+            categories = new ClientHandler(c).request().listResult;
+            
+            for(Category c :categories){
+                cmbCategory.addItem(c.getDescription());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmUpdateStock.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -493,31 +508,31 @@ public class frmUpdateStock extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditStockActionPerformed
-        String pName, pDescription, pStatus, pCategory, pModel;
-        int pQuantity;
-        LocalDate local = LocalDate.now();
-        Date date = Date.valueOf(local);
-        double costPrice, salePrice;
-        
-        Stock stockToUpdate;
-        Product product;
-        Category category;
-        Model model;
-        //Assigning variables values  
-        pName =  txtProductName.getText();
-        pDescription = txtDescription.getText();
-        pStatus = cmbStatus.getSelectedItem().toString();
-        pCategory = cmbCategory.getSelectedItem().toString();
-        pQuantity = Integer.parseInt(txtQuantity.getText());  
-        pModel = txtProductModel.getText();
-        costPrice = (Double)Double.parseDouble(txtProductCost.getText());
-        salePrice = (Double)Double.parseDouble(txtProductSale.getText());
-                
-        category = new Category(pCategory);
-        model = new Model(pModel);
-        product = new Product(pName, pDescription, category, pStatus, model, costPrice, salePrice, date); 
-                
-            if(product.update() != -1)
+        try {
+            String pName, pDescription, pStatus, pCategory, pModel;
+            int pQuantity;
+            LocalDate local = LocalDate.now();
+            Date date = Date.valueOf(local);
+            double costPrice, salePrice;
+            Stock stockToUpdate;
+            Product product;
+            Category category;
+            Model model;
+            //Assigning variables values
+            pName =  txtProductName.getText();
+            pDescription = txtDescription.getText();
+            pStatus = cmbStatus.getSelectedItem().toString();
+            pCategory = cmbCategory.getSelectedItem().toString();
+            pQuantity = Integer.parseInt(txtQuantity.getText());
+            pModel = txtProductModel.getText();
+            costPrice = (Double)Double.parseDouble(txtProductCost.getText());
+            salePrice = (Double)Double.parseDouble(txtProductSale.getText());
+            category = new Category(pCategory);
+            model = new Model(pModel);
+            product = new Product(pName, pDescription, category, pStatus, model, costPrice, salePrice, date);
+            c = new Communication(ProductManagement_Methods.PRODUCT_UPDATE.methodIdentifier, product);
+            int productUpdateSuccess = new ClientHandler(c).request().intResult;
+            if(productUpdateSuccess != -1)
             {
                 JOptionPane.showMessageDialog(null, "The product was successfully updated","Update Successful",JOptionPane.INFORMATION_MESSAGE);
                                         
@@ -527,8 +542,11 @@ public class frmUpdateStock extends javax.swing.JFrame {
             }
             else
             {
-               JOptionPane.showMessageDialog(null, "Something went wrong during the update process. Product Update was unsuccessful!","Registration Failed",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Something went wrong during the update process. Product Update was unsuccessful!","Registration Failed",JOptionPane.WARNING_MESSAGE);
             }
+        } catch (IOException ex) {
+            Logger.getLogger(frmUpdateStock.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnEditStockActionPerformed
 
     private void cmbProductSearchPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductSearchPopupMenuWillBecomeInvisible

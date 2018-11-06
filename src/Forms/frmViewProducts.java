@@ -6,10 +6,14 @@
 package Forms;
 
 import ProductManagement.Product;
+import ProductManagement.ProductManagement_Methods;
 import ProductManagement.Stock;
+import bc_stationary_bll.Communication;
 import bc_stationary_bll.SoundEx;
 import bc_stationary_bll.genericSort;
+import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -27,6 +31,7 @@ public class frmViewProducts extends javax.swing.JFrame {
      * Creates new form frmViewProducts
      */
     ArrayList<Product> productList;
+    Communication c;
     public frmViewProducts() {
         initComponents();
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
@@ -36,16 +41,21 @@ public class frmViewProducts extends javax.swing.JFrame {
     }
 
     public void initializeForm(){
-        Product product = new Product();
-        productList = product.select();
-        
-        DefaultListModel model = new DefaultListModel();
-        // Populate Listbox
-        for(Product p: productList)
-        {
-            model.addElement(p);
+        try {
+            Product product = new Product();
+            c = new Communication(ProductManagement_Methods.PRODUCT_SELECT_ALL.methodIdentifier, product);
+            productList = new ClientHandler(c).request().listResult;
+            
+            DefaultListModel model = new DefaultListModel();
+            // Populate Listbox
+            for(Product p: productList)
+            {
+                model.addElement(p);
+            }
+            lbxProducts.setModel(model);
+        } catch (IOException ex) {
+            Logger.getLogger(frmViewProducts.class.getName()).log(Level.SEVERE, null, ex);
         }
-        lbxProducts.setModel(model);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -452,13 +462,18 @@ public class frmViewProducts extends javax.swing.JFrame {
         ArrayList<Product> productsThatFitCriteria = new ArrayList<Product>();
         String searchCode = "", productCode = "", searchText = txtSearch.getText(),catCode="";
         if (searchText.equals("")) {
-            productList = product.select();
-            DefaultListModel model = new DefaultListModel();
-
-            for (Product p : productList) {
-                model.addElement(p);
+            try {
+                c = new Communication(ProductManagement_Methods.PRODUCT_SELECT_ALL.methodIdentifier, product);
+                productList = new ClientHandler(c).request().listResult;
+                DefaultListModel model = new DefaultListModel();
+                
+                for (Product p : productList) {
+                    model.addElement(p);
+                }
+                lbxProducts.setModel(model);
+            } catch (IOException ex) {
+                Logger.getLogger(frmViewProducts.class.getName()).log(Level.SEVERE, null, ex);
             }
-            lbxProducts.setModel(model);
         } else {
             int numSearchChars; // amount of characters that are typed into the search box.
 

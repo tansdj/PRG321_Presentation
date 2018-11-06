@@ -6,10 +6,14 @@
 package Forms;
 
 import ProductManagement.Product;
+import ProductManagement.ProductManagement_Methods;
 import ProductManagement.Stock;
+import bc_stationary_bll.Communication;
 import bc_stationary_bll.SoundEx;
 import bc_stationary_bll.genericSort;
+import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -27,6 +31,7 @@ public class frmViewStock extends javax.swing.JFrame {
      * Creates new form frmViewStock
      */
     ArrayList<Product> productList;
+    Communication c;
     public frmViewStock() {
         initComponents();
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
@@ -36,16 +41,21 @@ public class frmViewStock extends javax.swing.JFrame {
     }
 
     public void initializeForm(){
-        Product product = new Product();
-        productList = product.select();
-        
-        DefaultListModel model = new DefaultListModel();
-        // Populate Listbox
-        for(Product p: productList)
-        {
-            model.addElement(p);
+        try {
+            Product product = new Product();
+            c = new Communication(ProductManagement_Methods.PRODUCT_SELECT_ALL.methodIdentifier, product);
+            productList = new ClientHandler(c).request().listResult;
+            
+            DefaultListModel model = new DefaultListModel();
+            // Populate Listbox
+            for(Product p: productList)
+            {
+                model.addElement(p);
+            }
+            lbxProducts.setModel(model);
+        } catch (IOException ex) {
+            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
         }
-        lbxProducts.setModel(model);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -533,35 +543,40 @@ public class frmViewStock extends javax.swing.JFrame {
         if(index == -1){
             index = 0;
         }else{
-        selectedProduct = productList.get(index);
-        
-        Stock stock = new Stock(selectedProduct,0);
-        stock = stock.selectSpecStock();
-        
-        txtSearch.setText(selectedProduct.toString());
-        txtProductName2.setText(selectedProduct.getName());
-        txtProductName2.setEditable(false);
-        
-        txtDescription2.setText(selectedProduct.getDescription());
-        txtDescription2.setEditable(false);
-        
-        txtStatus.setText(selectedProduct.getStatus());
-        txtStatus.setEditable(false);
-        
-        txtProductModel.setText(selectedProduct.getModel().getDescription());
-        txtProductModel.setEditable(false);
-        
-        txtCategory.setText(selectedProduct.getCategory().getDescription());
-        txtCategory.setEditable(false);
-        
-        txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
-        txtProductCost.setEditable(false);
-        
-        txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
-        txtProductSale.setEditable(false);
-        
-        txtQuantity.setText(Integer.toString(stock.getQuantity()));
-        txtQuantity.setEditable(false);
+            try {
+                selectedProduct = productList.get(index);
+                
+                Stock stock = new Stock(selectedProduct,0);
+                c = new Communication(ProductManagement_Methods.STOCK_SELECT_SPEC.methodIdentifier, stock);
+                stock = (Stock) new ClientHandler(c).request().objectResult;
+                
+                txtSearch.setText(selectedProduct.toString());
+                txtProductName2.setText(selectedProduct.getName());
+                txtProductName2.setEditable(false);
+                
+                txtDescription2.setText(selectedProduct.getDescription());
+                txtDescription2.setEditable(false);
+                
+                txtStatus.setText(selectedProduct.getStatus());
+                txtStatus.setEditable(false);
+                
+                txtProductModel.setText(selectedProduct.getModel().getDescription());
+                txtProductModel.setEditable(false);
+                
+                txtCategory.setText(selectedProduct.getCategory().getDescription());
+                txtCategory.setEditable(false);
+                
+                txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
+                txtProductCost.setEditable(false);
+                
+                txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
+                txtProductSale.setEditable(false);
+                
+                txtQuantity.setText(Integer.toString(stock.getQuantity()));
+                txtQuantity.setEditable(false);
+            } catch (IOException ex) {
+                Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_lbxProductsValueChanged
 
@@ -571,8 +586,13 @@ public class frmViewStock extends javax.swing.JFrame {
         ArrayList<Product> newProductList = new ArrayList<Product>();
         for(Product p : productList)
         {
-            stock = new Stock(p,0);
-            allStockItems.add(stock.selectSpecStock());
+            try {
+                stock = new Stock(p,0);
+                c = new Communication(ProductManagement_Methods.STOCK_SELECT_SPEC.methodIdentifier, stock );
+                allStockItems.add((Stock) new ClientHandler(c).request().objectResult);
+            } catch (IOException ex) {
+                Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         try {
@@ -631,13 +651,18 @@ public class frmViewStock extends javax.swing.JFrame {
         ArrayList<Product> productsThatFitCriteria = new ArrayList<Product>();
         String searchCode = "", productCode = "", searchText = txtSearch.getText(),catCode="";
         if (searchText.equals("")) {
-            productList = product.select();
-            DefaultListModel model = new DefaultListModel();
-
-            for (Product p : productList) {
-                model.addElement(p);
+            try {
+                c = new Communication(ProductManagement_Methods.PRODUCT_SELECT_ALL.methodIdentifier, product);
+                productList = new ClientHandler(c).request().listResult;
+                DefaultListModel model = new DefaultListModel();
+                
+                for (Product p : productList) {
+                    model.addElement(p);
+                }
+                lbxProducts.setModel(model);
+            } catch (IOException ex) {
+                Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
             }
-            lbxProducts.setModel(model);
         } else {
             int numSearchChars; // amount of characters that are typed into the search box.
 

@@ -5,14 +5,21 @@
  */
 package Forms;
 
+import PersonManagement.PersonManagement_Methods;
 import PersonManagement.User;
 import ProductManagement.Order;
 import ProductManagement.OrderItems;
+import ProductManagement.ProductManagement_Methods;
+import bc_stationary_bll.Communication;
+import bc_stationary_management_system.ClientHandler;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
@@ -26,13 +33,20 @@ public class frmEditOrders extends javax.swing.JFrame {
      * Creates new form frmEditOrders
      */
     public ArrayList<User> users;
+    Communication c;
     public frmEditOrders() {
-        initComponents();
-        
-        users = new User().select();
-        cmbUsers.addItem("Select a User");
-        for(User u:users){
-            cmbUsers.addItem(u.toString());
+        try {
+            initComponents();
+            
+            User user = new User();
+            c = new Communication(PersonManagement_Methods.USER_SELECT_ALL.methodIdentifier, user);
+            users = new ClientHandler(c).request().listResult;
+            cmbUsers.addItem("Select a User");
+            for(User u:users){
+                cmbUsers.addItem(u.toString());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmEditOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
@@ -280,22 +294,32 @@ public class frmEditOrders extends javax.swing.JFrame {
         mainDash.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
+    
     ArrayList<Order> userOrders;
     private void cmbUsersPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbUsersPopupMenuWillBecomeInvisible
         // TODO add your handling code here:
         User selectedUser = null;
         if(cmbUsers.getSelectedIndex()>-1){
-        for(User u:users){
-            if(cmbUsers.getSelectedItem().toString().equals(u.toString())){
-                selectedUser = u;
+            try {
+                for(User u: users)
+                {
+                    if(cmbUsers.getSelectedItem().toString().equals(u.toString())){
+                        selectedUser = u;
+                    }
+                }
+                
+                Order order  = new Order(selectedUser,null,null,null);
+                c = new Communication(ProductManagement_Methods.ORDER_SELECT_USER_OPEN.methodIdentifier, order);
+                userOrders.set(0, (Order)new ClientHandler(c).request().objectResult);
+                
+                DefaultListModel model = new DefaultListModel();
+                for(Order o: userOrders){
+                    model.addElement(o.toString());
+                }
+                lbxOrders.setModel(model);
+            } catch (IOException ex) {
+                Logger.getLogger(frmEditOrders.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        userOrders = new Order(selectedUser,null,null,null).selectUserOrders();
-        DefaultListModel model = new DefaultListModel();
-        for(Order o:userOrders){
-            model.addElement(o.toString());
-        }
-        lbxOrders.setModel(model);
         }
        
     }//GEN-LAST:event_cmbUsersPopupMenuWillBecomeInvisible
@@ -304,8 +328,9 @@ public class frmEditOrders extends javax.swing.JFrame {
         if(lbxOrders.getSelectedIndex()>-1){
             int index = lbxOrders.getSelectedIndex();
             selectedOrder= userOrders.get(index);
+            
             DefaultListModel model = new DefaultListModel();
-            for(OrderItems oi:selectedOrder.getOrderItems()){
+            for(OrderItems oi: selectedOrder.getOrderItems()){
                 model.addElement(oi.toString());
             }
             lbxOrderInfo.setModel(model);
@@ -314,13 +339,20 @@ public class frmEditOrders extends javax.swing.JFrame {
 
     private void btnFinalizeOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFinalizeOrderMouseClicked
         if(lbxOrders.getSelectedIndex()>-1){
-            LocalDate localOrder = LocalDate.now();
-            Date receiveDate = Date.valueOf(localOrder);
-            selectedOrder.setReceivedDate(receiveDate);
-            if(selectedOrder.update()>=0){
-                JOptionPane.showMessageDialog(null, "Order Added!","Success!",JOptionPane.OK_OPTION);
-            }else{
-                JOptionPane.showMessageDialog(null, "Order Could not be finalized. Please try again later.","Failure!",JOptionPane.WARNING_MESSAGE);
+            try {
+                LocalDate localOrder = LocalDate.now();
+                Date receiveDate = Date.valueOf(localOrder);
+                selectedOrder.setReceivedDate(receiveDate);
+                c = new Communication(ProductManagement_Methods.ORDER_UPDATE.methodIdentifier, selectedOrder);
+                int orderUpdateSuccess = new ClientHandler(c).request().intResult;
+                
+                if(orderUpdateSuccess >= 0){
+                    JOptionPane.showMessageDialog(null, "Order was successfully finalized! It is now ready for delivery.","Successful Finalization",JOptionPane.INFORMATION_MESSAGE);
+                }else{
+                    JOptionPane.showMessageDialog(null, "Order could not be finalized. Please try again later.","Failure!",JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(frmEditOrders.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_btnFinalizeOrderMouseClicked

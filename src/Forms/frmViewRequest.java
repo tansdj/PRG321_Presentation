@@ -7,11 +7,17 @@ package Forms;
 
 import PersonManagement.User;
 import ProductManagement.Product;
+import ProductManagement.ProductManagement_Methods;
 import ProductManagement.UserRequest;
+import bc_stationary_bll.Communication;
 import bc_stationary_bll.GenericSerializer;
+import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -26,33 +32,40 @@ public class frmViewRequest extends javax.swing.JFrame {
      */
     public ArrayList<Product> products;
     public User loggedInuser;
+    Communication c; 
     public frmViewRequest() {
-        initComponents(); 
-        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45,45,45));
-        
-         UserRequest request = new UserRequest();
-         products = request.productsOnRequest();
-         for(Product p:products){
-            cmbProduct.addItem(p.getName()+"("+ p.getDescription()+"-"+p.getModel().getDescription()+")");
-         }
-        
-        loggedInuser = new User(); 
-        GenericSerializer gen = new GenericSerializer("loggedUser.txt",loggedInuser);
-        loggedInuser = (User)gen.Deserialize();
-        
-        txtProductName.setEditable(false);
-        txtCategory.setEditable(false);
-        txtProductModel.setEditable(false);
-        txtDescription.setEditable(false);
-        
-        txtLoggedUser.setText(loggedInuser.getPerson().getName() +" "+ loggedInuser.getPerson().getSurname() );
-        txtLoggedUser.setEditable(false);
-        txtQuantity.setEditable(false);
-        txtStatus.setEditable(false);
-        txtPriority.setEditable(false);
-        txtCompleteDate.setEditable(false);
-        txtRequestDate.setEditable(false);
+        try {
+            initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45,45,45));
+            
+            UserRequest request = new UserRequest();
+            c = new Communication(ProductManagement_Methods.UR_SELECT_PRODUCTS_ONREQ.methodIdentifier, request);
+            products = new ClientHandler(c).request().listResult;
+            
+            for(Product p:products){
+                cmbProduct.addItem(p.getName()+"("+ p.getDescription()+"-"+p.getModel().getDescription()+")");
+            }
+            
+            loggedInuser = new User();
+            GenericSerializer gen = new GenericSerializer("loggedUser.txt",loggedInuser);
+            loggedInuser = (User)gen.Deserialize();
+            
+            txtProductName.setEditable(false);
+            txtCategory.setEditable(false);
+            txtProductModel.setEditable(false);
+            txtDescription.setEditable(false);
+            
+            txtLoggedUser.setText(loggedInuser.getPerson().getName() +" "+ loggedInuser.getPerson().getSurname() );
+            txtLoggedUser.setEditable(false);
+            txtQuantity.setEditable(false);
+            txtStatus.setEditable(false);
+            txtPriority.setEditable(false);
+            txtCompleteDate.setEditable(false);
+            txtRequestDate.setEditable(false);
+        } catch (IOException ex) {
+            Logger.getLogger(frmViewRequest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -520,110 +533,115 @@ public class frmViewRequest extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnEditRequestActionPerformed
 
-        public Product selectedProduct;
+    public Product selectedProduct;
     public UserRequest selectedRequest;
     private void cmbProductPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductPopupMenuWillBecomeInvisible
-        String priority = "";
-        String currentStatus = "";
-        int priorityLevel = 0;
-        Date requestDate;
-        Date completedDate;
-        
-        String selectedProductSearch = cmbProduct.getSelectedItem().toString();
-        String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
-        String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf("-"));
-        String searchedModel = selectedProductSearch.substring(selectedProductSearch.indexOf("-")+1,selectedProductSearch.indexOf(")"));
-
-        selectedProduct = new Product();
-        for(Product p : products)
-        {
-            if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))&&(p.getModel().getDescription().equals(searchedModel))))
+        try {
+            String priority = "";
+            String currentStatus = "";
+            int priorityLevel = 0;
+            Date requestDate;
+            Date completedDate;
+            
+            String selectedProductSearch = cmbProduct.getSelectedItem().toString();
+            String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
+            String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf("-"));
+            String searchedModel = selectedProductSearch.substring(selectedProductSearch.indexOf("-")+1,selectedProductSearch.indexOf(")"));
+            
+            selectedProduct = new Product();
+            for(Product p : products)
             {
-                selectedProduct = p;
+                if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))&&(p.getModel().getDescription().equals(searchedModel))))
+                {
+                    selectedProduct = p;
+                }
             }
-        }
-        UserRequest request = new UserRequest(loggedInuser);
-        ArrayList<UserRequest> allRequests = request.selectSpecUserRequest();
-        
-        for(UserRequest ur: allRequests)
-        {
-            if(ur.getProduct().getName().equals(selectedProduct.getName()))
+            UserRequest request = new UserRequest(loggedInuser);
+            c = new Communication(ProductManagement_Methods.UR_SELECT_SPEC_USER_REQ.methodIdentifier, request);
+            ArrayList<UserRequest> allRequests = new ClientHandler(c).request().listResult;
+            
+            for(UserRequest ur: allRequests)
             {
-                selectedRequest = ur;
+                if(ur.getProduct().getName().equals(selectedProduct.getName()))
+                {
+                    selectedRequest = ur;
+                }
             }
-        }
-        
-        txtProductName.setText(selectedProduct.getName());
-        txtProductName.setEditable(false);
-
-        txtDescription.setText(selectedProduct.getDescription());
-        txtDescription.setEditable(false);
-
-        txtCategory.setText(selectedProduct.getCategory().getDescription());
-        txtCategory.setEditable(false);
-
-        txtProductModel.setText(selectedProduct.getModel().getDescription());
-        txtProductModel.setEditable(false);
-        
-        txtQuantity.setText(Integer.toString(selectedRequest.getQuantity()));
-        txtQuantity.setEditable(false);
-
-        priorityLevel = selectedRequest.getPriorityLevel();
-        switch(priorityLevel)
-        {
-            case 1: priority = "Low";
+            
+            txtProductName.setText(selectedProduct.getName());
+            txtProductName.setEditable(false);
+            
+            txtDescription.setText(selectedProduct.getDescription());
+            txtDescription.setEditable(false);
+            
+            txtCategory.setText(selectedProduct.getCategory().getDescription());
+            txtCategory.setEditable(false);
+            
+            txtProductModel.setText(selectedProduct.getModel().getDescription());
+            txtProductModel.setEditable(false);
+            
+            txtQuantity.setText(Integer.toString(selectedRequest.getQuantity()));
+            txtQuantity.setEditable(false);
+            
+            priorityLevel = selectedRequest.getPriorityLevel();
+            switch(priorityLevel)
+            {
+                case 1: priority = "Low";
                 break;
-            case 2: priority = "Medium";
+                case 2: priority = "Medium";
                 break;
-            case 3: priority = "High";
+                case 3: priority = "High";
                 break;
-            default:
-                break;
-        }
-        
-        txtPriority.setText(priority);
-        txtPriority.setEditable(false);
-        
-        currentStatus = selectedRequest.getStatus();
-        
-        if(currentStatus.equals("Unprocessed"))
-        {
-            txtStatus.setForeground(Color.red);
-        }
-        else if(currentStatus.equals("Partially Processed"))
-        {
-            txtStatus.setForeground(Color.blue);
-        }
-        else if(currentStatus.equals("Back Ordered"))
-        {
-            txtStatus.setForeground(Color.blue);
-        }
-        else if(currentStatus.equals("Ready for Delivery"))
-        {
-            txtStatus.setForeground(Color.green);
-        }
-              
-        txtStatus.setText(currentStatus);
-        txtStatus.setEditable(false);
-        
-        requestDate = (Date)selectedRequest.getReqDate();
-        completedDate = (Date)selectedRequest.getCompletedDate();
-        
-        if(requestDate.after(completedDate))
-        {
-            txtRequestDate.setText(requestDate.toString());
-            txtRequestDate.setEditable(false);
-        
-            txtCompleteDate.setText("Not yet specified");
-            txtCompleteDate.setEditable(false);
-        }
-        else
-        {
-            txtRequestDate.setText(requestDate.toString());
-            txtRequestDate.setEditable(false);
-        
-            txtCompleteDate.setText(completedDate.toString());
-            txtCompleteDate.setEditable(false);
+                default:
+                    break;
+            }
+            
+            txtPriority.setText(priority);
+            txtPriority.setEditable(false);
+            
+            currentStatus = selectedRequest.getStatus();
+            
+            if(currentStatus.equals("Unprocessed"))
+            {
+                txtStatus.setForeground(Color.red);
+            }
+            else if(currentStatus.equals("Partially Processed"))
+            {
+                txtStatus.setForeground(Color.blue);
+            }
+            else if(currentStatus.equals("Back Ordered"))
+            {
+                txtStatus.setForeground(Color.blue);
+            }
+            else if(currentStatus.equals("Ready for Delivery"))
+            {
+                txtStatus.setForeground(Color.green);
+            }
+            
+            txtStatus.setText(currentStatus);
+            txtStatus.setEditable(false);
+            
+            requestDate = (Date)selectedRequest.getReqDate();
+            completedDate = (Date)selectedRequest.getCompletedDate();
+            
+            if(requestDate.after(completedDate))
+            {
+                txtRequestDate.setText(requestDate.toString());
+                txtRequestDate.setEditable(false);
+                
+                txtCompleteDate.setText("Not yet specified");
+                txtCompleteDate.setEditable(false);
+            }
+            else
+            {
+                txtRequestDate.setText(requestDate.toString());
+                txtRequestDate.setEditable(false);
+                
+                txtCompleteDate.setText(completedDate.toString());
+                txtCompleteDate.setEditable(false);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmViewRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_cmbProductPopupMenuWillBecomeInvisible
 

@@ -5,7 +5,7 @@
  */
 package bc_stationary_management_system;
 import bc_stationary_bll.Communication;
-import java.io.IOException;
+import java.io.IOException; 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;

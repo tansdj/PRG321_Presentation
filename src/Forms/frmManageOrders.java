@@ -6,16 +6,21 @@
 package Forms;
 
 import PersonManagement.Person;
+import PersonManagement.PersonManagement_Methods;
 import PersonManagement.User;
 import ProductManagement.Order;
 import ProductManagement.OrderItems;
 import ProductManagement.Product;
+import ProductManagement.ProductManagement_Methods;
 import ProductManagement.Stock;
 import ProductManagement.UserRequest;
+import bc_stationary_bll.Communication;
 import bc_stationary_bll.Email;
 import bc_stationary_bll.Reporting;
 import bc_stationary_bll.genericSort;
+import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -38,28 +43,34 @@ public class frmManageOrders extends javax.swing.JFrame {
      * Creates new form frmManageOrders
      */
     public ArrayList<Product> products;
-
+    Communication c;
     public frmManageOrders() {
-        initComponents();
-        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45, 45, 45));
-        btnPurchase.setVisible(false);
-        btnOrder.setVisible(false);
-        
-        UserRequest request = new UserRequest();
-        products = request.productsOnRequest();
-        cmbProduct.addItem("Select a Product:");
-        for (Product p : products) {
-            cmbProduct.addItem(p.getName() + "(" + p.getDescription() + "-" + p.getModel().getDescription() + ")");
+        try {
+            initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45, 45, 45));
+            btnPurchase.setVisible(false);
+            btnOrder.setVisible(false);
+            
+            UserRequest request = new UserRequest();
+            c = new Communication(ProductManagement_Methods.UR_SELECT_PRODUCTS_ONREQ.methodIdentifier, request);
+            products = new ClientHandler(c).request().listResult;
+            
+            cmbProduct.addItem("Select a Product:");
+            for (Product p : products) {
+                cmbProduct.addItem(p.getName() + "(" + p.getDescription() + "-" + p.getModel().getDescription() + ")");
+            }
+            
+            txtProductName.setEditable(false);
+            txtDescription.setEditable(false);
+            txtCategory.setEditable(false);
+            txtProductModel.setEditable(false);
+            txtQuantity.setEditable(false);
+            txtPriority.setEditable(false);
+            txtRequestDate.setEditable(false);
+        } catch (IOException ex) {
+            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        txtProductName.setEditable(false);
-        txtDescription.setEditable(false);
-        txtCategory.setEditable(false);
-        txtProductModel.setEditable(false);
-        txtQuantity.setEditable(false);
-        txtPriority.setEditable(false);
-        txtRequestDate.setEditable(false);
     }
 
     /**
@@ -562,80 +573,88 @@ public class frmManageOrders extends javax.swing.JFrame {
     public UserRequest selectedRequest;
     public int stockQuantity = 0, requestQuantity = 0;
     private void lbxUsersValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxUsersValueChanged
-        int index = lbxUsers.getSelectedIndex();
-        String priority = "";
-        String userFullName = "";
-        int priorityLevel = 0;
-        btnOrder.setVisible(false);
-        btnPurchase.setVisible(false);
-        
-        if (index == -1) {
-            index = 0;
-        }
-
-        selectedRequest = allRequests.get(index);
-
-        txtProductName.setText(selectedProduct.getName());
-        txtProductName.setEditable(false);
-
-        txtDescription.setText(selectedProduct.getDescription());
-        txtDescription.setEditable(false);
-
-        txtCategory.setText(selectedProduct.getCategory().getDescription());
-        txtCategory.setEditable(false);
-
-        txtProductModel.setText(selectedProduct.getModel().getDescription());
-        txtProductModel.setEditable(false);
-
-        Person p = new Person();
-        p = selectedRequest.getUser().selectSpecUser().getPerson();
-        userFullName = p.getName() + " " + p.getSurname();
-        txtStaffMember.setText(userFullName);
-        txtStaffMember.setEditable(false);
-
-        requestQuantity = selectedRequest.getQuantity();
-        txtQuantity.setText(Integer.toString(requestQuantity));
-        txtQuantity.setEditable(false);
-
-        priorityLevel = selectedRequest.getPriorityLevel();
-        switch (priorityLevel) {
-            case 1:
-                priority = "Low";
-                break;
-            case 2:
-                priority = "Medium";
-                break;
-            case 3:
-                priority = "High";
-                break;
-            default:
-                break;
-        }
-
-        txtPriority.setText(priority);
-        txtPriority.setEditable(false);
-
-        txtRequestDate.setText(selectedRequest.getReqDate().toString());
-        txtRequestDate.setEditable(false);
-
-        Stock stock = new Stock(selectedProduct, 0);
-        stockQuantity = stock.selectSpecStock().getQuantity();
-
-        txtQuantityInStock.setText(Integer.toString(stockQuantity));
-        txtQuantityInStock.setEditable(false);
-
-        if (stockQuantity == 0) {
-            lblOrderStatus.setText("        Out of Stock");
-            btnPurchase.setVisible(true);
-        } 
-        else if (requestQuantity > stockQuantity) {
-            lblOrderStatus.setText("Insufficient quantity to fully fill order");
-            btnOrder.setVisible(true);
-        }
-        else if(requestQuantity <= stockQuantity)
-        {
-            lblOrderStatus.setText("Enough quantity items to fill this order.");
-            btnOrder.setVisible(true);
+        try {
+            int index = lbxUsers.getSelectedIndex();
+            String priority = "";
+            String userFullName = "";
+            int priorityLevel = 0;
+            btnOrder.setVisible(false);
+            btnPurchase.setVisible(false);
+            
+            if (index == -1) {
+                index = 0;
+            }
+            
+            selectedRequest = allRequests.get(index);
+            
+            txtProductName.setText(selectedProduct.getName());
+            txtProductName.setEditable(false);
+            
+            txtDescription.setText(selectedProduct.getDescription());
+            txtDescription.setEditable(false);
+            
+            txtCategory.setText(selectedProduct.getCategory().getDescription());
+            txtCategory.setEditable(false);
+            
+            txtProductModel.setText(selectedProduct.getModel().getDescription());
+            txtProductModel.setEditable(false);
+            
+            Person p = new Person();
+            User u = selectedRequest.getUser();
+            c = new Communication(PersonManagement_Methods.USER_SELECT_SPEC.methodIdentifier, u);
+            u = (User)new ClientHandler(c).request().objectResult;
+            p = u.getPerson();
+            
+            userFullName = p.getName() + " " + p.getSurname();
+            txtStaffMember.setText(userFullName);
+            txtStaffMember.setEditable(false);
+            
+            requestQuantity = selectedRequest.getQuantity();
+            txtQuantity.setText(Integer.toString(requestQuantity));
+            txtQuantity.setEditable(false);
+            
+            priorityLevel = selectedRequest.getPriorityLevel();
+            switch (priorityLevel) {
+                case 1:
+                    priority = "Low";
+                    break;
+                case 2:
+                    priority = "Medium";
+                    break;
+                case 3:
+                    priority = "High";
+                    break;
+                default:
+                    break;
+            }
+            
+            txtPriority.setText(priority);
+            txtPriority.setEditable(false);
+            
+            txtRequestDate.setText(selectedRequest.getReqDate().toString());
+            txtRequestDate.setEditable(false);
+            
+            Stock stock = new Stock(selectedProduct, 0);
+            stockQuantity = stock.selectSpecStock().getQuantity();
+            
+            txtQuantityInStock.setText(Integer.toString(stockQuantity));
+            txtQuantityInStock.setEditable(false);
+            
+            if (stockQuantity == 0) {
+                lblOrderStatus.setText("        Out of Stock");
+                btnPurchase.setVisible(true);
+            }
+            else if (requestQuantity > stockQuantity) {
+                lblOrderStatus.setText("Insufficient quantity to fully fill order");
+                btnOrder.setVisible(true);
+            }
+            else if(requestQuantity <= stockQuantity)
+            {
+                lblOrderStatus.setText("Enough quantity items to fill this order.");
+                btnOrder.setVisible(true);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_lbxUsersValueChanged
 
@@ -646,37 +665,41 @@ public class frmManageOrders extends javax.swing.JFrame {
     private void cmbProductPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductPopupMenuWillBecomeInvisible
         // TODO add your handling code here:
         if (cmbProduct.getSelectedIndex() > 0) {
-            String selectedProductSearch = cmbProduct.getSelectedItem().toString();
-            String searchedProduct = selectedProductSearch.substring(0, selectedProductSearch.indexOf("("));
-            String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(") + 1, selectedProductSearch.indexOf("-"));
-            String searchedModel = selectedProductSearch.substring(selectedProductSearch.indexOf("-") + 1, selectedProductSearch.indexOf(")"));
-
-            selectedProduct = new Product();
-            for (Product p : products) {
-                if ((p.getName().equals(searchedProduct) && (p.getDescription().equals(searchedDescription)) && (p.getModel().getDescription().equals(searchedModel)))) {
-                    selectedProduct = p;
-                }
-            }
-            UserRequest request = new UserRequest();
-            request.setProduct(selectedProduct);
-            allRequests = request.selectUnprocessed_Product_BackOrder();
             try {
-                Collections.sort(allRequests, new genericSort(UserRequest.class.getField("priorityLevel")));
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchFieldException ex) {
-                Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SecurityException ex) {
+                String selectedProductSearch = cmbProduct.getSelectedItem().toString();
+                String searchedProduct = selectedProductSearch.substring(0, selectedProductSearch.indexOf("("));
+                String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(") + 1, selectedProductSearch.indexOf("-"));
+                String searchedModel = selectedProductSearch.substring(selectedProductSearch.indexOf("-") + 1, selectedProductSearch.indexOf(")"));
+                
+                selectedProduct = new Product();
+                for (Product p : products) {
+                    if ((p.getName().equals(searchedProduct) && (p.getDescription().equals(searchedDescription)) && (p.getModel().getDescription().equals(searchedModel)))) {
+                        selectedProduct = p;
+                    }
+                }
+                UserRequest request = new UserRequest(selectedProduct);
+                c = new Communication(ProductManagement_Methods.UR_SELECT_PRODUCT_BACKORDER.methodIdentifier,request);
+                allRequests = new ClientHandler(c).request().listResult;
+                try {
+                    Collections.sort(allRequests, new genericSort(UserRequest.class.getField("priorityLevel")));
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoSuchFieldException ex) {
+                    Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SecurityException ex) {
+                    Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                DefaultListModel model = new DefaultListModel();
+                // Populate Listbox
+                for (UserRequest ur : allRequests) {
+                    model.addElement(ur.getUser().getUsername());
+                }
+                
+                lbxUsers.setModel(model);
+            } catch (IOException ex) {
                 Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            DefaultListModel model = new DefaultListModel();
-            // Populate Listbox
-            for (UserRequest ur : allRequests) {
-                model.addElement(ur.getUser().getUsername());
-            }
-
-            lbxUsers.setModel(model);
         } else {
             frmManageOrders orders = new frmManageOrders();
             orders.setVisible(true);
@@ -685,77 +708,119 @@ public class frmManageOrders extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbProductPopupMenuWillBecomeInvisible
 
     private void btnOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnOrderMouseClicked
-        User selectedUser = selectedRequest.getUser();
-        LocalDate localOrder = LocalDate.now();
-        Date orderDate = Date.valueOf(localOrder);
-        LocalDate localReceive = LocalDate.now().minusDays(1);
-        Date receiveDate = Date.valueOf(localReceive);
-        UserRequest requestToUpdate;
-        Stock stockToUpdate;
-        Product productToUpdate;
-        Order orderToUpdate;
-        int newStockQuantity, initialRequestQuantity = 0, remainingRequestQuantity;
-        boolean stockInsufficient = false; // Not out of stock, but also not enough to fill whole order.
-        
-        if((stockQuantity > 0)&&(stockQuantity < requestQuantity))
-        {
-            initialRequestQuantity = requestQuantity;
-            requestQuantity = stockQuantity;
-            stockInsufficient = true;
-        }
-        
-        ArrayList<OrderItems> items = new ArrayList<OrderItems>();
-        items.add(new OrderItems(selectedProduct,requestQuantity));
-
-        Order order = new Order(selectedUser);
-        orderToUpdate = order.selectUserOpenOrder();
-        if(orderToUpdate != null)
-        {
-            OrderItems orderItem = new OrderItems(selectedProduct,requestQuantity,orderToUpdate);
-            try {
-                if(orderItem.insert() != -1)
-                {
-                    requestToUpdate = new UserRequest(selectedUser,selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
-                    selectedRequest.getCompletedDate());
-                    
-                    if(requestToUpdate.update() != -1)
+        try {
+            User selectedUser = selectedRequest.getUser();
+            LocalDate localOrder = LocalDate.now();
+            Date orderDate = Date.valueOf(localOrder);
+            LocalDate localReceive = LocalDate.now().minusDays(1);
+            Date receiveDate = Date.valueOf(localReceive);
+            UserRequest requestToUpdate;
+            Stock stockToUpdate;
+            Product productToUpdate;
+            Order orderToUpdate;
+            int newStockQuantity, initialRequestQuantity = 0, remainingRequestQuantity;
+            boolean stockInsufficient = false; // Not out of stock, but also not enough to fill whole order.
+            if((stockQuantity > 0)&&(stockQuantity < requestQuantity))
+            {
+                initialRequestQuantity = requestQuantity;
+                requestQuantity = stockQuantity;
+                stockInsufficient = true;
+            }   ArrayList<OrderItems> items = new ArrayList<OrderItems>();
+            items.add(new OrderItems(selectedProduct,requestQuantity));
+            Order order = new Order(selectedUser);
+            c = new Communication(ProductManagement_Methods.ORDER_SELECT_USER_OPEN.methodIdentifier, order);
+            orderToUpdate = (Order)new ClientHandler(c).request().objectResult;
+            if(orderToUpdate != null)
+            {
+                OrderItems orderItem = new OrderItems(selectedProduct,requestQuantity,orderToUpdate);
+                try {
+                    c = new Communication(ProductManagement_Methods.ORDER_ITEMS_INSERT.methodIdentifier,orderItem);
+                    int orderItemInsertSuccess = new ClientHandler(c).request().intResult;
+                    if(orderItemInsertSuccess != -1)
                     {
-                        newStockQuantity = stockQuantity - requestQuantity;
-                        if(newStockQuantity == 0)
+                        requestToUpdate = new UserRequest(selectedUser,selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
+                                selectedRequest.getCompletedDate());
+                        c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier,requestToUpdate);
+                        int requestUpdateSuccess = new ClientHandler(c).request().intResult;
+                        if(requestUpdateSuccess != -1)
                         {
-                            stockToUpdate = new Stock(selectedProduct,newStockQuantity);
-                            if(stockToUpdate.update() != -1)
+                            newStockQuantity = stockQuantity - requestQuantity;
+                            if(newStockQuantity == 0)
                             {
-                                productToUpdate = new Product(selectedProduct.getName(),selectedProduct.getDescription(),selectedProduct.getCategory(),"Unavailable",selectedProduct.getModel(),
-                                selectedProduct.getCostPrice(), selectedProduct.getSalesPrice(), selectedProduct.getEntryDate());
-                                
-                                if(productToUpdate.update() != -1)
+                                stockToUpdate = new Stock(selectedProduct,newStockQuantity);
+                                c = new Communication(ProductManagement_Methods.STOCK_UPDATE.methodIdentifier, stockToUpdate);
+                                int stockUpdateSuccess =  new ClientHandler(c).request().intResult;
+                                if(stockUpdateSuccess != -1)
                                 {
-                                    if(stockInsufficient)
+                                    productToUpdate = new Product(selectedProduct.getName(),selectedProduct.getDescription(),selectedProduct.getCategory(),"Unavailable",selectedProduct.getModel(),
+                                            selectedProduct.getCostPrice(), selectedProduct.getSalesPrice(), selectedProduct.getEntryDate());
+                                    c = new Communication(ProductManagement_Methods.PRODUCT_UPDATE.methodIdentifier,productToUpdate);
+                                    int productUpdateSuccess = new ClientHandler(c).request().intResult;
+                                    
+                                    if(productUpdateSuccess != -1)
                                     {
-                                         remainingRequestQuantity = initialRequestQuantity - requestQuantity;
-                                         UserRequest newRequest = new UserRequest(selectedUser,selectedProduct,remainingRequestQuantity,selectedRequest.getPriorityLevel(),"Unprocessed",orderDate,receiveDate);
-                                         
-                                         if(newRequest.insert() != -1)
-                                         {
-                                             String message = requestQuantity + " items out of a total of "+initialRequestQuantity+" items was ordered. The remaining "+ remainingRequestQuantity+" items should be purchased in order to fully fill this order.";
-                                             JOptionPane.showMessageDialog(null, message, "Notice of partial order fufillment", JOptionPane.INFORMATION_MESSAGE);                          
-                                             
-                                             JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);                                   
-                                             frmManageOrders manageOrders = new frmManageOrders();
-                                             manageOrders.setVisible(true);
-                                             this.setVisible(false);
-                                         }
-                                         
+                                        if(stockInsufficient)
+                                        {
+                                            remainingRequestQuantity = initialRequestQuantity - requestQuantity;
+                                            UserRequest newRequest = new UserRequest(selectedUser,selectedProduct,remainingRequestQuantity,selectedRequest.getPriorityLevel(),"Unprocessed",orderDate,receiveDate);
+                                            c = new Communication(ProductManagement_Methods.UR_INSERT.methodIdentifier,newRequest);
+                                            int requestInsertSuccess = new ClientHandler(c).request().intResult;
+                                            if(requestInsertSuccess != -1)
+                                            {
+                                                String message = requestQuantity + " items out of a total of "+initialRequestQuantity+" items was ordered. The remaining "+ remainingRequestQuantity+" items should be purchased in order to fully fill this order.";
+                                                JOptionPane.showMessageDialog(null, message, "Notice of partial order fufillment", JOptionPane.INFORMATION_MESSAGE);
+                                                
+                                                JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);
+                                                frmManageOrders manageOrders = new frmManageOrders();
+                                                manageOrders.setVisible(true);
+                                                this.setVisible(false);
+                                            }
+                                            
+                                        }
+                                        else
+                                        {
+                                            JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);
+                                            frmManageOrders manageOrders = new frmManageOrders();
+                                            manageOrders.setVisible(true);
+                                            this.setVisible(false);
+                                        }
+                                        
                                     }
                                     else
                                     {
-                                        JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);                                   
+                                        JOptionPane.showMessageDialog(null, "Something went wrong! Item was not successfully ordered.", "Unsuccessful Order Upload", JOptionPane.WARNING_MESSAGE);                                   
                                         frmManageOrders manageOrders = new frmManageOrders();
                                         manageOrders.setVisible(true);
                                         this.setVisible(false);
                                     }
-                                   
+                                }
+                            }
+                            else
+                            {
+                                stockToUpdate = new Stock(selectedProduct,newStockQuantity);
+                                c = new Communication(ProductManagement_Methods.STOCK_UPDATE.methodIdentifier, stockToUpdate);
+                                int stockUpdateSuccess =  new ClientHandler(c).request().intResult;
+                                if(stockUpdateSuccess != -1)
+                                {
+                                    if(stockInsufficient)
+                                    {
+                                        remainingRequestQuantity = initialRequestQuantity - requestQuantity;
+                                        UserRequest newRequest = new UserRequest(selectedUser,selectedProduct,remainingRequestQuantity,selectedRequest.getPriorityLevel(),"Unprocessed",orderDate,receiveDate);
+                                        c = new Communication(ProductManagement_Methods.UR_INSERT.methodIdentifier,newRequest);
+                                        int requestInsertSuccess = new ClientHandler(c).request().intResult;
+                                        
+                                        if(requestInsertSuccess != -1)
+                                        {
+                                            String message = requestQuantity + " items out of a total of "+initialRequestQuantity+" items was ordered. The remaining "+ remainingRequestQuantity+" items should be purchased in order to fully fill this order.";
+                                            JOptionPane.showMessageDialog(null, message, "Notice of partial order fufillment", JOptionPane.INFORMATION_MESSAGE);
+                                            
+                                            JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);
+                                            frmManageOrders manageOrders = new frmManageOrders();
+                                            manageOrders.setVisible(true);
+                                            this.setVisible(false);
+                                        }
+                                        
+                                    }
                                 }
                                 else
                                 {
@@ -766,64 +831,41 @@ public class frmManageOrders extends javax.swing.JFrame {
                                 }
                             }
                         }
-                        else
-                        {
-                            stockToUpdate = new Stock(selectedProduct,newStockQuantity);
-                            if(stockToUpdate.update() != -1)
-                            {
-                                if(stockInsufficient)
-                                    {
-                                         remainingRequestQuantity = initialRequestQuantity - requestQuantity;
-                                         UserRequest newRequest = new UserRequest(selectedUser,selectedProduct,remainingRequestQuantity,selectedRequest.getPriorityLevel(),"Unprocessed",orderDate,receiveDate);
-                                         
-                                         if(newRequest.insert() != -1)
-                                         {
-                                             String message = requestQuantity + " items out of a total of "+initialRequestQuantity+" items was ordered. The remaining "+ remainingRequestQuantity+" items should be purchased in order to fully fill this order.";
-                                             JOptionPane.showMessageDialog(null, message, "Notice of partial order fufillment", JOptionPane.INFORMATION_MESSAGE);                          
-                                             
-                                             JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);                                   
-                                             frmManageOrders manageOrders = new frmManageOrders();
-                                             manageOrders.setVisible(true);
-                                             this.setVisible(false);
-                                         }
-                                         
-                                    }
-                            }
-                            else
-                            {
-                                JOptionPane.showMessageDialog(null, "Something went wrong! Item was not successfully ordered.", "Unsuccessful Order Upload", JOptionPane.WARNING_MESSAGE);
-                                frmManageOrders manageOrders = new frmManageOrders();
-                                manageOrders.setVisible(true);
-                                this.setVisible(false);
-                            }
-                        }
+
                     }
-                    
+                } catch (IOException ex) {                    
+                    Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        else
-        {
-            order = new Order(selectedUser,orderDate,receiveDate,items);
-            if(order.insert() != -1)
+            else
             {
-               requestToUpdate = new UserRequest(selectedUser,selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
-               selectedRequest.getCompletedDate());
-                    
-                    if(requestToUpdate.update() != -1)
+                order = new Order(selectedUser,orderDate,receiveDate,items);
+                c = new Communication(ProductManagement_Methods.ORDER_INSERT.methodIdentifier, order);
+                int orderInsertSuccess =  new ClientHandler(c).request().intResult;
+                if(orderInsertSuccess != -1)
+                {
+                    requestToUpdate = new UserRequest(selectedUser,selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
+                            selectedRequest.getCompletedDate());
+                    c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier,requestToUpdate);
+                    int requestUpdateSuccess = new ClientHandler(c).request().intResult;
+                                        
+                    if(requestUpdateSuccess != -1)
                     {
                         newStockQuantity = stockQuantity - requestQuantity;
                         if(newStockQuantity == 0)
                         {
                             stockToUpdate = new Stock(selectedProduct,newStockQuantity);
-                            if(stockToUpdate.update() != -1)
+                            c = new Communication(ProductManagement_Methods.STOCK_UPDATE.methodIdentifier, stockToUpdate);
+                            int stockUpdateSuccess = new ClientHandler(c).request().intResult;
+                            
+                            if(stockUpdateSuccess != -1)
                             {
                                 productToUpdate = new Product(selectedProduct.getName(),selectedProduct.getDescription(),selectedProduct.getCategory(),"Not Available",selectedProduct.getModel(),
-                                selectedProduct.getCostPrice(), selectedProduct.getSalesPrice(), selectedProduct.getEntryDate());
+                                        selectedProduct.getCostPrice(), selectedProduct.getSalesPrice(), selectedProduct.getEntryDate());
+                                c = new Communication(ProductManagement_Methods.PRODUCT_UPDATE.methodIdentifier, productToUpdate);
+                                int productUpdateSuccess = new ClientHandler(c).request().intResult;
                                 
-                                if(productToUpdate.update() != -1)
+                                if(productUpdateSuccess != -1)
                                 {
                                     JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);
                                     frmManageOrders manageOrders = new frmManageOrders();
@@ -842,7 +884,10 @@ public class frmManageOrders extends javax.swing.JFrame {
                         else
                         {
                             stockToUpdate = new Stock(selectedProduct,newStockQuantity);
-                            if(stockToUpdate.update() != -1)
+                            c = new Communication(ProductManagement_Methods.STOCK_UPDATE.methodIdentifier, stockToUpdate);
+                            int stockUpdateSuccess = new ClientHandler(c).request().intResult;
+                            
+                            if(stockUpdateSuccess != -1)
                             {
                                 JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);
                                 frmManageOrders manageOrders = new frmManageOrders();
@@ -858,7 +903,10 @@ public class frmManageOrders extends javax.swing.JFrame {
                             }
                         }
                     }
+                }
             }
+        } catch (IOException ex) {
+            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_btnOrderMouseClicked
@@ -871,48 +919,61 @@ public class frmManageOrders extends javax.swing.JFrame {
         int answer = JOptionPane.showConfirmDialog(null, "Do you want to purchase more items than the requested amount?","Order Additional Quantity",JOptionPane.YES_NO_OPTION);
         if(answer == 0)// yes
         {
-            int quantity = Integer.parseInt(JOptionPane.showInputDialog(null,"How many items do you want to purchase?","Specify Quantity",JOptionPane.QUESTION_MESSAGE));
-            stockItems.add(new Stock(selectedProduct,quantity));
-            
-            if(requestToUpdate.update() != -1)
-            {
-                String docName = "stockPurchaseOrder_"+selectedProduct.getName()+".pdf";
-                Reporting report = new Reporting(stockItems, docName);
-                report.generatePurchaseOrder();
-                String message = "Please find attached, to this mail, the purchase order for Product Name: " + selectedProduct.getName();
-                String path = null;//"C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\";
-                Email email = new Email("eldanefer1@gmail.com", message, "Purchase Order Form", path);
-                email.sendEmail();
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "Something went wrong! Purchase order was not successfully sent.", "Purchase Order Unsuccessfully Send ", JOptionPane.WARNING_MESSAGE);
-                frmManageOrders manageOrders = new frmManageOrders();
-                manageOrders.setVisible(true);
-                this.setVisible(false);
+            try {
+                int quantity = Integer.parseInt(JOptionPane.showInputDialog(null,"How many items do you want to purchase?","Specify Quantity",JOptionPane.QUESTION_MESSAGE));
+                stockItems.add(new Stock(selectedProduct,quantity));
+                c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier, requestToUpdate);
+                int requestUpdateSuccess =  new ClientHandler(c).request().intResult;
+                
+                if(requestUpdateSuccess != -1)
+                {
+                    String docName = "stockPurchaseOrder_"+selectedProduct.getName()+".pdf";
+                    Reporting report = new Reporting(stockItems, docName);
+                    report.generatePurchaseOrder();
+                    String message = "Please find attached, to this mail, the purchase order for Product Name: " + selectedProduct.getName();
+                    String path = null;//"C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\";
+                    Email email = new Email("eldanefer1@gmail.com", message, "Purchase Order Form", path);
+                    email.sendEmail();
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Something went wrong! Purchase order was not successfully sent.", "Purchase Order Unsuccessfully Send ", JOptionPane.WARNING_MESSAGE);
+                    frmManageOrders manageOrders = new frmManageOrders();
+                    manageOrders.setVisible(true);
+                    this.setVisible(false);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
             }
            
         }
         else
         {
-            if(requestToUpdate.update() != -1)
-            {
-                //JOptionPane.showMessageDialog(null, "The requested quantity was send for purchase", "Purchase Order Send", JOptionPane.INFORMATION_MESSAGE);
-                stockItems.add(new Stock(selectedProduct,requestQuantity));
-                String docName = "stockPurchaseOrder_"+selectedProduct.getName()+".pdf";
-                Reporting report = new Reporting(stockItems, docName);
-                report.generatePurchaseOrder();
-                String message = "Please find attached, to this mail, the purchase order for Product Name: " + selectedProduct.getName();
-                String path = null;//"C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\";
-                Email email = new Email("eldanefer1@gmail.com", message, "Purchase Order Form", path);
-                email.sendEmail();
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "Something went wrong! Purchase order was not successfully sent.", "Purchase Order Unsuccessfully Send ", JOptionPane.WARNING_MESSAGE);
-                frmManageOrders manageOrders = new frmManageOrders();
-                manageOrders.setVisible(true);
-                this.setVisible(false);
+            try {
+                c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier, requestToUpdate);
+                int requestUpdateSuccess = new ClientHandler(c).request().intResult;
+                
+                if(requestUpdateSuccess != -1)
+                {
+                    //JOptionPane.showMessageDialog(null, "The requested quantity was send for purchase", "Purchase Order Send", JOptionPane.INFORMATION_MESSAGE);
+                    stockItems.add(new Stock(selectedProduct,requestQuantity));
+                    String docName = "stockPurchaseOrder_"+selectedProduct.getName()+".pdf";
+                    Reporting report = new Reporting(stockItems, docName);
+                    report.generatePurchaseOrder();
+                    String message = "Please find attached, to this mail, the purchase order for Product Name: " + selectedProduct.getName();
+                    String path = null;//"C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\";
+                    Email email = new Email("eldanefer1@gmail.com", message, "Purchase Order Form", path);
+                    email.sendEmail();
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Something went wrong! Purchase order was not successfully sent.", "Purchase Order Unsuccessfully Send ", JOptionPane.WARNING_MESSAGE);
+                    frmManageOrders manageOrders = new frmManageOrders();
+                    manageOrders.setVisible(true);
+                    this.setVisible(false);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             

@@ -9,13 +9,19 @@ import PersonManagement.User;
 import ProductManagement.Category;
 import ProductManagement.Model;
 import ProductManagement.Product;
+import ProductManagement.ProductManagement_Methods;
 import ProductManagement.Stock;
 import ProductManagement.UserRequest;
+import bc_stationary_bll.Communication;
 import bc_stationary_bll.GenericSerializer;
+import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -31,32 +37,39 @@ public class frmManageRequest extends javax.swing.JFrame {
      */
     public ArrayList<Product> products;
     public User loggedInuser;
+    Communication c;
     public frmManageRequest() {
-        initComponents();
-        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45,45,45));
-        Product product = new Product();
-         products = product.select();
-         for(Product p:products){
-            cmbProduct.addItem(p.getName()+"("+ p.getDescription()+"-"+p.getModel().getDescription()+")");
+        try {
+            initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45,45,45));
+            Product product = new Product();
+            c = new Communication(ProductManagement_Methods.PRODUCT_SELECT_ALL.methodIdentifier, product);
+            products = new ClientHandler(c).request().listResult;
+            
+            for(Product p:products){
+                cmbProduct.addItem(p.getName()+"("+ p.getDescription()+"-"+p.getModel().getDescription()+")");
+            }
+            
+            loggedInuser = new User();
+            GenericSerializer gen = new GenericSerializer("loggedUser.txt",loggedInuser);
+            loggedInuser = (User)gen.Deserialize();
+            
+            txtProductName.setEditable(false);
+            txtCategory.setEditable(false);
+            txtProductModel.setEditable(false);
+            txtDescription.setEditable(false);
+            
+            txtLoggedUser.setText(loggedInuser.getPerson().getName() +" "+ loggedInuser.getPerson().getSurname() );
+            txtLoggedUser.setEditable(false);
+            
+            LocalDate local = LocalDate.now();
+            Date date = Date.valueOf(local);
+            txtRequestDate.setText(date.toString());
+            txtRequestDate.setEditable(false);
+        } catch (IOException ex) {
+            Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        loggedInuser = new User(); 
-        GenericSerializer gen = new GenericSerializer("loggedUser.txt",loggedInuser);
-        loggedInuser = (User)gen.Deserialize();
-                
-        txtProductName.setEditable(false);
-        txtCategory.setEditable(false);
-        txtProductModel.setEditable(false);
-        txtDescription.setEditable(false);
-        
-        txtLoggedUser.setText(loggedInuser.getPerson().getName() +" "+ loggedInuser.getPerson().getSurname() );
-        txtLoggedUser.setEditable(false);
-        
-        LocalDate local = LocalDate.now();
-        Date date = Date.valueOf(local);
-        txtRequestDate.setText(date.toString());
-        txtRequestDate.setEditable(false);
     }
 
     /**
@@ -620,36 +633,53 @@ public class frmManageRequest extends javax.swing.JFrame {
  
                     if((newProductName.equals(existingProductName))&&(newUserName.equals(existingUserName)))
                     {
-                       newQuantity = uNew.getQuantity();
-                       existingQuantity = uOld.getQuantity();
-                       uNew.setQuantity(newQuantity + existingQuantity); // add quantities of the same Unprocessed Product
-                       
-                       newPriority = uNew.getPriorityLevel();
-                       existingPriority = uOld.getPriorityLevel();
-                       if(newPriority < existingPriority) // check if new priority is now higher or not
-                       {
-                           uNew.setPriorityLevel(existingPriority);
-                       }
-                       
-                       if(uNew.update() == -1) // update existing Unprocessed Product
-                       {
-                            success = false;
-                       }
+                        try {
+                            newQuantity = uNew.getQuantity();
+                            existingQuantity = uOld.getQuantity();
+                            uNew.setQuantity(newQuantity + existingQuantity); // add quantities of the same Unprocessed Product
+                            
+                            newPriority = uNew.getPriorityLevel();
+                            existingPriority = uOld.getPriorityLevel();
+                            if(newPriority < existingPriority) // check if new priority is now higher or not
+                            {
+                                uNew.setPriorityLevel(existingPriority);
+                            }
+                            
+                            c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier, uNew);
+                            int uNewUpdateSuccess = new ClientHandler(c).request().intResult;
+                            if(uNewUpdateSuccess == -1) // update existing Unprocessed Product
+                            {
+                                success = false;
+                            }} catch (IOException ex) {
+                            Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     else
                     {
-                        if(uNew.insert() == -1)
-                        {
-                            success = false;
+                        try {
+                            c = new Communication(ProductManagement_Methods.UR_INSERT.methodIdentifier, uNew);
+                            int uNewInsertSuccess = new ClientHandler(c).request().intResult;
+                            if(uNewInsertSuccess == -1)
+                            {
+                                success = false;
+                            }
+                        } catch (IOException ex) {
+                            Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }  
             }
             else
             {
-                if(uNew.insert() == -1)
-                {
-                    success = false;
+                try {
+                    c = new Communication(ProductManagement_Methods.UR_INSERT.methodIdentifier, uNew);
+                    int uNewInsertSuccess = new ClientHandler(c).request().intResult;
+                    if(uNewInsertSuccess == -1)
+                    {
+                        success = false;
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

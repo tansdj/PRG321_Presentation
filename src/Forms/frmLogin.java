@@ -250,10 +250,9 @@ public class frmLogin extends javax.swing.JFrame {
             User userLogin = new User(userName,passWord);
             c = new Communication(PersonManagement_Methods.USER_TEST_LOGIN.methodIdentifier,userLogin);
             allowAccess = new ClientHandler(c).request().intResult;
-            //allowAccess = userLogin.testLogin();
+
             if(allowAccess == 1)
             {
-                //User currentUser = userLogin.selectSpecUser();
                 c = new Communication(PersonManagement_Methods.USER_SELECT_SPEC.methodIdentifier,userLogin);
                 User currentUser = (User) new ClientHandler(c).request().objectResult;
                 String accessLevel = currentUser.getAccessLevel();
@@ -301,7 +300,6 @@ public class frmLogin extends javax.swing.JFrame {
             try {
                 String username = txtUsername.getText();
                 User user = new User(username,"");
-                //boolean existingUser = user.testForExistingUser();
                 c = new Communication(PersonManagement_Methods.USER_TEST_EXISTING.methodIdentifier,user);
                 boolean existingUser = new ClientHandler(c).request().boolResult;
                 if(username.equals("") || (!existingUser))
@@ -316,7 +314,6 @@ public class frmLogin extends javax.swing.JFrame {
                         UserSecurityQuestions uQuestion = new UserSecurityQuestions(user);
                         c = new Communication(PersonManagement_Methods.USQ_SELECT_SPEC.methodIdentifier,uQuestion);
                         UserSecurityQuestions specUQuestion = (UserSecurityQuestions) new ClientHandler(c).request().objectResult;
-                        //UserSecurityQuestions specUQuestion = uQuestion.selectSpecUserQuestions();
                         SecurityQuestions questions = specUQuestion.getQuestion();
                         String question = questions.getQuestion();
                         String answer = specUQuestion.getAnswer();
@@ -335,7 +332,6 @@ public class frmLogin extends javax.swing.JFrame {
                                     {
                                         c = new Communication(PersonManagement_Methods.USER_SELECT_ALL.methodIdentifier,user);
                                         ArrayList<User> allUsers = new ClientHandler(c).request().listResult;
-                                        //ArrayList<User> allUsers = user.select();
                                         User currentUser = null;
                                         
                                         for(User u : allUsers)

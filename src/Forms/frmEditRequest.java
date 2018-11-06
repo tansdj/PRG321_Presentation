@@ -5,9 +5,15 @@
  */
 package Forms;
 
+import ProductManagement.ProductManagement_Methods;
 import ProductManagement.UserRequest;
+import bc_stationary_bll.Communication;
+import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -22,20 +28,26 @@ public class frmEditRequest extends javax.swing.JFrame {
      * Creates new form frmEditRequest
      */
     public ArrayList<UserRequest> requestItems;
+    Communication c;
     public frmEditRequest() {
-        initComponents();
-        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45, 45, 45));
-        UserRequest request = new UserRequest();
-        requestItems = request.select();
-        
-        DefaultListModel model = new DefaultListModel();
-        // Populate Listbox
+        try {
+            initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45, 45, 45));
+            UserRequest request = new UserRequest();
+            c  = new Communication(ProductManagement_Methods.UR_SELECT_ALL.methodIdentifier, request);
+            requestItems = new ClientHandler(c).request().listResult;
+            
+            DefaultListModel model = new DefaultListModel();
+            // Populate Listbox
             for (UserRequest u : requestItems) {
                 model.addElement(u);
-            }   
-
-        lbxRequestedItems.setModel(model);
+            }
+            
+            lbxRequestedItems.setModel(model);
+        } catch (IOException ex) {
+            Logger.getLogger(frmEditRequest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -265,12 +277,18 @@ public class frmEditRequest extends javax.swing.JFrame {
         int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove this request item?","Remove Request Item",JOptionPane.YES_NO_OPTION);
         if(answer == 0)// if Yes
         {
-            if(selectedRequest.delete() != -1)
-            {
-                JOptionPane.showMessageDialog(null, "The request item was successfully deleted","Deletion Successful",JOptionPane.INFORMATION_MESSAGE);
-                StandardMainDash mainDash = new StandardMainDash();
-                mainDash.setVisible(true);
-                this.setVisible(false);                                    
+            try {
+                c = new Communication(ProductManagement_Methods.UR_DELETE.methodIdentifier, selectedRequest);
+                int requestDeleteSuccess = new ClientHandler(c).request().intResult;
+                if(requestDeleteSuccess != -1)
+                {
+                    JOptionPane.showMessageDialog(null, "The request item was successfully deleted","Deletion Successful",JOptionPane.INFORMATION_MESSAGE);
+                    StandardMainDash mainDash = new StandardMainDash();
+                    mainDash.setVisible(true);                                    
+                    this.setVisible(false);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(frmEditRequest.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_lbxRequestedItemsValueChanged

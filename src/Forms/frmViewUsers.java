@@ -8,13 +8,19 @@ package Forms;
 import PersonManagement.Address;
 import PersonManagement.Contact;
 import PersonManagement.Person;
+import PersonManagement.PersonManagement_Methods;
 import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
+import bc_stationary_bll.Communication;
 import bc_stationary_bll.SoundEx;
+import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 
@@ -28,20 +34,25 @@ public class frmViewUsers extends javax.swing.JFrame {
      * Creates new form frmViewUsers
      */
     public ArrayList<User> userList;
-
+    Communication c;
     public frmViewUsers() {
-        initComponents();
-        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45, 45, 45));
-        User user = new User();
-        userList = user.select();
-
-        DefaultListModel model = new DefaultListModel();
-        // Populate Listbox
-        for (User u : userList) {
-            model.addElement(u);
+        try {
+            initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45, 45, 45));
+            User user = new User();
+            c = new Communication(PersonManagement_Methods.USER_SELECT_ALL.methodIdentifier, user);
+            userList = new ClientHandler(c).request().listResult;
+            
+            DefaultListModel model = new DefaultListModel();
+            // Populate Listbox
+            for (User u : userList) {
+                model.addElement(u);
+            }
+            lbxUsers.setModel(model);
+        } catch (IOException ex) {
+            Logger.getLogger(frmViewUsers.class.getName()).log(Level.SEVERE, null, ex);
         }
-        lbxUsers.setModel(model);
 
     }
 
@@ -619,13 +630,18 @@ public class frmViewUsers extends javax.swing.JFrame {
         ArrayList<User> usersThatFitCriteria = new ArrayList<User>();
         String searchCode = "", userCode = "", searchText = txtSearch.getText();
         if (searchText.equals("")) {
-            userList = user.select();
-            DefaultListModel model = new DefaultListModel();
-
-            for (User u : userList) {
-                model.addElement(u);
+            try {
+                c = new Communication(PersonManagement_Methods.USER_SELECT_ALL.methodIdentifier, user);
+                userList = new ClientHandler(c).request().listResult;
+                DefaultListModel model = new DefaultListModel();
+                
+                for (User u : userList) {
+                    model.addElement(u);
+                }
+                lbxUsers.setModel(model);
+            } catch (IOException ex) {
+                Logger.getLogger(frmViewUsers.class.getName()).log(Level.SEVERE, null, ex);
             }
-            lbxUsers.setModel(model);
         } else {
             int numSearchChars; // amount of characters that are typed into the search box.
 
@@ -688,13 +704,17 @@ public class frmViewUsers extends javax.swing.JFrame {
             Contact contact = null;
             UserSecurityQuestions userSecQ = new UserSecurityQuestions(selectedUser, new SecurityQuestions(), "");
             try {
-                Person per = person.selectSpecPerson();
+                c = new Communication(PersonManagement_Methods.PERSON_SELECT_SPECIFIC.methodIdentifier, person);
+                Person per = (Person) new ClientHandler(c).request().objectResult;
                 address = per.getAddress();
                 contact = per.getContact();
 
-                userSecQ = userSecQ.selectSpecUserQuestions();
-            } catch (SQLException se) {
+                c = new Communication(PersonManagement_Methods.USQ_SELECT_SPEC.methodIdentifier, userSecQ);
+                userSecQ = (UserSecurityQuestions) new ClientHandler(c).request().objectResult;
+            } 
+            catch (IOException io) {
             }
+            
 
             txtSearch.setText(person.toString());
             txtFirstname.setText(person.getName());

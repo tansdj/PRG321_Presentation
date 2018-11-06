@@ -9,15 +9,21 @@ import PersonManagement.Address;
 import PersonManagement.Contact;
 import PersonManagement.Department;
 import PersonManagement.Person;
+import PersonManagement.PersonManagement_Methods;
 import PersonManagement.SecurityQuestions;
+import bc_stationary_bll.Communication;
 import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import bc_stationary_bll.Validation;
+import bc_stationary_management_system.ClientHandler;
 import com.mysql.jdbc.exceptions.DeadlockTimeoutRollbackMarker;
+import java.io.IOException;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.UIManager;
 
 /**
@@ -29,17 +35,24 @@ public class frmRegisterUser extends javax.swing.JFrame {
     /**
      * Creates new form frmRegisterUser
      */
+    Communication c;
     public frmRegisterUser() {
-        initComponents();
-        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45,45,45));
-        ArrayList<Department> departments = new ArrayList<Department>();
-        Department dept = new Department();
-        departments = dept.select();
-        for(Department d:departments){
-            cmbDepartment.addItem(d.getName());
+        try {
+            initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45,45,45));
+            ArrayList<Department> departments = new ArrayList<Department>();
+            Department dept = new Department();
+            c = new Communication(PersonManagement_Methods.DEP_SELECT_ALL.methodIdentifier, dept);
+            departments = new ClientHandler(c).request().listResult;
+            
+            for(Department d:departments){
+                cmbDepartment.addItem(d.getName());
+            }
+            pnlDepartmentInfo1.setVisible(false);
+        } catch (IOException ex) {
+            Logger.getLogger(frmRegisterUser.class.getName()).log(Level.SEVERE, null, ex);
         }
-        pnlDepartmentInfo1.setVisible(false);
 
     }
 
@@ -654,7 +667,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
         login.setVisible(true);
         this.setVisible(false); 
     }//GEN-LAST:event_btnBackActionPerformed
-
+    
     private void btnNextRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextRegistrationActionPerformed
         //Variable Declaration
         String userFirstName="", userLastName="", userCampus="", addressLine1="", addressLine2="", addressCity="", contactCell="", contactEmail="", userID="", userDepart="",addressPostal="";

@@ -9,9 +9,13 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import ProductManagement.*;
 import bc_stationary_bll.*;
+import bc_stationary_management_system.ClientHandler;
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 /**
  *
@@ -23,17 +27,23 @@ public class frmAddProduct extends javax.swing.JFrame {
      * Creates new form frmAddProduct
      */
     
+    Communication c;
     public frmAddProduct() {
-        initComponents();
-        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45,45,45));
-        txtStatus.setEditable(false);
-        
-        Category category = new Category();
-        ArrayList<Category> categories = category.select();
-        
-        for(Category c:categories){
-            cmbCategory.addItem(c.getDescription());
+        try {
+            initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45,45,45));
+            txtStatus.setEditable(false);
+            
+            Category category = new Category();
+            c = new Communication(ProductManagement_Methods.CAT_SELECT_ALL.methodIdentifier,category);
+            ArrayList<Category> categories = new ClientHandler(c).request().listResult;
+            
+            for(Category c:categories){
+                cmbCategory.addItem(c.getDescription());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmAddProduct.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -538,7 +548,7 @@ public class frmAddProduct extends javax.swing.JFrame {
 
     public Product productToAdd;
     private void btnInsertProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertProductActionPerformed
-        //Variable decleration
+        //Variable declaration
         String pName, pDescription, pStatus, pCategory, pModel;
         int pQuantity;
         LocalDate local = LocalDate.now();
@@ -548,6 +558,7 @@ public class frmAddProduct extends javax.swing.JFrame {
         Validation validation = new Validation();
         Category category;
         Model model;
+        
         //Assigning variables values            
         try 
         {
@@ -589,14 +600,23 @@ public class frmAddProduct extends javax.swing.JFrame {
                                          pCategory = cmbCategory.getSelectedItem().toString();
                                          category = new Category(pCategory);
                                          
-                                         model = new Model(pModel);                            
-                                         if(model.insert() != -1)
+                                         model = new Model(pModel);
+                                         c =  new Communication(ProductManagement_Methods.MODEL_INSERT.methodIdentifier,model);
+                                         int modelInsertSuccess = new ClientHandler(c).request().intResult;
+                                         if(modelInsertSuccess != -1)
                                          {
                                             productToAdd = new Product(pName, pDescription, category, pStatus, model, costPrice, salePrice, date); 
                                             Stock stock = new Stock(productToAdd,pQuantity);
-                                            if((productToAdd.insert() != -1)&&(category.insert() != -1))
+                                            c = new Communication(ProductManagement_Methods.PRODUCT_INSERT.methodIdentifier,productToAdd);
+                                            int productInsertSuccess = new ClientHandler(c).request().intResult;
+                                            
+                                            c = new Communication(ProductManagement_Methods.CAT_INSERT.methodIdentifier, category);
+                                            int categoryInsertSuccess = new ClientHandler(c).request().intResult;
+                                            if((productInsertSuccess != -1)&&(categoryInsertSuccess != -1))
                                             {
-                                                if(stock.insert() != -1)
+                                                c = new Communication(ProductManagement_Methods.STOCK_INSERT.methodIdentifier,stock);
+                                                int stockInsertSuccess = new ClientHandler(c).request().intResult;
+                                                if(stockInsertSuccess != -1)
                                                 {
                                                     JOptionPane.showMessageDialog(null, "The product was successfully registered","Registration Successful",JOptionPane.INFORMATION_MESSAGE);
                                         
@@ -618,17 +638,24 @@ public class frmAddProduct extends javax.swing.JFrame {
                                          pCategory = txtCategory.getText(); 
                                          category = new Category(pCategory);
                                          
-                                         
-                                         if(category.insert() != -1)
+                                         c = new Communication(ProductManagement_Methods.CAT_INSERT.methodIdentifier, category);
+                                         int categoryInsertSuccess = new ClientHandler(c).request().intResult;
+                                         if(categoryInsertSuccess != -1)
                                          {
                                             model = new Model(pModel);
-                                            if(model.insert() != -1)
+                                            c = new Communication(ProductManagement_Methods.MODEL_INSERT.methodIdentifier,model);
+                                            int modelInsertSuccess = new ClientHandler(c).request().intResult;
+                                            if(modelInsertSuccess != -1)
                                             {
                                                 productToAdd = new Product(pName, pDescription, category, pStatus, model, costPrice, salePrice, date); 
                                                 Stock stock = new Stock(productToAdd,pQuantity);
-                                                if((productToAdd.insert() != -1))
+                                                c = new Communication(ProductManagement_Methods.PRODUCT_INSERT.methodIdentifier,productToAdd);
+                                                int productInsertSuccess = new ClientHandler(c).request().intResult;
+                                                if((productInsertSuccess != -1))
                                                 {
-                                                    if(stock.insert() != -1)
+                                                    c = new Communication(ProductManagement_Methods.STOCK_INSERT.methodIdentifier,stock);
+                                                    int stockInsertSuccess = new ClientHandler(c).request().intResult;
+                                                    if(stockInsertSuccess != -1)
                                                     {
                                                         JOptionPane.showMessageDialog(null, "The product was successfully registered","Registration Successful",JOptionPane.INFORMATION_MESSAGE);
                                         

@@ -8,10 +8,15 @@ package Forms;
 import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.*;
+import bc_stationary_bll.Communication;
 import bc_stationary_bll.Validation;
+import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -26,28 +31,35 @@ public class frmManageProfile extends javax.swing.JFrame {
      * Creates new form frmManageProfile
      */
     public ArrayList<User> userList;
-    
+    Communication c;
     public frmManageProfile() {
-        initComponents();
-        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45, 45, 45));
-
-        User user = new User();
-        userList = user.select();
-
-        DefaultListModel model = new DefaultListModel();
-        // Populate Listbox
-        for (User u : userList) {
-            model.addElement(u);
-        }
-
-        lbxUsers.setModel(model);
-
-        ArrayList<Department> departments = new ArrayList<Department>();
-        Department dept = new Department();
-        departments = dept.select();
-        for (Department d : departments) {
-            cmbDepartment.addItem(d.getName());
+        try {
+            initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45, 45, 45));
+            
+            User user = new User();
+            c = new Communication(PersonManagement_Methods.USER_SELECT_ALL.methodIdentifier, user);
+            userList = new ClientHandler(c).request().listResult;
+            
+            DefaultListModel model = new DefaultListModel();
+            // Populate Listbox
+            for (User u : userList) {
+                model.addElement(u);
+            }
+            
+            lbxUsers.setModel(model);
+            
+            ArrayList<Department> departments = new ArrayList<Department>();
+            Department dept = new Department();
+            c = new Communication(PersonManagement_Methods.DEP_SELECT_ALL.methodIdentifier, dept);
+            departments = new ClientHandler(c).request().listResult;
+            
+            for (Department d : departments) {
+                cmbDepartment.addItem(d.getName());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmManageProfile.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -667,12 +679,15 @@ public class frmManageProfile extends javax.swing.JFrame {
         Department dep = null;
         UserSecurityQuestions userSecQ = new UserSecurityQuestions(selectedUser, new SecurityQuestions(), "");
         try {
-            Person per = person.selectSpecPerson();
+            c = new Communication(PersonManagement_Methods.PERSON_SELECT_SPECIFIC.methodIdentifier, person);
+            Person per = (Person)new ClientHandler(c).request().objectResult;
             address = per.getAddress();
             contact = per.getContact();
             dep = per.getDepartment();
-            userSecQ = userSecQ.selectSpecUserQuestions();
-        } catch (SQLException se) {
+            c = new Communication(PersonManagement_Methods.USQ_SELECT_SPEC.methodIdentifier, userSecQ);
+            userSecQ = (UserSecurityQuestions) new ClientHandler(c).request().objectResult;
+        } 
+        catch (IOException io) {
 
         }
 
@@ -713,96 +728,101 @@ public class frmManageProfile extends javax.swing.JFrame {
     }//GEN-LAST:event_lbxUsersValueChanged
 
     private void btnEditUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditUserActionPerformed
-        //Variable Declaration
-        String userFirstName="", userLastName="", userIDNumber="", userCampus="", addressLine1="", addressLine2="", addressCity="",
-        contactCell="", contactEmail="", addressPostal="",
-        userUsername="", userAccessLevel="", userStatus="", userSecQuestion="", userSecAnswer="",
-        departmentName="";
-        User userToUpdate;
-        Person personToUpdate;
-        Address addressToUpdate;
-        Contact contactToUpdate;
-        Department deptToUpdate;
-
-        UserSecurityQuestions userSecToUpdate;
-        Validation validation = new Validation();
-
-        //Assigning values to variables
-        userFirstName = txtFirstnameUpdate.getText();
-        userLastName = txtLastnameUpdate.getText();
-        userIDNumber = txtIDNumber.getText();
-
-        if(cmbCampus.getSelectedItem().toString() != "")
-        {
-            userCampus = cmbCampus.getSelectedItem().toString();
-            lblCampusUpdate.setForeground(Color.white);
-            if(!"".equals(txtLine1.getText()))
+        try {
+            String userFirstName="", userLastName="", userIDNumber="", userCampus="", addressLine1="", addressLine2="", addressCity="",
+                    contactCell="", contactEmail="", addressPostal="",
+                    userUsername="", userAccessLevel="", userStatus="", userSecQuestion="", userSecAnswer="",
+                    departmentName="";
+            User userToUpdate;
+            Person personToUpdate;
+            Address addressToUpdate;
+            Contact contactToUpdate;
+            Department deptToUpdate;
+            UserSecurityQuestions userSecToUpdate;
+            Validation validation = new Validation();
+            //Assigning values to variables
+            userFirstName = txtFirstnameUpdate.getText();
+            userLastName = txtLastnameUpdate.getText();
+            userIDNumber = txtIDNumber.getText();
+            if(cmbCampus.getSelectedItem().toString() != "")
             {
-                addressLine1 = txtLine1.getText();
-                lblLine1.setForeground(Color.white);
-                if(!"".equals(txtLine2.getText()))
+                userCampus = cmbCampus.getSelectedItem().toString();
+                lblCampusUpdate.setForeground(Color.white);
+                if(!"".equals(txtLine1.getText()))
                 {
-                    addressLine2 = txtLine2.getText();
-                    lblLine2.setForeground(Color.white);
-                    if((validation.testProperString(txtCity.getText()))&&(!"".equals(txtCity.getText())))
+                    addressLine1 = txtLine1.getText();
+                    lblLine1.setForeground(Color.white);
+                    if(!"".equals(txtLine2.getText()))
                     {
-                        addressCity = txtCity.getText();
-                        lblCity.setForeground(Color.white);
-                        if((validation.testNumericString(txtPostalCode.getText()))&&(!"".equals(txtPostalCode.getText())))
+                        addressLine2 = txtLine2.getText();
+                        lblLine2.setForeground(Color.white);
+                        if((validation.testProperString(txtCity.getText()))&&(!"".equals(txtCity.getText())))
                         {
-                            if(validation.testLength(txtPostalCode.getText(), 4, 4))
+                            addressCity = txtCity.getText();
+                            lblCity.setForeground(Color.white);
+                            if((validation.testNumericString(txtPostalCode.getText()))&&(!"".equals(txtPostalCode.getText())))
                             {
-                                addressPostal = txtPostalCode.getText();
-                                lblPostalCode.setForeground(Color.white);
-                                if(validation.testNumericString(txtCellphoneNo.getText()))
+                                if(validation.testLength(txtPostalCode.getText(), 4, 4))
                                 {
-                                    if(validation.testLength(txtCellphoneNo.getText(), 10, 10))
+                                    addressPostal = txtPostalCode.getText();
+                                    lblPostalCode.setForeground(Color.white);
+                                    if(validation.testNumericString(txtCellphoneNo.getText()))
                                     {
-                                        contactCell = txtCellphoneNo.getText();
-                                        lblCellNo.setForeground(Color.white);
-                                        char[] emailCharacters = new char[]{'@','.'};
-                                        if((validation.testContains(txtEmail.getText(), emailCharacters))&&(!"".equals(txtEmail.getText())))
+                                        if(validation.testLength(txtCellphoneNo.getText(), 10, 10))
                                         {
-                                            contactEmail = txtEmail.getText();
-                                            lblEmail.setForeground(Color.white);
-                                            if(!"".equals(cmbDepartment.getSelectedItem().toString()))
+                                            contactCell = txtCellphoneNo.getText();
+                                            lblCellNo.setForeground(Color.white);
+                                            char[] emailCharacters = new char[]{'@','.'};
+                                            if((validation.testContains(txtEmail.getText(), emailCharacters))&&(!"".equals(txtEmail.getText())))
                                             {
-                                                departmentName = cmbDepartment.getSelectedItem().toString();
-                                                lblDepartment.setForeground(Color.white);
-                                                userUsername = txtUsername1.getText();
-                                                userAccessLevel = txtAccessLevel.getText();
-                                                userStatus = txtStatus.getText();
-                                                userSecQuestion = txtSecQuestion.getText();
-                                                if(!"".equals(txtAnswer1.getText()))
+                                                contactEmail = txtEmail.getText();
+                                                lblEmail.setForeground(Color.white);
+                                                if(!"".equals(cmbDepartment.getSelectedItem().toString()))
                                                 {
+                                                    departmentName = cmbDepartment.getSelectedItem().toString();
+                                                    lblDepartment.setForeground(Color.white);
+                                                    userUsername = txtUsername1.getText();
+                                                    userAccessLevel = txtAccessLevel.getText();
+                                                    userStatus = txtStatus.getText();
+                                                    userSecQuestion = txtSecQuestion.getText();
+                                                    if(!"".equals(txtAnswer1.getText()))
+                                                    {
                                                         userSecAnswer = txtAnswer1.getText();
                                                         lblAnswer1.setForeground(Color.white);
-                                                }
-                                                else
-                                                {
+                                                    }
+                                                    else
+                                                    {
                                                         JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Security Answer",JOptionPane.WARNING_MESSAGE);
                                                         lblAnswer1.setForeground(Color.red);
                                                         txtAnswer1.grabFocus();
                                                         txtAnswer1.setText("");
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Department",JOptionPane.WARNING_MESSAGE);
+                                                    lblDepartment.setForeground(Color.red);
                                                 }
                                             }
                                             else
                                             {
-                                                JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Department",JOptionPane.WARNING_MESSAGE);
-                                                lblDepartment.setForeground(Color.red);
+                                                JOptionPane.showMessageDialog(null, "This is not a valid email address. Please Try Again!","Incorrect Email",JOptionPane.WARNING_MESSAGE);
+                                                txtEmail.setText("");
+                                                txtEmail.grabFocus();
+                                                lblEmail.setForeground(Color.red);
                                             }
                                         }
                                         else
                                         {
-                                            JOptionPane.showMessageDialog(null, "This is not a valid email address. Please Try Again!","Incorrect Email",JOptionPane.WARNING_MESSAGE);
-                                            txtEmail.setText("");
-                                            txtEmail.grabFocus();
-                                            lblEmail.setForeground(Color.red);
+                                            JOptionPane.showMessageDialog(null, "This field must contain 10 numeric characters. Please Try Again!","Incorrect Cellphone Number",JOptionPane.WARNING_MESSAGE);
+                                            txtCellphoneNo.setText("");
+                                            txtCellphoneNo.grabFocus();
+                                            lblCellNo.setForeground(Color.red);
                                         }
                                     }
                                     else
                                     {
-                                        JOptionPane.showMessageDialog(null, "This field must contain 10 numeric characters. Please Try Again!","Incorrect Cellphone Number",JOptionPane.WARNING_MESSAGE);
+                                        JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain letters. Please Try Again!","Incorrect Cellphone Number",JOptionPane.WARNING_MESSAGE);
                                         txtCellphoneNo.setText("");
                                         txtCellphoneNo.grabFocus();
                                         lblCellNo.setForeground(Color.red);
@@ -810,15 +830,15 @@ public class frmManageProfile extends javax.swing.JFrame {
                                 }
                                 else
                                 {
-                                    JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain letters. Please Try Again!","Incorrect Cellphone Number",JOptionPane.WARNING_MESSAGE);
-                                    txtCellphoneNo.setText("");
-                                    txtCellphoneNo.grabFocus();
-                                    lblCellNo.setForeground(Color.red);
+                                    JOptionPane.showMessageDialog(null, "This field must contain 4 numeric characters. Please Try Again!","Incorrect Postal Code",JOptionPane.WARNING_MESSAGE);
+                                    txtPostalCode.setText("");
+                                    txtPostalCode.grabFocus();
+                                    lblPostalCode.setForeground(Color.red);
                                 }
                             }
                             else
                             {
-                                JOptionPane.showMessageDialog(null, "This field must contain 4 numeric characters. Please Try Again!","Incorrect Postal Code",JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain letters. Please Try Again!","Incorrect Postal Code",JOptionPane.WARNING_MESSAGE);
                                 txtPostalCode.setText("");
                                 txtPostalCode.grabFocus();
                                 lblPostalCode.setForeground(Color.red);
@@ -826,56 +846,60 @@ public class frmManageProfile extends javax.swing.JFrame {
                         }
                         else
                         {
-                            JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain letters. Please Try Again!","Incorrect Postal Code",JOptionPane.WARNING_MESSAGE);
-                            txtPostalCode.setText("");
-                            txtPostalCode.grabFocus();
-                            lblPostalCode.setForeground(Color.red);
+                            JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain numberic characters. Please Try Again!","Incorrect City",JOptionPane.WARNING_MESSAGE);
+                            txtCity.setText("");
+                            txtCity.grabFocus();
+                            lblCity.setForeground(Color.red);
                         }
                     }
                     else
                     {
-                        JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain numberic characters. Please Try Again!","Incorrect City",JOptionPane.WARNING_MESSAGE);
-                        txtCity.setText("");
-                        txtCity.grabFocus();
-                        lblCity.setForeground(Color.red);
+                        JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Address Line 2",JOptionPane.WARNING_MESSAGE);
+                        txtLine2.setText("");
+                        txtLine2.grabFocus();
+                        lblLine2.setForeground(Color.red);
                     }
                 }
                 else
                 {
-                    JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Address Line 2",JOptionPane.WARNING_MESSAGE);
-                    txtLine2.setText("");
-                    txtLine2.grabFocus();
-                    lblLine2.setForeground(Color.red);
+                    JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Address Line 1",JOptionPane.WARNING_MESSAGE);
+                    txtLine1.setText("");
+                    txtLine1.grabFocus();
+                    lblLine1.setForeground(Color.red);
                 }
             }
             else
             {
-                JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Address Line 1",JOptionPane.WARNING_MESSAGE);
-                txtLine1.setText("");
-                txtLine1.grabFocus();
-                lblLine1.setForeground(Color.red);
-            }
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Campus",JOptionPane.WARNING_MESSAGE);
-            lblCampusUpdate.setForeground(Color.red);
-        }
-
-        addressToUpdate = new Address(addressLine1, addressLine2, addressCity, addressPostal);
-        contactToUpdate = new Contact(contactCell, contactEmail);
-        deptToUpdate = new Department(departmentName);
-        personToUpdate = new Person(userFirstName, userLastName, userIDNumber, addressToUpdate, contactToUpdate, deptToUpdate, userCampus);
-        userToUpdate = new User(personToUpdate, userUsername, userPassword, userAccessLevel, userStatus);
-        userSecToUpdate = new UserSecurityQuestions(userToUpdate, new SecurityQuestions(userSecQuestion), userSecAnswer);
-
-        if (userToUpdate.update() != -1) {
-            if (personToUpdate.update() != -1) {
-                if (userSecToUpdate.update() != -1) {
-                    JOptionPane.showMessageDialog(null, "User was successfully updated!", "Successful Update", JOptionPane.INFORMATION_MESSAGE);
-                    AdministratorMainDash mainDash = new AdministratorMainDash();
-                    mainDash.setVisible(true);
-                    this.setVisible(false);
+                JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Campus",JOptionPane.WARNING_MESSAGE);
+                lblCampusUpdate.setForeground(Color.red);
+            }   addressToUpdate = new Address(addressLine1, addressLine2, addressCity, addressPostal);
+            
+            contactToUpdate = new Contact(contactCell, contactEmail);
+            deptToUpdate = new Department(departmentName);
+            personToUpdate = new Person(userFirstName, userLastName, userIDNumber, addressToUpdate, contactToUpdate, deptToUpdate, userCampus);
+            userToUpdate = new User(personToUpdate, userUsername, userPassword, userAccessLevel, userStatus);
+            userSecToUpdate = new UserSecurityQuestions(userToUpdate, new SecurityQuestions(userSecQuestion), userSecAnswer);
+            c = new Communication(PersonManagement_Methods.USER_UPDATE.methodIdentifier, userToUpdate);
+            int userUpdateSuccess = new ClientHandler(c).request().intResult;
+            
+            if (userUpdateSuccess != -1) {
+                c = new Communication(PersonManagement_Methods.PERSON_UPDATE.methodIdentifier, personToUpdate);
+                int personUpdateSuccess = new ClientHandler(c).request().intResult;
+                
+                if (personUpdateSuccess != -1) {
+                    c = new Communication(PersonManagement_Methods.USQ_UPDATE.methodIdentifier, userSecToUpdate);
+                    int userSecUpdateSuccess = new ClientHandler(c).request().intResult;
+                    
+                    if (userSecUpdateSuccess != -1) {
+                        JOptionPane.showMessageDialog(null, "User was successfully updated!", "Successful Update", JOptionPane.INFORMATION_MESSAGE);
+                        AdministratorMainDash mainDash = new AdministratorMainDash();
+                        mainDash.setVisible(true);
+                        this.setVisible(false);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "Error occured during this process!", "Unsuccessful Update", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
                 else
                 {
@@ -886,10 +910,8 @@ public class frmManageProfile extends javax.swing.JFrame {
             {
                 JOptionPane.showMessageDialog(null, "Error occured during this process!", "Unsuccessful Update", JOptionPane.ERROR_MESSAGE);
             }
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Error occured during this process!", "Unsuccessful Update", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {
+            Logger.getLogger(frmManageProfile.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnEditUserActionPerformed
 

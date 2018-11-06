@@ -9,12 +9,18 @@ import PersonManagement.Address;
 import PersonManagement.Contact;
 import PersonManagement.Department;
 import PersonManagement.Person;
+import PersonManagement.PersonManagement_Methods;
 import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
+import bc_stationary_bll.Communication;
 import bc_stationary_bll.Validation;
+import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -34,20 +40,26 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
     }
     
     public Person person = null;
+    Communication c;
     public frmRegisterUserLogin(Person p)
     {
-        initComponents();
-        person = p;
-        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(new Color(45,45,45));
-        txtAccessLevel.setEditable(false);
-        txtStatus.setEditable(false);
-        ArrayList<SecurityQuestions> questions = new ArrayList<SecurityQuestions>();
-        SecurityQuestions seqQuestion = new SecurityQuestions();
-        questions = seqQuestion.select();
-        // Populate Combobox
-        for(SecurityQuestions s:questions){
-            cmbQuestion.addItem(s.getQuestion());
+        try {
+            initComponents();
+            person = p;
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45,45,45));
+            txtAccessLevel.setEditable(false);
+            txtStatus.setEditable(false);
+            ArrayList<SecurityQuestions> questions = new ArrayList<SecurityQuestions>();
+            SecurityQuestions seqQuestion = new SecurityQuestions();
+            c = new Communication(PersonManagement_Methods.SQ_SELECT_ALL.methodIdentifier, seqQuestion);
+            questions = new ClientHandler(c).request().listResult;
+            // Populate Combobox
+            for(SecurityQuestions s:questions){
+                cmbQuestion.addItem(s.getQuestion());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmRegisterUserLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -394,7 +406,6 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         frmRegisterUser register = new frmRegisterUser();
         register.setVisible(true);
         this.setVisible(false);
-
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
@@ -422,81 +433,92 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
                 {
                     if(validation.testLength(passWord, 8, 15))
                     {
-                        user = new User(userName,passWord);
-                        boolean existingUser = user.testForExistingUser();
-                        
-                        if(!existingUser)
-                        {
-                            lblUsername.setForeground(Color.white);
-                            lblPassword.setForeground(Color.white);
-                            lblRePassword.setForeground(Color.white);
-                            accessLevel = txtAccessLevel.getText();
-                            status = txtStatus.getText();
-                            if(!"".equals(cmbQuestion.getSelectedItem().toString()))
+                        try {
+                            user = new User(userName,passWord);
+                            c = new Communication(PersonManagement_Methods.USER_TEST_EXISTING.methodIdentifier,user);
+                            boolean existingUser = new ClientHandler(c).request().boolResult;
+                            
+                            if(!existingUser)
                             {
-                                securityQuestion = cmbQuestion.getSelectedItem().toString();
-                                lblSecurityQuestion.setForeground(Color.white);
-                                if(!"".equals(txtAnswer.getText()))
+                                lblUsername.setForeground(Color.white);
+                                lblPassword.setForeground(Color.white);
+                                lblRePassword.setForeground(Color.white);
+                                accessLevel = txtAccessLevel.getText();
+                                status = txtStatus.getText();
+                                if(!"".equals(cmbQuestion.getSelectedItem().toString()))
                                 {
-                                    securityAwns = txtAnswer.getText();
-                                    lblAnswer.setForeground(Color.white);
-                                    
-                                    userToInsert = new User(person, userName, passWord, accessLevel, status);
-                                    secQuestion = new SecurityQuestions(securityQuestion);
-                                    userSec = new UserSecurityQuestions(userToInsert, secQuestion, securityAwns);
-            
-                                    boolean success = true;
-                                    
-                                    if (person.insert()==-1) 
+                                    securityQuestion = cmbQuestion.getSelectedItem().toString();
+                                    lblSecurityQuestion.setForeground(Color.white);
+                                    if(!"".equals(txtAnswer.getText())) 
                                     {
-                                        success = false;
-                                    }
-                                    
-                                    if (userToInsert.insert()==-1) 
-                                    {
-                                        success = false;
-                                    }
-                                    
-                                    if (userSec.insert()==-1) 
-                                    {
-                                        success = false;
-                                    }
-                                    
-                                    if (success) 
-                                    {
-                                        JOptionPane.showMessageDialog(null, "The user was successfully registered","Registration Successful",JOptionPane.INFORMATION_MESSAGE);
+                                        securityAwns = txtAnswer.getText();
+                                        lblAnswer.setForeground(Color.white);
                                         
-                                        frmLogin login = new frmLogin();
-                                        login.setVisible(true);
-                                        this.setVisible(false);
+                                        userToInsert = new User(person, userName, passWord, accessLevel, status);
+                                        secQuestion = new SecurityQuestions(securityQuestion);
+                                        userSec = new UserSecurityQuestions(userToInsert, secQuestion, securityAwns);
+                                        
+                                        boolean success = true;
+                                   
+                                        c = new Communication(PersonManagement_Methods.PERSON_INSERT.methodIdentifier,person);
+                                        int personSuccess = new ClientHandler(c).request().intResult;
+                                        if (personSuccess == -1)
+                                        {
+                                            success = false;
+                                        }
+                                        
+                                        c = new Communication(PersonManagement_Methods.USER_INSERT.methodIdentifier,userToInsert);
+                                        int userSuccess = new ClientHandler(c).request().intResult;
+                                        if (userSuccess == -1)
+                                        {
+                                            success = false;
+                                        }
+                                        
+                                        c = new Communication(PersonManagement_Methods.USQ_INSERT.methodIdentifier, userSec);
+                                        int userSecSuccess = new ClientHandler(c).request().intResult;
+                                        if (userSecSuccess == -1)
+                                        {
+                                            success = false;
+                                        }
+                                        
+                                        if (success)
+                                        {
+                                            JOptionPane.showMessageDialog(null, "The user was successfully registered","Registration Successful",JOptionPane.INFORMATION_MESSAGE);
+                                            
+                                            frmLogin login = new frmLogin();
+                                            login.setVisible(true);
+                                            this.setVisible(false);
+                                        }
+                                        else
+                                        {
+                                            JOptionPane.showMessageDialog(null, "Something went wrong during the registration process. User Registration was unsuccessful!","Registration Failed",JOptionPane.WARNING_MESSAGE);
+                                        }
                                     }
                                     else
                                     {
-                                          JOptionPane.showMessageDialog(null, "Something went wrong during the registration process. User Registration was unsuccessful!","Registration Failed",JOptionPane.WARNING_MESSAGE);
+                                        JOptionPane.showMessageDialog(null, "Please Enter an Answer to the Security Question!","Incorrect Security Answer",JOptionPane.WARNING_MESSAGE);
+                                        lblAnswer.setForeground(Color.red);
                                     }
                                 }
                                 else
                                 {
-                                    JOptionPane.showMessageDialog(null, "Please Enter an Answer to the Security Question!","Incorrect Security Answer",JOptionPane.WARNING_MESSAGE);
-                                    lblAnswer.setForeground(Color.red);
+                                    JOptionPane.showMessageDialog(null, "Please choose a Security Question!","Incorrect Security Question",JOptionPane.WARNING_MESSAGE);
+                                    lblSecurityQuestion.setForeground(Color.red);
                                 }
                             }
                             else
                             {
-                                JOptionPane.showMessageDialog(null, "Please choose a Security Question!","Incorrect Security Question",JOptionPane.WARNING_MESSAGE);
-                                lblSecurityQuestion.setForeground(Color.red);
+                                JOptionPane.showMessageDialog(null, "This user already exists. Please Try Again!","Existing User already registered",JOptionPane.WARNING_MESSAGE);
+                                txtUsername.setText("");
+                                txtPassword.setText("");
+                                txtRePassword.setText("");
+                                txtUsername.grabFocus();
+                                lblUsername.setForeground(Color.red);
+                                lblPassword.setForeground(Color.red);
+                                lblRePassword.setForeground(Color.red);
                             }
-                        }
-                        else
-                        {
-                            JOptionPane.showMessageDialog(null, "This user already exists. Please Try Again!","Existing User already registered",JOptionPane.WARNING_MESSAGE);
-                            txtUsername.setText("");
-                            txtPassword.setText("");
-                            txtRePassword.setText("");
-                            txtUsername.grabFocus();
-                            lblUsername.setForeground(Color.red);
-                            lblPassword.setForeground(Color.red);
-                            lblRePassword.setForeground(Color.red);
+                        } catch (IOException ex) {
+                            Logger.getLogger(frmRegisterUserLogin.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                     else
