@@ -13,7 +13,9 @@ import ProductManagement.Product;
 import ProductManagement.Stock;
 import ProductManagement.UserRequest;
 import bc_stationary_bll.Email;
-import bc_stationary_bll.Reporting;
+import bc_stationary_bll.Reports.ReportBuilder;
+import bc_stationary_bll.Reports.ReportMenu;
+import bc_stationary_bll.Reports.Reporting;
 import bc_stationary_bll.genericSort;
 import java.awt.Color;
 import java.sql.Date;
@@ -876,9 +878,8 @@ public class frmManageOrders extends javax.swing.JFrame {
             
             if(requestToUpdate.update() != -1)
             {
-                String docName = "stockPurchaseOrder_"+selectedProduct.getName()+".pdf";
-                Reporting report = new Reporting(stockItems, docName);
-                report.generatePurchaseOrder();
+                Reporting report = new ReportBuilder(ReportMenu.PURCHASE_ORDER.reportOption,stockItems).createReport();
+                report.generateReport();
                 String message = "Please find attached, to this mail, the purchase order for Product Name: " + selectedProduct.getName();
                 String path = null;//"C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\";
                 Email email = new Email("eldanefer1@gmail.com", message, "Purchase Order Form", path);
@@ -900,8 +901,8 @@ public class frmManageOrders extends javax.swing.JFrame {
                 //JOptionPane.showMessageDialog(null, "The requested quantity was send for purchase", "Purchase Order Send", JOptionPane.INFORMATION_MESSAGE);
                 stockItems.add(new Stock(selectedProduct,requestQuantity));
                 String docName = "stockPurchaseOrder_"+selectedProduct.getName()+".pdf";
-                Reporting report = new Reporting(stockItems, docName);
-                report.generatePurchaseOrder();
+                Reporting report = new ReportBuilder(ReportMenu.PURCHASE_ORDER.reportOption,stockItems).createReport();
+                report.generateReport();
                 String message = "Please find attached, to this mail, the purchase order for Product Name: " + selectedProduct.getName();
                 String path = null;//"C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\";
                 Email email = new Email("eldanefer1@gmail.com", message, "Purchase Order Form", path);
