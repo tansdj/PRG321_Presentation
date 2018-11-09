@@ -403,7 +403,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        frmRegisterUser register = new frmRegisterUser();
+        frmRegisterUser register = new frmRegisterUser(person);
         register.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
@@ -554,7 +554,6 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         else
         {
             JOptionPane.showMessageDialog(null, "This field may not be empty. Please Try Again!","Incorrect Username",JOptionPane.WARNING_MESSAGE);
-            txtUsername.setText("");
             txtUsername.grabFocus();
             lblUsername.setForeground(Color.red);
         } 

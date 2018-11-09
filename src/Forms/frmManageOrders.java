@@ -200,14 +200,18 @@ public class frmManageOrders extends javax.swing.JFrame {
         btnEditRequest.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnEditRequest.setForeground(new java.awt.Color(255, 255, 255));
         btnEditRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View.png"))); // NOI18N
-        btnEditRequest.setText("Manage Orders");
-        btnEditRequest.setActionCommand("Manage Orders");
+        btnEditRequest.setText("Finalize Orders");
         btnEditRequest.setBorder(null);
         btnEditRequest.setBorderPainted(false);
         btnEditRequest.setContentAreaFilled(false);
         btnEditRequest.setFocusPainted(false);
-        btnEditRequest.setIconTextGap(25);
+        btnEditRequest.setIconTextGap(40);
         btnEditRequest.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
+        btnEditRequest.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnEditRequestMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlMenuLayout = new javax.swing.GroupLayout(pnlMenu);
         pnlMenu.setLayout(pnlMenuLayout);
@@ -714,18 +718,21 @@ public class frmManageOrders extends javax.swing.JFrame {
             Date orderDate = Date.valueOf(localOrder);
             LocalDate localReceive = LocalDate.now().minusDays(1);
             Date receiveDate = Date.valueOf(localReceive);
+            
             UserRequest requestToUpdate;
             Stock stockToUpdate;
             Product productToUpdate;
             Order orderToUpdate;
             int newStockQuantity, initialRequestQuantity = 0, remainingRequestQuantity;
             boolean stockInsufficient = false; // Not out of stock, but also not enough to fill whole order.
+            
             if((stockQuantity > 0)&&(stockQuantity < requestQuantity))
             {
                 initialRequestQuantity = requestQuantity;
                 requestQuantity = stockQuantity;
                 stockInsufficient = true;
             }   ArrayList<OrderItems> items = new ArrayList<OrderItems>();
+            
             items.add(new OrderItems(selectedProduct,requestQuantity));
             Order order = new Order(selectedUser);
             c = new Communication(ProductManagement_Methods.ORDER_SELECT_USER_OPEN.methodIdentifier, order);
@@ -783,8 +790,7 @@ public class frmManageOrders extends javax.swing.JFrame {
                                             frmManageOrders manageOrders = new frmManageOrders();
                                             manageOrders.setVisible(true);
                                             this.setVisible(false);
-                                        }
-                                        
+                                        }    
                                     }
                                     else
                                     {
@@ -821,6 +827,13 @@ public class frmManageOrders extends javax.swing.JFrame {
                                         }
                                         
                                     }
+                                    else
+                                    {
+                                        JOptionPane.showMessageDialog(null, "Item was successfully ordered!", "Successful Order Upload", JOptionPane.INFORMATION_MESSAGE);
+                                        frmManageOrders manageOrders = new frmManageOrders();
+                                        manageOrders.setVisible(true);
+                                        this.setVisible(false);
+                                    }   
                                 }
                                 else
                                 {
@@ -931,7 +944,7 @@ public class frmManageOrders extends javax.swing.JFrame {
                     Reporting report = new Reporting(stockItems, docName);
                     report.generatePurchaseOrder();
                     String message = "Please find attached, to this mail, the purchase order for Product Name: " + selectedProduct.getName();
-                    String path = null;//"C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\";
+                    String path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\\"+docName;
                     Email email = new Email("eldanefer1@gmail.com", message, "Purchase Order Form", path);
                     email.sendEmail();
                 }
@@ -982,6 +995,12 @@ public class frmManageOrders extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_btnPurchaseMouseClicked
+
+    private void btnEditRequestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditRequestMouseClicked
+        frmEditOrders editOrder = new frmEditOrders();
+        editOrder.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnEditRequestMouseClicked
 
     /**
      * @param args the command line arguments

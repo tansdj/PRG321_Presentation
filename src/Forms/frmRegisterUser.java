@@ -55,6 +55,49 @@ public class frmRegisterUser extends javax.swing.JFrame {
         }
 
     }
+    
+    public frmRegisterUser(Person p) {
+        try {
+            initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45,45,45));
+            ArrayList<Department> departments = new ArrayList<Department>();
+            Department dept = new Department();
+            c = new Communication(PersonManagement_Methods.DEP_SELECT_ALL.methodIdentifier, dept);
+            departments = new ClientHandler(c).request().listResult;
+            
+            for(Department d:departments){
+                cmbDepartment.addItem(d.getName());
+            }
+            pnlDepartmentInfo1.setVisible(false);
+        } catch (IOException ex) {
+            Logger.getLogger(frmRegisterUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        txtFirstname.setText(p.getName());
+        txtLastname.setText(p.getSurname());
+        txtIDNumber.setText(p.getId());
+        cmbCampus.setSelectedItem(p.getCampus());
+        
+        txtLine1.setText(p.getAddress().getLine1());
+        txtLine2.setText(p.getAddress().getLine2());
+        txtCity.setText(p.getAddress().getCity());
+        txtPostalCode.setText(p.getAddress().getPostalCode());
+        
+        txtCellphoneNo.setText(p.getContact().getCell());
+        txtEmail.setText(p.getContact().getEmail());
+        
+        int selectedDepartOption = jTabbedPane2.getSelectedIndex();
+        if(selectedDepartOption == 0)
+        {
+            cmbDepartment.setSelectedItem(p.getDepartment().getName());
+        }
+        else if(selectedDepartOption == 1)
+        {
+            txtDepartment.setText(p.getDepartment().getName());
+        }
+
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -770,7 +813,6 @@ public class frmRegisterUser extends javax.swing.JFrame {
                                                             else
                                                             {
                                                                 JOptionPane.showMessageDialog(null, "This is not a valid email address. Please Try Again!","Incorrect Email",JOptionPane.WARNING_MESSAGE);
-                                                                txtEmail.setText("");
                                                                 txtEmail.grabFocus();
                                                                 lblEmail.setForeground(Color.red);
                                                             }
@@ -778,7 +820,6 @@ public class frmRegisterUser extends javax.swing.JFrame {
                                                         else
                                                         {
                                                             JOptionPane.showMessageDialog(null, "This field must contain 10 numeric characters. Please Try Again!","Incorrect Cellphone Number",JOptionPane.WARNING_MESSAGE);
-                                                            txtCellphoneNo.setText("");
                                                             txtCellphoneNo.grabFocus();
                                                             lblCellNo.setForeground(Color.red);
                                                         }
@@ -786,7 +827,6 @@ public class frmRegisterUser extends javax.swing.JFrame {
                                                     else
                                                     {
                                                         JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain letters. Please Try Again!","Incorrect Cellphone Number",JOptionPane.WARNING_MESSAGE);
-                                                        txtCellphoneNo.setText("");
                                                         txtCellphoneNo.grabFocus();
                                                         lblCellNo.setForeground(Color.red);
                                                     }
@@ -794,7 +834,6 @@ public class frmRegisterUser extends javax.swing.JFrame {
                                                 else
                                                 {
                                                     JOptionPane.showMessageDialog(null, "This field must contain 4 numeric characters. Please Try Again!","Incorrect Postal Code",JOptionPane.WARNING_MESSAGE);
-                                                    txtPostalCode.setText("");
                                                     txtPostalCode.grabFocus();
                                                     lblPostalCode.setForeground(Color.red);
                                                 }  
@@ -802,7 +841,6 @@ public class frmRegisterUser extends javax.swing.JFrame {
                                             else
                                             {
                                                 JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain letters. Please Try Again!","Incorrect Postal Code",JOptionPane.WARNING_MESSAGE);
-                                                txtPostalCode.setText("");
                                                 txtPostalCode.grabFocus();
                                                 lblPostalCode.setForeground(Color.red);
                                             }                                         
@@ -810,7 +848,6 @@ public class frmRegisterUser extends javax.swing.JFrame {
                                         else
                                         {
                                             JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain numberic characters. Please Try Again!","Incorrect City",JOptionPane.WARNING_MESSAGE);
-                                            txtCity.setText("");
                                             txtCity.grabFocus();
                                             lblCity.setForeground(Color.red);
                                         }
@@ -818,7 +855,6 @@ public class frmRegisterUser extends javax.swing.JFrame {
                                     else
                                     {
                                         JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Address Line 2",JOptionPane.WARNING_MESSAGE);
-                                        txtLine2.setText("");
                                         txtLine2.grabFocus();
                                         lblLine2.setForeground(Color.red);
                                     }
@@ -826,7 +862,6 @@ public class frmRegisterUser extends javax.swing.JFrame {
                                 else
                                 {
                                     JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Address Line 1",JOptionPane.WARNING_MESSAGE);
-                                    txtLine1.setText("");
                                     txtLine1.grabFocus();
                                     lblLine1.setForeground(Color.red);
                                 }
@@ -840,7 +875,6 @@ public class frmRegisterUser extends javax.swing.JFrame {
                         else
                         {
                             JOptionPane.showMessageDialog(null, "This field must be exactly 13 numeric characters. Please Try Again!","Incorrect ID Number",JOptionPane.WARNING_MESSAGE);
-                            txtIDNumber.setText("");
                             txtIDNumber.grabFocus();
                             lblIDNumber.setForeground(Color.red);
                         } 
@@ -848,7 +882,6 @@ public class frmRegisterUser extends javax.swing.JFrame {
                     else
                     {
                         JOptionPane.showMessageDialog(null, "This field cannot be empty nor may it contain any letters. Please Try Again!","Incorrect ID Number",JOptionPane.WARNING_MESSAGE);
-                        txtIDNumber.setText("");
                         txtIDNumber.grabFocus();
                         lblIDNumber.setForeground(Color.red);
                     }
@@ -857,7 +890,6 @@ public class frmRegisterUser extends javax.swing.JFrame {
                 else
                 {
                     JOptionPane.showMessageDialog(null, "This field cannot be empty nor may it contain any numeric characters. Please Try Again!","Incorrect Lastname",JOptionPane.WARNING_MESSAGE);
-                    txtLastname.setText("");
                     txtLastname.grabFocus();
                     lblLastname.setForeground(Color.red);
                 }
@@ -865,7 +897,6 @@ public class frmRegisterUser extends javax.swing.JFrame {
             else
             {
                 JOptionPane.showMessageDialog(null, "This field cannot be empty nor may it contain any numeric characters. Please Try Again!","Incorrect Firstname",JOptionPane.WARNING_MESSAGE);
-                txtFirstname.setText("");
                 txtFirstname.grabFocus();
                 lblFirstname.setForeground(Color.red);  
             }

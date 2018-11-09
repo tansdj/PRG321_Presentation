@@ -614,86 +614,91 @@ public class frmManageRequest extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddItemActionPerformed
 
     private void btnSubmitRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitRequestActionPerformed
-        boolean success = true;
-         UserRequest request = new UserRequest();
-         ArrayList<UserRequest> loggedRequests = request.selectUnprocessed_ProductBackOrder();
-         
-        for(UserRequest uNew : requestItems)
-        {
-            if(loggedRequests.size() > 0)
+        try {
+            boolean success = true;
+            UserRequest request = new UserRequest();
+            c = new Communication(ProductManagement_Methods.UR_SELECT_BACKORDER.methodIdentifier, request);
+            ArrayList<UserRequest> loggedRequests = new ClientHandler(c).request().listResult;
+            
+            for(UserRequest uNew : requestItems)
             {
-                for(UserRequest uOld : loggedRequests)
+                if(loggedRequests.size() > 0)
                 {
-                    String newProductName = uNew.getProduct().getName();
-                    String existingProductName = uOld.getProduct().getName();
-                    String newUserName = uNew.getUser().getUsername();
-                    String existingUserName = uOld.getUser().getUsername();
-                    
-                    int newQuantity=0, existingQuantity=0, newPriority=0, existingPriority=0;
- 
-                    if((newProductName.equals(existingProductName))&&(newUserName.equals(existingUserName)))
+                    for(UserRequest uOld : loggedRequests)
                     {
-                        try {
-                            newQuantity = uNew.getQuantity();
-                            existingQuantity = uOld.getQuantity();
-                            uNew.setQuantity(newQuantity + existingQuantity); // add quantities of the same Unprocessed Product
-                            
-                            newPriority = uNew.getPriorityLevel();
-                            existingPriority = uOld.getPriorityLevel();
-                            if(newPriority < existingPriority) // check if new priority is now higher or not
-                            {
-                                uNew.setPriorityLevel(existingPriority);
+                        String newProductName = uNew.getProduct().getName();
+                        String existingProductName = uOld.getProduct().getName();
+                        String newUserName = uNew.getUser().getUsername();
+                        String existingUserName = uOld.getUser().getUsername();
+                        
+                        int newQuantity=0, existingQuantity=0, newPriority=0, existingPriority=0;
+                        
+                        if((newProductName.equals(existingProductName))&&(newUserName.equals(existingUserName)))
+                        {
+                            try {
+                                newQuantity = uNew.getQuantity();
+                                existingQuantity = uOld.getQuantity();
+                                uNew.setQuantity(newQuantity + existingQuantity); // add quantities of the same Unprocessed Product
+                                
+                                newPriority = uNew.getPriorityLevel();
+                                existingPriority = uOld.getPriorityLevel();
+                                if(newPriority < existingPriority) // check if new priority is now higher or not
+                                {
+                                    uNew.setPriorityLevel(existingPriority);
+                                }
+                                
+                                c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier, uNew);
+                                int uNewUpdateSuccess = new ClientHandler(c).request().intResult;
+                                if(uNewUpdateSuccess == -1) // update existing Unprocessed Product
+                                {
+                                    success = false;
+                                }} catch (IOException ex) {
+                                    Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                        }
+                        else
+                        {
+                            try {
+                                c = new Communication(ProductManagement_Methods.UR_INSERT.methodIdentifier, uNew);
+                                int uNewInsertSuccess = new ClientHandler(c).request().intResult;
+                                if(uNewInsertSuccess == -1)
+                                {
+                                    success = false;
+                                }
+                            } catch (IOException ex) {
+                                Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            
-                            c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier, uNew);
-                            int uNewUpdateSuccess = new ClientHandler(c).request().intResult;
-                            if(uNewUpdateSuccess == -1) // update existing Unprocessed Product
-                            {
-                                success = false;
-                            }} catch (IOException ex) {
-                            Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    else
-                    {
-                        try {
-                            c = new Communication(ProductManagement_Methods.UR_INSERT.methodIdentifier, uNew);
-                            int uNewInsertSuccess = new ClientHandler(c).request().intResult;
-                            if(uNewInsertSuccess == -1)
-                            {
-                                success = false;
-                            }
-                        } catch (IOException ex) {
-                            Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                else
+                {
+                    try {
+                        c = new Communication(ProductManagement_Methods.UR_INSERT.methodIdentifier, uNew);
+                        int uNewInsertSuccess = new ClientHandler(c).request().intResult;
+                        if(uNewInsertSuccess == -1)
+                        {
+                            success = false;
                         }
+                    } catch (IOException ex) {
+                        Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }  
             }
+
+            if(success)
+            {
+                JOptionPane.showMessageDialog(null, "Request was successfully submitted!", "Successful Submission", JOptionPane.INFORMATION_MESSAGE);
+                StandardMainDash mainDash = new StandardMainDash();
+                mainDash.setVisible(true);
+                this.setVisible(false);
+            }
             else
             {
-                try {
-                    c = new Communication(ProductManagement_Methods.UR_INSERT.methodIdentifier, uNew);
-                    int uNewInsertSuccess = new ClientHandler(c).request().intResult;
-                    if(uNewInsertSuccess == -1)
-                    {
-                        success = false;
-                    }
-                } catch (IOException ex) {
-                    Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                JOptionPane.showMessageDialog(null, "Error occured during this process!", "Unsuccessful Submission", JOptionPane.ERROR_MESSAGE);
             }
-        }
-        
-        if(success)
-        {
-            JOptionPane.showMessageDialog(null, "Request was successfully submitted!", "Successful Submission", JOptionPane.INFORMATION_MESSAGE);
-            StandardMainDash mainDash = new StandardMainDash();
-            mainDash.setVisible(true);
-            this.setVisible(false);
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Error occured during this process!", "Unsuccessful Submission", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {
+            Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         

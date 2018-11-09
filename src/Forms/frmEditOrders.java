@@ -12,6 +12,7 @@ import ProductManagement.OrderItems;
 import ProductManagement.ProductManagement_Methods;
 import bc_stationary_bll.Communication;
 import bc_stationary_management_system.ClientHandler;
+import java.awt.Color;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -37,9 +39,11 @@ public class frmEditOrders extends javax.swing.JFrame {
     public frmEditOrders() {
         try {
             initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45, 45, 45));
             
-            User user = new User();
-            c = new Communication(PersonManagement_Methods.USER_SELECT_ALL.methodIdentifier, user);
+            Order order = new Order();
+            c = new Communication(ProductManagement_Methods.ORDER_SELECT_USER_OPEN.methodIdentifier, order);
             users = new ClientHandler(c).request().listResult;
             cmbUsers.addItem("Select a User");
             for(User u:users){
@@ -77,6 +81,7 @@ public class frmEditOrders extends javax.swing.JFrame {
         lbxOrderInfo = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         pnlMainDashHeader.setBackground(new java.awt.Color(255, 255, 0));
         pnlMainDashHeader.setPreferredSize(new java.awt.Dimension(1071, 530));
@@ -184,7 +189,7 @@ public class frmEditOrders extends javax.swing.JFrame {
 
         lblSearchUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblSearchUsers.setForeground(new java.awt.Color(255, 255, 255));
-        lblSearchUsers.setText("Select a User to view orders:");
+        lblSearchUsers.setText("Select an Order to view items:");
 
         lbxOrders.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lbxOrders.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -224,15 +229,15 @@ public class frmEditOrders extends javax.swing.JFrame {
         pnlProjectInfoLayout.setHorizontalGroup(
             pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlProjectInfoLayout.createSequentialGroup()
-                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnFinalizeOrder)
-                    .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(pnlProjectInfoLayout.createSequentialGroup()
-                            .addGap(28, 28, 28)
-                            .addComponent(lblProductInfo))
-                        .addGroup(pnlProjectInfoLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 872, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlProjectInfoLayout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(lblProductInfo))
+                    .addGroup(pnlProjectInfoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnFinalizeOrder)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 691, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlProjectInfoLayout.setVerticalGroup(
@@ -241,10 +246,10 @@ public class frmEditOrders extends javax.swing.JFrame {
                 .addGap(22, 22, 22)
                 .addComponent(lblProductInfo)
                 .addGap(25, 25, 25)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnFinalizeOrder)
-                .addContainerGap(339, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -252,7 +257,7 @@ public class frmEditOrders extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -261,9 +266,9 @@ public class frmEditOrders extends javax.swing.JFrame {
                             .addComponent(cmbUsers, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblSearchUsers))
-                        .addGap(46, 46, 46)
-                        .addComponent(pnlProjectInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(0, 20, Short.MAX_VALUE))
+                        .addGap(38, 38, 38)
+                        .addComponent(pnlProjectInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 85, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -275,8 +280,8 @@ public class frmEditOrders extends javax.swing.JFrame {
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(71, 71, 71)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlProjectInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(pnlProjectInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(cmbUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -309,8 +314,8 @@ public class frmEditOrders extends javax.swing.JFrame {
                 }
                 
                 Order order  = new Order(selectedUser,null,null,null);
-                c = new Communication(ProductManagement_Methods.ORDER_SELECT_USER_OPEN.methodIdentifier, order);
-                userOrders.set(0, (Order)new ClientHandler(c).request().objectResult);
+                c = new Communication(ProductManagement_Methods.ORDER_SELECT_USER.methodIdentifier, order);
+                userOrders = new ClientHandler(c).request().listResult;
                 
                 DefaultListModel model = new DefaultListModel();
                 for(Order o: userOrders){
@@ -342,13 +347,19 @@ public class frmEditOrders extends javax.swing.JFrame {
             try {
                 LocalDate localOrder = LocalDate.now();
                 Date receiveDate = Date.valueOf(localOrder);
+                
                 selectedOrder.setReceivedDate(receiveDate);
                 c = new Communication(ProductManagement_Methods.ORDER_UPDATE.methodIdentifier, selectedOrder);
                 int orderUpdateSuccess = new ClientHandler(c).request().intResult;
                 
-                if(orderUpdateSuccess >= 0){
+                if(orderUpdateSuccess != -1)
+                {
                     JOptionPane.showMessageDialog(null, "Order was successfully finalized! It is now ready for delivery.","Successful Finalization",JOptionPane.INFORMATION_MESSAGE);
-                }else{
+                    AdministratorMainDash mainDash = new AdministratorMainDash();
+                    mainDash.setVisible(true);
+                    this.setVisible(false);
+                }
+                else{
                     JOptionPane.showMessageDialog(null, "Order could not be finalized. Please try again later.","Failure!",JOptionPane.WARNING_MESSAGE);
                 }
             } catch (IOException ex) {

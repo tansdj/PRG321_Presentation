@@ -679,7 +679,6 @@ public class frmAddProduct extends javax.swing.JFrame {
                                  else
                                  {
                                     JOptionPane.showMessageDialog(null, "This field must be in the form of a currency!","Incorrect Product Sale Price",JOptionPane.WARNING_MESSAGE);
-                                    txtProductSale.setText("");
                                     txtProductSale.grabFocus();
                                     lblProductSale.setForeground(Color.red);
                                  }
@@ -687,7 +686,6 @@ public class frmAddProduct extends javax.swing.JFrame {
                              else
                              {
                                 JOptionPane.showMessageDialog(null, "This field must be in the form of a currency!","Incorrect Product Cost Price",JOptionPane.WARNING_MESSAGE);
-                                txtProductCost.setText("");
                                 txtProductCost.grabFocus();
                                 lblProductCost.setForeground(Color.red);
                              }
@@ -695,7 +693,6 @@ public class frmAddProduct extends javax.swing.JFrame {
                         else
                         {
                             JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Product Model",JOptionPane.WARNING_MESSAGE);
-                            txtProductModel.setText("");
                             txtProductModel.grabFocus();
                             lblProductModel.setForeground(Color.red);
                         }
@@ -709,7 +706,6 @@ public class frmAddProduct extends javax.swing.JFrame {
                 else
                 {
                     JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Product Description",JOptionPane.WARNING_MESSAGE);
-                    txtDescription.setText("");
                     txtDescription.grabFocus();
                     lblDescription.setForeground(Color.red);
                 }
@@ -717,7 +713,6 @@ public class frmAddProduct extends javax.swing.JFrame {
             else
             {
                 JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Product Name",JOptionPane.WARNING_MESSAGE);
-                txtProductName.setText("");
                 txtProductName.grabFocus();
                 lblProductName.setForeground(Color.red);
             }

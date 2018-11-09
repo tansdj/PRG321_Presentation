@@ -9,6 +9,7 @@ import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.*;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.Validation;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
@@ -30,7 +31,7 @@ public class frmManageProfile extends javax.swing.JFrame {
     /**
      * Creates new form frmManageProfile
      */
-    public ArrayList<User> userList;
+    public ArrayList<User> userList = new ArrayList<User>();
     Communication c;
     public frmManageProfile() {
         try {
@@ -38,9 +39,12 @@ public class frmManageProfile extends javax.swing.JFrame {
             this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             this.getContentPane().setBackground(new Color(45, 45, 45));
             
-            User user = new User();
-            c = new Communication(PersonManagement_Methods.USER_SELECT_ALL.methodIdentifier, user);
-            userList = new ClientHandler(c).request().listResult;
+            User loggedInuser = new User();
+            GenericSerializer gen = new GenericSerializer("loggedUser.txt",loggedInuser);
+            loggedInuser = (User)gen.Deserialize();
+            c = new Communication(PersonManagement_Methods.USER_SELECT_SPEC.methodIdentifier, loggedInuser);
+            User user = (User) new ClientHandler(c).request().objectResult;
+            userList.add(user);
             
             DefaultListModel model = new DefaultListModel();
             // Populate Listbox
@@ -78,7 +82,6 @@ public class frmManageProfile extends javax.swing.JFrame {
         pnlMenu = new javax.swing.JPanel();
         btnBack = new javax.swing.JButton();
         btnUpdateUser = new javax.swing.JButton();
-        txtSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         lbxUsers = new javax.swing.JList<>();
         pnlUserInfo1 = new javax.swing.JPanel();
@@ -219,10 +222,6 @@ public class frmManageProfile extends javax.swing.JFrame {
                 .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(828, Short.MAX_VALUE))
         );
-
-        txtSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtSearch.setText("Search...");
-        txtSearch.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         lbxUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lbxUsers.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -632,9 +631,7 @@ public class frmManageProfile extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtSearch)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(pnlUserInfo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 20, Short.MAX_VALUE))
@@ -649,12 +646,9 @@ public class frmManageProfile extends javax.swing.JFrame {
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(44, 44, 44)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(pnlUserInfo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(15, 15, 15)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pnlUserInfo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
 
@@ -1005,7 +999,6 @@ public class frmManageProfile extends javax.swing.JFrame {
     private javax.swing.JTextField txtLine1;
     private javax.swing.JTextField txtLine2;
     private javax.swing.JTextField txtPostalCode;
-    private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtSecQuestion;
     private javax.swing.JTextField txtStatus;
     private javax.swing.JTextField txtUsername1;
