@@ -6,11 +6,12 @@
 package Forms;
 
 import PersonManagement.User;
-import ProductManagement.Order;
 import ProductManagement.ProductManagement_Methods;
 import ProductManagement.Stock;
 import ProductManagement.UserRequest;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
+import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.Reports.ReportBuilder;
 import bc_stationary_bll.Reports.ReportMenu;
 import bc_stationary_bll.Reports.Reporting;
@@ -21,8 +22,6 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -38,6 +37,9 @@ public class frmGenerateReports extends javax.swing.JFrame {
     public ArrayList<User> users = new ArrayList<User>();
     public ArrayList<UserRequest> requestsForReport = new ArrayList<UserRequest>();
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmGenerateReports() {
         try {
             initComponents();
@@ -53,7 +55,6 @@ public class frmGenerateReports extends javax.swing.JFrame {
             btnViewStaffOrder.setEnabled(false);
             dtpSpecifiedDate.setVisible(false);
             
-            ArrayList<UserRequest> allRequests = new ArrayList<UserRequest>();
             c = new Communication(ProductManagement_Methods.UR_SELECT_USERS_WITH_REQ.methodIdentifier, new UserRequest());
             users = new ClientHandler(c).request().listResult;
             
@@ -62,7 +63,9 @@ public class frmGenerateReports extends javax.swing.JFrame {
                 cmbUsers.addItem(u.toString());
             }
         } catch (IOException ex) {
-            Logger.getLogger(frmGenerateReports.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) selectUsersWithReq() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }
 
@@ -156,6 +159,7 @@ public class frmGenerateReports extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(60);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -173,15 +177,11 @@ public class frmGenerateReports extends javax.swing.JFrame {
         btnGenerateReports.setBorder(null);
         btnGenerateReports.setBorderPainted(false);
         btnGenerateReports.setContentAreaFilled(false);
+        btnGenerateReports.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGenerateReports.setFocusPainted(false);
         btnGenerateReports.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnGenerateReports.setIconTextGap(5);
         btnGenerateReports.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/reactivate_Red.png"))); // NOI18N
-        btnGenerateReports.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerateReportsActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout pnlMenuLayout = new javax.swing.GroupLayout(pnlMenu);
         pnlMenu.setLayout(pnlMenuLayout);
@@ -274,6 +274,7 @@ public class frmGenerateReports extends javax.swing.JFrame {
         btnGenerateStaffOrder.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnGenerateStaffOrder.setText("Generate Report");
         btnGenerateStaffOrder.setBorderPainted(false);
+        btnGenerateStaffOrder.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGenerateStaffOrder.setFocusPainted(false);
         btnGenerateStaffOrder.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -295,6 +296,7 @@ public class frmGenerateReports extends javax.swing.JFrame {
         });
 
         cmbUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cmbUsers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbUsers.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -425,16 +427,6 @@ public class frmGenerateReports extends javax.swing.JFrame {
     dtpSpecifiedDate.setCalendarPreferredSize(new java.awt.Dimension(185, 152));
     dtpSpecifiedDate.setFieldFont(new java.awt.Font("Century Gothic", java.awt.Font.PLAIN, 16));
     dtpSpecifiedDate.setBehavior(datechooser.model.multiple.MultyModelBehavior.SELECT_SINGLE);
-    dtpSpecifiedDate.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
-        public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
-            dtpSpecifiedDateOnSelectionChange(evt);
-        }
-    });
-    dtpSpecifiedDate.addCommitListener(new datechooser.events.CommitListener() {
-        public void onCommit(datechooser.events.CommitEvent evt) {
-            dtpSpecifiedDateOnCommit(evt);
-        }
-    });
 
     javax.swing.GroupLayout pnlStaffOrderLayout = new javax.swing.GroupLayout(pnlStaffOrder);
     pnlStaffOrder.setLayout(pnlStaffOrderLayout);
@@ -483,6 +475,7 @@ public class frmGenerateReports extends javax.swing.JFrame {
     btnGenerateAvailableStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
     btnGenerateAvailableStock.setText("Generate Report");
     btnGenerateAvailableStock.setBorderPainted(false);
+    btnGenerateAvailableStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     btnGenerateAvailableStock.setFocusPainted(false);
     btnGenerateAvailableStock.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -576,10 +569,6 @@ public class frmGenerateReports extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
-    private void btnGenerateReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportsActionPerformed
-
-    }//GEN-LAST:event_btnGenerateReportsActionPerformed
-
     private void btnViewAvailableStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewAvailableStockMouseClicked
         try
         {
@@ -588,9 +577,11 @@ public class frmGenerateReports extends javax.swing.JFrame {
             reportGen.setVisible(true);
             this.setVisible(false);
         }
-        catch(IOException e)
+        catch(IOException ex)
         {
-           
+            CustomException ce = new CustomException(date.toString()+": File could not be found (frmGenerateReports)",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
         
     }//GEN-LAST:event_btnViewAvailableStockMouseClicked
@@ -603,9 +594,9 @@ public class frmGenerateReports extends javax.swing.JFrame {
             
             Reporting report = new ReportBuilder(ReportMenu.STOCK_REPORT.reportOption,allStock).createReport();
             report.generateReport(); 
-            path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\\"+report.docName;
+            path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\Project 3 -latest\\BC_Stationary_Management_System\\"+report.docName;
             
-            if(allStock.size() > 0)
+            if(allStock.size() > 0) // If stock is available
             {
                 btnViewAvailableStock.setEnabled(true);
                 JOptionPane.showMessageDialog(null, "Available Stock Report was successfully generated! Please make sure to make an external backup after viewing.", "Successful Report Generation", JOptionPane.INFORMATION_MESSAGE);
@@ -620,32 +611,38 @@ public class frmGenerateReports extends javax.swing.JFrame {
             }
             
         } catch (IOException ex) {
-            Logger.getLogger(frmGenerateReports.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In Stock Class) select() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_btnGenerateAvailableStockMouseClicked
 
     private void btnGenerateStaffOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGenerateStaffOrderMouseClicked
-        // TODO add your handling code here:
         String selectedDate = dtpSpecifiedDate.getText();
         UserRequest request = new UserRequest(selectedUser);
         try {
-            c = new Communication(ProductManagement_Methods.UR_SELECT_SPEC_USER_REQ.methodIdentifier, request);
-            ArrayList<UserRequest> allRequestForUser = new ClientHandler(c).request().listResult;
-            SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");
-            for(UserRequest ur: allRequestForUser)
+            if(rbtnSOSpecified.isSelected())
             {
-                if(sdf.format(ur.getReqDate()).equals(selectedDate))
+                c = new Communication(ProductManagement_Methods.UR_SELECT_SPEC_USER_REQ.methodIdentifier, request);
+                ArrayList<UserRequest> allRequestForUser = new ClientHandler(c).request().listResult;
+                SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");
+                for(UserRequest ur: allRequestForUser)
                 {
-                    requestsForReport.add(ur);
+                    if(sdf.format(ur.getReqDate()).equals(selectedDate))
+                    {
+                        requestsForReport.add(ur);
+                    }
                 }
-            }
+            }      
         } catch (IOException ex) {
-            Logger.getLogger(frmGenerateReports.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) selectSpecUserRequest() method failed! Or StockReport Failed",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
         
         Reporting report = new ReportBuilder(ReportMenu.USER_REQUEST_REPORT.reportOption,requestsForReport).createReport();
         report.generateReport(); 
-        path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\\"+report.docName;
+        path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\Project 3 -latest\\BC_Stationary_Management_System\\"+report.docName;
            
         if(requestsForReport.size() > 0)
         {
@@ -663,7 +660,6 @@ public class frmGenerateReports extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGenerateStaffOrderMouseClicked
 
     private void btnViewStaffOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewStaffOrderMouseClicked
-        // TODO add your handling code here:
         try
         {
             Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler "+ path);
@@ -671,8 +667,11 @@ public class frmGenerateReports extends javax.swing.JFrame {
             reportGen.setVisible(true);
             this.setVisible(false);
         }
-        catch(IOException e)
+        catch(IOException ex)
         {
+            CustomException ce = new CustomException(date.toString()+": File could not be found (frmGenerateReports)",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_btnViewStaffOrderMouseClicked
 
@@ -693,7 +692,6 @@ public class frmGenerateReports extends javax.swing.JFrame {
     
     
     private void rbtnSOTodayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtnSOTodayMouseClicked
-        // TODO add your handling code here:
         LocalDate local = LocalDate.now();
         Date today = Date.valueOf(local);
         UserRequest request = new UserRequest(selectedUser);
@@ -709,7 +707,9 @@ public class frmGenerateReports extends javax.swing.JFrame {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(frmGenerateReports.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) selectSpecUserRequest() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_rbtnSOTodayMouseClicked
 
@@ -730,37 +730,27 @@ public class frmGenerateReports extends javax.swing.JFrame {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(frmGenerateReports.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) selectSpecUserRequest() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_rbtnSOMonthMouseClicked
 
     private void rbtnSOSpecifiedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtnSOSpecifiedMouseClicked
-        // TODO add your handling code here:
         dtpSpecifiedDate.setVisible(true);
         JOptionPane.showMessageDialog(null, "Please select a date using the calender.", "Select a Date", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_rbtnSOSpecifiedMouseClicked
 
-    private void dtpSpecifiedDateOnCommit(datechooser.events.CommitEvent evt) {//GEN-FIRST:event_dtpSpecifiedDateOnCommit
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_dtpSpecifiedDateOnCommit
-
     private void rbntAvailableStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbntAvailableStockMouseClicked
-        // TODO add your handling code here:
         pnlAvailableStock.setVisible(true);
         pnlStaffOrder.setVisible(false);
     }//GEN-LAST:event_rbntAvailableStockMouseClicked
 
     private void rbtnStaffOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtnStaffOrderMouseClicked
-        // TODO add your handling code here:
         pnlStaffOrder.setVisible(true);
         pnlAvailableStock.setVisible(false);
+        requestsForReport.clear();
     }//GEN-LAST:event_rbtnStaffOrderMouseClicked
-
-    private void dtpSpecifiedDateOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_dtpSpecifiedDateOnSelectionChange
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_dtpSpecifiedDateOnSelectionChange
 
     /**
      * @param args the command line arguments
@@ -801,11 +791,9 @@ public class frmGenerateReports extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnGenerateAvailableStock;
-    private javax.swing.JButton btnGenerateAvailableStock1;
     private javax.swing.JButton btnGenerateReports;
     private javax.swing.JButton btnGenerateStaffOrder;
     private javax.swing.JButton btnViewAvailableStock;
-    private javax.swing.JButton btnViewAvailableStock1;
     private javax.swing.JButton btnViewStaffOrder;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
@@ -813,12 +801,10 @@ public class frmGenerateReports extends javax.swing.JFrame {
     private datechooser.beans.DateChooserCombo dtpSpecifiedDate;
     private javax.swing.JLabel lblEditRequest;
     private javax.swing.JLabel lblGenerateAvailableStock;
-    private javax.swing.JLabel lblGenerateAvailableStock1;
     private javax.swing.JLabel lblGenerateReport;
     private javax.swing.JLabel lblGenerateStaffOrder;
     private javax.swing.JLabel lblGenerateStaffOrder1;
     private javax.swing.JPanel pnlAvailableStock;
-    private javax.swing.JPanel pnlAvailableStock1;
     private javax.swing.JPanel pnlGenerateReport;
     private javax.swing.JPanel pnlMainDashHeader;
     private javax.swing.JPanel pnlMenu;

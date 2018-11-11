@@ -5,13 +5,14 @@
  */
 package Forms;
 
-import PersonManagement.PersonManagement_Methods;
 import PersonManagement.User;
 import ProductManagement.Order;
 import ProductManagement.OrderItems;
 import ProductManagement.ProductManagement_Methods;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
 import bc_stationary_bll.Email;
+import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.Reports.ReportBuilder;
 import bc_stationary_bll.Reports.ReportMenu;
 import bc_stationary_bll.Reports.Reporting;
@@ -20,12 +21,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.io.IOException;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -41,11 +38,15 @@ public class frmEditOrders extends javax.swing.JFrame {
      */
     public ArrayList<User> users;
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmEditOrders() {
         try {
             initComponents();
             this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             this.getContentPane().setBackground(new Color(45, 45, 45));
+            lblListHeading.setText(String.format("%S            %S              %S", "Product","Description","Qty"));
             
             Order order = new Order();
             c = new Communication(ProductManagement_Methods.ORDER_SELECTUSERS_WITH_OPEN_ORDERS.methodIdentifier, order);
@@ -54,8 +55,11 @@ public class frmEditOrders extends javax.swing.JFrame {
             for(User u:users){
                 cmbUsers.addItem(u.toString());
             }
-        } catch (IOException ex) {
-            Logger.getLogger(frmEditOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) {
+            CustomException ce = new CustomException(date.toString()+": (In Order Class) selectUsersWithOpenOrder() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
         
     }
@@ -84,6 +88,7 @@ public class frmEditOrders extends javax.swing.JFrame {
         btnFinalizeOrder = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         lbxOrderInfo = new javax.swing.JList<>();
+        lblListHeading = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -138,6 +143,7 @@ public class frmEditOrders extends javax.swing.JFrame {
         btnAddRequest.setBorder(null);
         btnAddRequest.setBorderPainted(false);
         btnAddRequest.setContentAreaFilled(false);
+        btnAddRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddRequest.setFocusPainted(false);
         btnAddRequest.setIconTextGap(10);
         btnAddRequest.setLabel("Finalize Orders");
@@ -151,6 +157,7 @@ public class frmEditOrders extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(36);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -182,6 +189,7 @@ public class frmEditOrders extends javax.swing.JFrame {
         );
 
         cmbUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cmbUsers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbUsers.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -197,6 +205,7 @@ public class frmEditOrders extends javax.swing.JFrame {
         lblSearchUsers.setText("Select an Order to view items:");
 
         lbxOrders.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxOrders.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbxOrders.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lbxOrdersValueChanged(evt);
@@ -214,6 +223,7 @@ public class frmEditOrders extends javax.swing.JFrame {
         btnFinalizeOrder.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnFinalizeOrder.setText("Finalize Order");
         btnFinalizeOrder.setBorderPainted(false);
+        btnFinalizeOrder.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFinalizeOrder.setFocusPainted(false);
         btnFinalizeOrder.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -222,39 +232,41 @@ public class frmEditOrders extends javax.swing.JFrame {
         });
 
         lbxOrderInfo.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lbxOrderInfo.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lbxOrderInfoValueChanged(evt);
-            }
-        });
         jScrollPane2.setViewportView(lbxOrderInfo);
+
+        lblListHeading.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblListHeading.setForeground(new java.awt.Color(255, 255, 255));
+        lblListHeading.setText("Product");
 
         javax.swing.GroupLayout pnlProjectInfoLayout = new javax.swing.GroupLayout(pnlProjectInfo);
         pnlProjectInfo.setLayout(pnlProjectInfoLayout);
         pnlProjectInfoLayout.setHorizontalGroup(
             pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlProjectInfoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlProjectInfoLayout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(lblProductInfo))
-                    .addGroup(pnlProjectInfoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnFinalizeOrder)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 691, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(btnFinalizeOrder, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 691, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+            .addGroup(pnlProjectInfoLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblProductInfo)
+                    .addComponent(lblListHeading, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlProjectInfoLayout.setVerticalGroup(
             pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlProjectInfoLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblProductInfo)
-                .addGap(25, 25, 25)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblListHeading)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnFinalizeOrder)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(46, 46, 46))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -306,9 +318,8 @@ public class frmEditOrders extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
     
     ArrayList<Order> userOrders;
+    public User selectedUser = null;
     private void cmbUsersPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbUsersPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
-        User selectedUser = null;
         if(cmbUsers.getSelectedIndex()> 0){
             try {
                 for(User u: users)
@@ -328,7 +339,9 @@ public class frmEditOrders extends javax.swing.JFrame {
                 }
                 lbxOrders.setModel(model);
             } catch (IOException ex) {
-                Logger.getLogger(frmEditOrders.class.getName()).log(Level.SEVERE, null, ex);
+                CustomException ce = new CustomException(date.toString()+": (In Order Class) selectUserOrders() method failed!",ex);
+                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                gen.Serialize(true); // append to file
             }
         }
        
@@ -355,7 +368,9 @@ public class frmEditOrders extends javax.swing.JFrame {
                 LocalDate localOrder = LocalDate.now();
                 Date receiveDate = Date.valueOf(localOrder);
                 ArrayList<OrderItems> items = selectedOrder.getOrderItems();
-                String user = cmbUsers.getSelectedItem().toString();
+                String user = selectedUser.toString();
+                String emailAddress = selectedUser.getPerson().getContact().getEmail();
+                
                 selectedOrder.setReceivedDate(receiveDate);
                 c = new Communication(ProductManagement_Methods.ORDER_UPDATE.methodIdentifier, selectedOrder);
                 int orderUpdateSuccess = new ClientHandler(c).request().intResult;
@@ -366,8 +381,8 @@ public class frmEditOrders extends javax.swing.JFrame {
                     Reporting report = new ReportBuilder(ReportMenu.ORDER_DELIVERY_REPORT.reportOption,items).createReport();
                     report.generateReport();
                     String message = String.format("Dear %S,\n Your order is ready for delivery and will arrive shortly!\nPlease find attached, to this mail, the list of items that are currently in this order.", user);
-                    String path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\\"+report.docName;
-                    Email email = new Email("eldanefer1@gmail.com", message, "Your Order is Ready for Delivery", path);
+                    String path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\Project 3 -latest\\BC_Stationary_Management_System\\"+report.docName;
+                    Email email = new Email(emailAddress, message, "Your Order is Ready for Delivery", path);
                     email.sendEmail();
                     
                     this.setCursor(Cursor.getDefaultCursor());
@@ -380,14 +395,12 @@ public class frmEditOrders extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Order could not be finalized. Please try again later.","Failure!",JOptionPane.WARNING_MESSAGE);
                 }
             } catch (IOException ex) {
-                Logger.getLogger(frmEditOrders.class.getName()).log(Level.SEVERE, null, ex);
+                CustomException ce = new CustomException(date.toString()+": (In Order Class) update() method failed!",ex);
+                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                gen.Serialize(true); // append to file
             }
         }
     }//GEN-LAST:event_btnFinalizeOrderMouseClicked
-
-    private void lbxOrderInfoValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxOrderInfoValueChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lbxOrderInfoValueChanged
 
     /**
      * @param args the command line arguments
@@ -432,6 +445,7 @@ public class frmEditOrders extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAddRequest;
+    private javax.swing.JLabel lblListHeading;
     private javax.swing.JLabel lblProductInfo;
     private javax.swing.JLabel lblSearchUsers;
     private javax.swing.JList<String> lbxOrderInfo;

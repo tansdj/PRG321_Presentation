@@ -11,15 +11,14 @@ import ProductManagement.Product;
 import ProductManagement.ProductManagement_Methods;
 import ProductManagement.Stock;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
+import bc_stationary_bll.GenericSerializer;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.animation.Animation;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -35,6 +34,9 @@ public class frmUpdateStock extends javax.swing.JFrame {
     public ArrayList<Product> products;
     public ArrayList<Category> categories;
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmUpdateStock() {
         try {
             initComponents();
@@ -44,6 +46,7 @@ public class frmUpdateStock extends javax.swing.JFrame {
             c = new Communication(ProductManagement_Methods.PRODUCT_SELECT_ALL.methodIdentifier, product);
             products = new ClientHandler(c).request().listResult;
             
+            cmbProductSearch.addItem("Select Product:");
             for(Product p :products){
                 cmbProductSearch.addItem(p.getName()+"("+ p.getDescription()+")");
             }
@@ -55,8 +58,15 @@ public class frmUpdateStock extends javax.swing.JFrame {
             for(Category c :categories){
                 cmbCategory.addItem(c.getDescription());
             }
+            
+            txtProductName.setEditable(false);
+            txtProductModel.setEditable(false);
+            txtQuantity.setEditable(false);
+            
         } catch (IOException ex) {
-            Logger.getLogger(frmUpdateStock.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": Unknown Error in one of the following classes: Product, Category",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }
 
@@ -183,8 +193,10 @@ public class frmUpdateStock extends javax.swing.JFrame {
 
         cmbStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Not Available", "Discontinued" }));
+        cmbStatus.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         cmbCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cmbCategory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         lblProductModel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblProductModel.setForeground(new java.awt.Color(255, 255, 255));
@@ -324,6 +336,7 @@ public class frmUpdateStock extends javax.swing.JFrame {
         btnEditStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnEditStock.setText("Update Stock");
         btnEditStock.setBorderPainted(false);
+        btnEditStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEditStock.setFocusPainted(false);
         btnEditStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -332,6 +345,7 @@ public class frmUpdateStock extends javax.swing.JFrame {
         });
 
         cmbProductSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cmbProductSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbProductSearch.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -352,6 +366,7 @@ public class frmUpdateStock extends javax.swing.JFrame {
         btnAddProduct.setBorder(null);
         btnAddProduct.setBorderPainted(false);
         btnAddProduct.setContentAreaFilled(false);
+        btnAddProduct.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddProduct.setFocusPainted(false);
         btnAddProduct.setIconTextGap(30);
         btnAddProduct.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
@@ -369,15 +384,11 @@ public class frmUpdateStock extends javax.swing.JFrame {
         btnUpdateStock.setBorder(null);
         btnUpdateStock.setBorderPainted(false);
         btnUpdateStock.setContentAreaFilled(false);
+        btnUpdateStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdateStock.setFocusPainted(false);
         btnUpdateStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnUpdateStock.setIconTextGap(5);
         btnUpdateStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
-        btnUpdateStock.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateStockActionPerformed(evt);
-            }
-        });
 
         btnViewStock.setBackground(new java.awt.Color(40, 40, 40));
         btnViewStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
@@ -387,6 +398,7 @@ public class frmUpdateStock extends javax.swing.JFrame {
         btnViewStock.setBorder(null);
         btnViewStock.setBorderPainted(false);
         btnViewStock.setContentAreaFilled(false);
+        btnViewStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewStock.setFocusPainted(false);
         btnViewStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewStock.setIconTextGap(40);
@@ -405,6 +417,7 @@ public class frmUpdateStock extends javax.swing.JFrame {
         btnAddStock.setBorder(null);
         btnAddStock.setBorderPainted(false);
         btnAddStock.setContentAreaFilled(false);
+        btnAddStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddStock.setFocusPainted(false);
         btnAddStock.setIconTextGap(50);
         btnAddStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
@@ -422,6 +435,7 @@ public class frmUpdateStock extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(45);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -520,16 +534,17 @@ public class frmUpdateStock extends javax.swing.JFrame {
             Model model;
             //Assigning variables values
             pName =  txtProductName.getText();
-            pDescription = txtDescription.getText();
+            pDescription = txtDescription.getText().trim();
             pStatus = cmbStatus.getSelectedItem().toString();
             pCategory = cmbCategory.getSelectedItem().toString();
             pQuantity = Integer.parseInt(txtQuantity.getText());
             pModel = txtProductModel.getText();
-            costPrice = (Double)Double.parseDouble(txtProductCost.getText());
-            salePrice = (Double)Double.parseDouble(txtProductSale.getText());
+            costPrice = (Double)Double.parseDouble(txtProductCost.getText().trim());
+            salePrice = (Double)Double.parseDouble(txtProductSale.getText().trim());
             category = new Category(pCategory);
             model = new Model(pModel);
             product = new Product(pName, pDescription, category, pStatus, model, costPrice, salePrice, date);
+            
             c = new Communication(ProductManagement_Methods.PRODUCT_UPDATE.methodIdentifier, product);
             int productUpdateSuccess = new ClientHandler(c).request().intResult;
             if(productUpdateSuccess != -1)
@@ -545,43 +560,46 @@ public class frmUpdateStock extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Something went wrong during the update process. Product Update was unsuccessful!","Registration Failed",JOptionPane.WARNING_MESSAGE);
             }
         } catch (IOException ex) {
-            Logger.getLogger(frmUpdateStock.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In Product Class) update() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_btnEditStockActionPerformed
 
     private void cmbProductSearchPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductSearchPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
-        String selectedProductSearch = cmbProductSearch.getSelectedItem().toString();
-        String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
-        String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf(")"));
-        
-        Product selectedProduct = new Product();
-        for(Product p : products)
+        if(cmbProductSearch.getSelectedIndex() > 0)
         {
-            if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))))
+            String selectedProductSearch = cmbProductSearch.getSelectedItem().toString();
+            String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
+            String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf(")"));
+        
+            Product selectedProduct = new Product();
+            for(Product p : products)
             {
-                selectedProduct = p;
+                if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))))
+                {
+                    selectedProduct = p;
+                }
             }
+        
+            Model model = selectedProduct.getModel();
+            Category category = selectedProduct.getCategory();
+            Stock stock = new Stock(selectedProduct,0);
+            stock = stock.selectSpecStock();
+        
+            txtProductName.setText(selectedProduct.getName());
+            txtProductName.setEditable(false);
+            txtDescription.setText(selectedProduct.getDescription());
+            txtProductModel.setText(model.getDescription()); 
+            txtProductModel.setEditable(false);
+            txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
+            txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
+            txtQuantity.setText(Integer.toString(stock.getQuantity()));
+            txtQuantity.setEditable(false);
         }
         
-        Model model = selectedProduct.getModel();
-        Category category = selectedProduct.getCategory();
-        Stock stock = new Stock(selectedProduct,0);
-        stock = stock.selectSpecStock();
-        
-        txtProductName.setText(selectedProduct.getName());
-        txtDescription.setText(selectedProduct.getDescription());
-        txtProductModel.setText(model.getDescription()); 
-        txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
-        txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
-        txtQuantity.setText(Integer.toString(stock.getQuantity()));
-        txtQuantity.setEditable(false);
 
     }//GEN-LAST:event_cmbProductSearchPopupMenuWillBecomeInvisible
-
-    private void btnUpdateStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStockActionPerformed
-
-    }//GEN-LAST:event_btnUpdateStockActionPerformed
 
     private void btnViewStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStockActionPerformed
         frmViewStock viewStock = new frmViewStock();

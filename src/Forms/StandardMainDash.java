@@ -12,6 +12,8 @@ import javax.swing.JOptionPane;
 /**
  *
  * @author Eldane
+ * This form is the Main Menu for the Standard User (Staff Member). It provides central navigation to any part of the
+ * Standard User system.
  */
 public class StandardMainDash extends javax.swing.JFrame {
 
@@ -40,7 +42,7 @@ public class StandardMainDash extends javax.swing.JFrame {
         btnManageRequest = new javax.swing.JButton();
         btnManageProfile = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
-        btnViewUserDetails = new javax.swing.JButton();
+        btnViewProductDetails = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(45, 45, 45));
@@ -54,7 +56,7 @@ public class StandardMainDash extends javax.swing.JFrame {
 
         lblMainDashboard.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
         lblMainDashboard.setForeground(new java.awt.Color(255, 255, 255));
-        lblMainDashboard.setText("Main Dashboard");
+        lblMainDashboard.setText("Main Standard User Dashboard");
         lblMainDashboard.setAlignmentY(0.0F);
 
         javax.swing.GroupLayout pnlRegisterHeader1Layout = new javax.swing.GroupLayout(pnlRegisterHeader1);
@@ -64,7 +66,7 @@ public class StandardMainDash extends javax.swing.JFrame {
             .addGroup(pnlRegisterHeader1Layout.createSequentialGroup()
                 .addGap(607, 607, 607)
                 .addComponent(lblMainDashboard)
-                .addContainerGap(699, Short.MAX_VALUE))
+                .addContainerGap(531, Short.MAX_VALUE))
         );
         pnlRegisterHeader1Layout.setVerticalGroup(
             pnlRegisterHeader1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,23 +147,23 @@ public class StandardMainDash extends javax.swing.JFrame {
             }
         });
 
-        btnViewUserDetails.setBackground(new java.awt.Color(40, 40, 40));
-        btnViewUserDetails.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnViewUserDetails.setForeground(new java.awt.Color(255, 255, 255));
-        btnViewUserDetails.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View.png"))); // NOI18N
-        btnViewUserDetails.setText("View Product Details");
-        btnViewUserDetails.setActionCommand("View Details");
-        btnViewUserDetails.setBorder(null);
-        btnViewUserDetails.setBorderPainted(false);
-        btnViewUserDetails.setContentAreaFilled(false);
-        btnViewUserDetails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewUserDetails.setFocusPainted(false);
-        btnViewUserDetails.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnViewUserDetails.setIconTextGap(10);
-        btnViewUserDetails.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
-        btnViewUserDetails.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnViewProductDetails.setBackground(new java.awt.Color(40, 40, 40));
+        btnViewProductDetails.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnViewProductDetails.setForeground(new java.awt.Color(255, 255, 255));
+        btnViewProductDetails.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View.png"))); // NOI18N
+        btnViewProductDetails.setText("View Product Details");
+        btnViewProductDetails.setActionCommand("View Details");
+        btnViewProductDetails.setBorder(null);
+        btnViewProductDetails.setBorderPainted(false);
+        btnViewProductDetails.setContentAreaFilled(false);
+        btnViewProductDetails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewProductDetails.setFocusPainted(false);
+        btnViewProductDetails.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnViewProductDetails.setIconTextGap(10);
+        btnViewProductDetails.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
+        btnViewProductDetails.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnViewUserDetailsMouseClicked(evt);
+                btnViewProductDetailsMouseClicked(evt);
             }
         });
 
@@ -171,7 +173,7 @@ public class StandardMainDash extends javax.swing.JFrame {
             pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnManageRequest, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnManageProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnViewUserDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnViewProductDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnlMenuLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -185,7 +187,7 @@ public class StandardMainDash extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnManageProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnViewUserDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnViewProductDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(700, Short.MAX_VALUE))
@@ -233,11 +235,11 @@ public class StandardMainDash extends javax.swing.JFrame {
         }    
     }//GEN-LAST:event_btnExitActionPerformed
 
-    private void btnViewUserDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewUserDetailsMouseClicked
+    private void btnViewProductDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewProductDetailsMouseClicked
        frmViewProducts viewP = new frmViewProducts();
        viewP.setVisible(true);
        this.setVisible(false);
-    }//GEN-LAST:event_btnViewUserDetailsMouseClicked
+    }//GEN-LAST:event_btnViewProductDetailsMouseClicked
 
     /**
      * @param args the command line arguments
@@ -278,7 +280,7 @@ public class StandardMainDash extends javax.swing.JFrame {
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnManageProfile;
     private javax.swing.JButton btnManageRequest;
-    private javax.swing.JButton btnViewUserDetails;
+    private javax.swing.JButton btnViewProductDetails;
     private javax.swing.JLabel lblMainDashboard;
     private javax.swing.JPanel pnlMainDashHeader;
     private javax.swing.JPanel pnlMenu;

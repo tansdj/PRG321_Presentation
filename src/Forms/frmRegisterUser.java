@@ -10,21 +10,18 @@ import PersonManagement.Contact;
 import PersonManagement.Department;
 import PersonManagement.Person;
 import PersonManagement.PersonManagement_Methods;
-import PersonManagement.SecurityQuestions;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
+import bc_stationary_bll.GenericSerializer;
 import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
 import bc_stationary_bll.Validation;
 import bc_stationary_management_system.ClientHandler;
-import com.mysql.jdbc.exceptions.DeadlockTimeoutRollbackMarker;
 import java.io.IOException;
-import java.sql.Array;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.UIManager;
 
 /**
  *
@@ -36,22 +33,31 @@ public class frmRegisterUser extends javax.swing.JFrame {
      * Creates new form frmRegisterUser
      */
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmRegisterUser() {
         try {
             initComponents();
             this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             this.getContentPane().setBackground(new Color(45,45,45));
+        
             ArrayList<Department> departments = new ArrayList<Department>();
             Department dept = new Department();
             c = new Communication(PersonManagement_Methods.DEP_SELECT_ALL.methodIdentifier, dept);
             departments = new ClientHandler(c).request().listResult;
             
+            // Populate the Department Combobox
             for(Department d:departments){
                 cmbDepartment.addItem(d.getName());
             }
             pnlDepartmentInfo1.setVisible(false);
-        } catch (IOException ex) {
-            Logger.getLogger(frmRegisterUser.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) {
+            CustomException ce = new CustomException(date.toString()+": (In Department Class) select() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
+            
         }
 
     }
@@ -66,12 +72,16 @@ public class frmRegisterUser extends javax.swing.JFrame {
             c = new Communication(PersonManagement_Methods.DEP_SELECT_ALL.methodIdentifier, dept);
             departments = new ClientHandler(c).request().listResult;
             
+            // Populate the Department combobox
             for(Department d:departments){
                 cmbDepartment.addItem(d.getName());
             }
             pnlDepartmentInfo1.setVisible(false);
-        } catch (IOException ex) {
-            Logger.getLogger(frmRegisterUser.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) {
+            CustomException ce = new CustomException(date.toString()+": (In Department Class) select() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
         
         txtFirstname.setText(p.getName());
@@ -210,6 +220,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
         btnRegisterUser.setBorder(null);
         btnRegisterUser.setBorderPainted(false);
         btnRegisterUser.setContentAreaFilled(false);
+        btnRegisterUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRegisterUser.setFocusPainted(false);
         btnRegisterUser.setIconTextGap(10);
         btnRegisterUser.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
@@ -222,6 +233,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnBack.setIconTextGap(70);
@@ -474,7 +486,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
                     .addGroup(pnlContactInfoLayout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(lblContactInfo)))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlContactInfoLayout.setVerticalGroup(
             pnlContactInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -494,6 +506,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
 
         btnNextRegistration.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnNextRegistration.setText("Continue");
+        btnNextRegistration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNextRegistration.setFocusPainted(false);
         btnNextRegistration.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -589,11 +602,6 @@ public class frmRegisterUser extends javax.swing.JFrame {
 
         txtDepartment.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtDepartment.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtDepartment.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDepartmentActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout pnlNewDepartmentLayout = new javax.swing.GroupLayout(pnlNewDepartment);
         pnlNewDepartment.setLayout(pnlNewDepartmentLayout);
@@ -669,7 +677,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
                 .addGap(0, 404, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(87, 87, 87)
+                .addGap(84, 84, 84)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -678,7 +686,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
                         .addGap(78, 78, 78)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(pnlContactInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlDepartmentInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 473, Short.MAX_VALUE)))
+                            .addComponent(pnlDepartmentInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(btnNextRegistration))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -686,9 +694,12 @@ public class frmRegisterUser extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlRegisterHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(60, 60, 60)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pnlPersonalInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pnlContactInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -697,8 +708,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
                             .addComponent(pnlDepartmentInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pnlAddressInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(btnNextRegistration))
-                    .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnNextRegistration)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -715,23 +725,23 @@ public class frmRegisterUser extends javax.swing.JFrame {
         //Variable Declaration
         String userFirstName="", userLastName="", userCampus="", addressLine1="", addressLine2="", addressCity="", contactCell="", contactEmail="", userID="", userDepart="",addressPostal="";
         Validation validation = new Validation();
-        Person person = new Person();
+        Person person = null;
         try 
         {
             //Assigning values to variables
             if((validation.testProperString(txtFirstname.getText()))&&(!"".equals(txtFirstname.getText())))
             {
-                userFirstName = txtFirstname.getText();
+                userFirstName = txtFirstname.getText().trim();
                 lblFirstname.setForeground(Color.white); 
                 if((validation.testProperString(txtLastname.getText()))&&(!"".equals(txtLastname.getText())))
                 {
-                    userLastName = txtLastname.getText();
+                    userLastName = txtLastname.getText().trim();
                     lblLastname.setForeground(Color.white);
                     if((validation.testNumericString(txtIDNumber.getText()))&&(!"".equals(txtLastname.getText())))
                     {
                         if(validation.testLength(txtIDNumber.getText(), 13, 13))
                         {
-                            userID = txtIDNumber.getText();
+                            userID = txtIDNumber.getText().trim();
                             lblIDNumber.setForeground(Color.white);
                             if(validation.testProperString(cmbCampus.getSelectedItem().toString()))
                             {
@@ -739,15 +749,15 @@ public class frmRegisterUser extends javax.swing.JFrame {
                                 lblCampus.setForeground(Color.white);
                                 if(!"".equals(txtLine1.getText()))
                                 {
-                                    addressLine1 = txtLine1.getText();
+                                    addressLine1 = txtLine1.getText().trim();
                                     lblLine1.setForeground(Color.white);
                                     if(!"".equals(txtLine2.getText()))
                                     {
-                                        addressLine2 = txtLine2.getText();
+                                        addressLine2 = txtLine2.getText().trim();
                                         lblLine2.setForeground(Color.white);
                                         if((validation.testProperString(txtCity.getText())) && (!"".equals(txtCity.getText())))
                                         {
-                                            addressCity = (String)txtCity.getText();
+                                            addressCity = (String)txtCity.getText().trim();
                                             lblCity.setForeground(Color.white);
                                             if(validation.testNumericString(txtPostalCode.getText()))
                                             {
@@ -765,7 +775,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
                                                             char[] emailCharacters = new char[]{'@','.'};
                                                             if((validation.testContains(txtEmail.getText(), emailCharacters)) && (!"".equals(txtEmail.getText())))
                                                             {
-                                                                contactEmail = txtEmail.getText();
+                                                                contactEmail = txtEmail.getText().trim();
                                                                 lblEmail.setForeground(Color.white);
                                                                 if(validation.testProperString(cmbDepartment.getSelectedItem().toString()))
                                                                 {
@@ -787,7 +797,7 @@ public class frmRegisterUser extends javax.swing.JFrame {
                                                                     }
                                                                     else if(selectedDepartOption == 1)
                                                                     {
-                                                                        userDepart = txtDepartment.getText();
+                                                                        userDepart = txtDepartment.getText().trim();
                                                                         lblDepartment3.setForeground(Color.white);
                                                                     
                                                                         Address address = new Address(addressLine1,addressLine2,addressCity,addressPostal);
@@ -899,18 +909,15 @@ public class frmRegisterUser extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "This field cannot be empty nor may it contain any numeric characters. Please Try Again!","Incorrect Firstname",JOptionPane.WARNING_MESSAGE);
                 txtFirstname.grabFocus();
                 lblFirstname.setForeground(Color.red);  
-            }
-            
-                
+            }        
         } 
-        catch (Exception e) 
+        catch (Exception ex) 
         {
-            
+            CustomException ce = new CustomException(date.toString()+": An Unknown Error occured in frmRegisterUser",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }      
     }//GEN-LAST:event_btnNextRegistrationActionPerformed
-
-    private void txtDepartmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDepartmentActionPerformed
-    }//GEN-LAST:event_txtDepartmentActionPerformed
 
     /**
      * @param args the command line arguments

@@ -13,14 +13,15 @@ import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
+import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.SoundEx;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 
@@ -35,6 +36,9 @@ public class frmViewUsers extends javax.swing.JFrame {
      */
     public ArrayList<User> userList;
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmViewUsers() {
         try {
             initComponents();
@@ -50,8 +54,25 @@ public class frmViewUsers extends javax.swing.JFrame {
                 model.addElement(u);
             }
             lbxUsers.setModel(model);
+            
+            txtFirstname.setEditable(false);
+            txtLastname.setEditable(false);
+            txtIDNumber.setEditable(false);
+            txtCampus.setEditable(false);
+            txtLine1.setEditable(false);
+            txtLine2.setEditable(false);
+            txtCity.setEditable(false);
+            txtPostalCode.setEditable(false);
+            txtCellphoneNo.setEditable(false);
+            txtEmail.setEditable(false);
+            txtUsername.setEditable(false);
+            txtAccessLevel.setEditable(false);
+            txtStatus.setEditable(false);
+            
         } catch (IOException ex) {
-            Logger.getLogger(frmViewUsers.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In User Class) select() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
 
     }
@@ -169,25 +190,22 @@ public class frmViewUsers extends javax.swing.JFrame {
         btnViewUser.setBorder(null);
         btnViewUser.setBorderPainted(false);
         btnViewUser.setContentAreaFilled(false);
+        btnViewUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewUser.setFocusPainted(false);
         btnViewUser.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewUser.setIconTextGap(25);
-        btnViewUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewUserActionPerformed(evt);
-            }
-        });
 
         btnAddUser.setBackground(new java.awt.Color(204, 0, 0));
         btnAddUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnAddUser.setForeground(new java.awt.Color(255, 255, 255));
         btnAddUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1.png"))); // NOI18N
-        btnAddUser.setText("Add User");
+        btnAddUser.setText("Accept User");
         btnAddUser.setBorder(null);
         btnAddUser.setBorderPainted(false);
         btnAddUser.setContentAreaFilled(false);
+        btnAddUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddUser.setFocusPainted(false);
-        btnAddUser.setIconTextGap(30);
+        btnAddUser.setIconTextGap(8);
         btnAddUser.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
         btnAddUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -203,6 +221,7 @@ public class frmViewUsers extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(15);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -220,6 +239,7 @@ public class frmViewUsers extends javax.swing.JFrame {
         btnUpdateUser.setBorder(null);
         btnUpdateUser.setBorderPainted(false);
         btnUpdateUser.setContentAreaFilled(false);
+        btnUpdateUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdateUser.setFocusPainted(false);
         btnUpdateUser.setIconTextGap(5);
         btnUpdateUser.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
@@ -275,6 +295,7 @@ public class frmViewUsers extends javax.swing.JFrame {
         });
 
         lbxUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxUsers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbxUsers.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lbxUsersValueChanged(evt);
@@ -608,10 +629,6 @@ public class frmViewUsers extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnViewUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewUserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnViewUserActionPerformed
-
     private void btnAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUserActionPerformed
         frmAddUser addUser = new frmAddUser();
         addUser.setVisible(true);
@@ -639,10 +656,14 @@ public class frmViewUsers extends javax.swing.JFrame {
                     model.addElement(u);
                 }
                 lbxUsers.setModel(model);
-            } catch (IOException ex) {
-                Logger.getLogger(frmViewUsers.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+            catch (IOException ex) {
+                CustomException ce = new CustomException(date.toString()+": (In User Class) select() method failed!",ex);
+                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                gen.Serialize(true); // append to file
             }
-        } else {
+        } else 
+        {
             int numSearchChars; // amount of characters that are typed into the search box.
 
             searchCode = SoundEx.Soundex(searchText);
@@ -657,12 +678,17 @@ public class frmViewUsers extends javax.swing.JFrame {
 
                         Person p = u.getPerson();
                         try {
-                            p = p.selectSpecPerson();
+                            c = new Communication(PersonManagement_Methods.PERSON_SELECT_SPECIFIC.methodIdentifier, p);
+                            p = (Person) new ClientHandler(c).request().objectResult;
                             u.setPerson(p);
                             usersThatFitCriteria.add(u);
-                        } catch (SQLException se) {
-                            System.out.println(se);
-                        }
+                        } 
+                        catch (IOException ex) {
+                            CustomException ce = new CustomException(date.toString()+": (In Person Class) selectSpecPerson() method failed!",ex);
+                            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                            gen.Serialize(true); // append to file
+                        } 
+                        
 
                     }
 
@@ -672,12 +698,13 @@ public class frmViewUsers extends javax.swing.JFrame {
             DefaultListModel model = new DefaultListModel();
 
             lbxUsers.setModel(model);
-            if(usersThatFitCriteria.size()==0){
+            if(usersThatFitCriteria.size() == 0){
                 model.addElement(new String("No Results Found"));
-            }else{
-            for (User u : usersThatFitCriteria) {
-                model.addElement(u);
             }
+            else{
+                for (User u : usersThatFitCriteria) {
+                    model.addElement(u);
+                }
             }
             lbxUsers.setModel(model);
         }
@@ -712,7 +739,10 @@ public class frmViewUsers extends javax.swing.JFrame {
                 c = new Communication(PersonManagement_Methods.USQ_SELECT_SPEC.methodIdentifier, userSecQ);
                 userSecQ = (UserSecurityQuestions) new ClientHandler(c).request().objectResult;
             } 
-            catch (IOException io) {
+            catch (IOException ex) {
+                CustomException ce = new CustomException(date.toString()+": Unknown Error in one of the following classes: Person, UserSecurityQuestions",ex);
+                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                gen.Serialize(true); // append to file
             }
             
 
@@ -748,7 +778,7 @@ public class frmViewUsers extends javax.swing.JFrame {
             txtEmail.setEditable(false);
 
             txtUsername.setText(selectedUser.getUsername());
-            txtFirstname.setEditable(false);
+            txtUsername.setEditable(false);
 
             txtAccessLevel.setText(selectedUser.getAccessLevel());
             txtAccessLevel.setEditable(false);

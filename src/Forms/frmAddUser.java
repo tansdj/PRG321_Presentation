@@ -13,17 +13,17 @@ import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
+import bc_stationary_bll.GenericSerializer;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 
 /**
  *
@@ -36,6 +36,9 @@ public class frmAddUser extends javax.swing.JFrame {
      */
     public ArrayList<User> userList;
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmAddUser() {
         try {
             initComponents();
@@ -52,8 +55,13 @@ public class frmAddUser extends javax.swing.JFrame {
             {
                 model.addElement(u);
             }
-            lbxUsers.setModel(model);
             
+            if(userList.isEmpty())
+            {
+                model.addElement("There are no Pending Users");
+            }
+            lbxUsers.setModel(model);
+ 
             txtFirstname.setEditable(false);
             txtLastname.setEditable(false);
             txtIDNumber.setEditable(false);
@@ -67,8 +75,11 @@ public class frmAddUser extends javax.swing.JFrame {
             txtFirstname.setEditable(false);
             txtAccessLevel.setEditable(false);
             txtStatus.setEditable(false);
-        } catch (IOException ex) {
-            Logger.getLogger(frmAddUser.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) {
+            CustomException ce = new CustomException(date.toString()+": (In User Class) selectPending() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }
 
@@ -137,7 +148,7 @@ public class frmAddUser extends javax.swing.JFrame {
 
         lblAddUser.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
         lblAddUser.setForeground(new java.awt.Color(255, 255, 255));
-        lblAddUser.setText("Add User");
+        lblAddUser.setText("Accept User");
         lblAddUser.setAlignmentY(0.0F);
 
         javax.swing.GroupLayout pnlRegisterHeader1Layout = new javax.swing.GroupLayout(pnlRegisterHeader1);
@@ -147,7 +158,7 @@ public class frmAddUser extends javax.swing.JFrame {
             .addGroup(pnlRegisterHeader1Layout.createSequentialGroup()
                 .addGap(607, 607, 607)
                 .addComponent(lblAddUser)
-                .addContainerGap(787, Short.MAX_VALUE))
+                .addContainerGap(751, Short.MAX_VALUE))
         );
         pnlRegisterHeader1Layout.setVerticalGroup(
             pnlRegisterHeader1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -180,6 +191,7 @@ public class frmAddUser extends javax.swing.JFrame {
         btnViewUser.setBorder(null);
         btnViewUser.setBorderPainted(false);
         btnViewUser.setContentAreaFilled(false);
+        btnViewUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewUser.setFocusPainted(false);
         btnViewUser.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewUser.setIconTextGap(25);
@@ -194,12 +206,13 @@ public class frmAddUser extends javax.swing.JFrame {
         btnAddUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnAddUser.setForeground(new java.awt.Color(255, 255, 255));
         btnAddUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
-        btnAddUser.setText("Add User");
+        btnAddUser.setText("Accept User");
         btnAddUser.setBorder(null);
         btnAddUser.setBorderPainted(false);
         btnAddUser.setContentAreaFilled(false);
+        btnAddUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddUser.setFocusPainted(false);
-        btnAddUser.setIconTextGap(30);
+        btnAddUser.setIconTextGap(8);
 
         btnBack.setBackground(new java.awt.Color(204, 0, 0));
         btnBack.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
@@ -209,6 +222,7 @@ public class frmAddUser extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(20);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -226,6 +240,7 @@ public class frmAddUser extends javax.swing.JFrame {
         btnUpdateUser.setBorder(null);
         btnUpdateUser.setBorderPainted(false);
         btnUpdateUser.setContentAreaFilled(false);
+        btnUpdateUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdateUser.setFocusPainted(false);
         btnUpdateUser.setIconTextGap(5);
         btnUpdateUser.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
@@ -321,6 +336,7 @@ public class frmAddUser extends javax.swing.JFrame {
         btnRejectUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnRejectUser.setText("Reject User");
         btnRejectUser.setBorderPainted(false);
+        btnRejectUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRejectUser.setFocusPainted(false);
         btnRejectUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -331,6 +347,7 @@ public class frmAddUser extends javax.swing.JFrame {
         btnInsertUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnInsertUser.setText("Add User");
         btnInsertUser.setBorderPainted(false);
+        btnInsertUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnInsertUser.setFocusPainted(false);
         btnInsertUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -578,6 +595,7 @@ public class frmAddUser extends javax.swing.JFrame {
         );
 
         lbxUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxUsers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbxUsers.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lbxUsersValueChanged(evt);
@@ -656,7 +674,9 @@ public class frmAddUser extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Error occured during this process!","Unsuccessful Insertation",JOptionPane.ERROR_MESSAGE);
             }     
         } catch (IOException ex) {
-            Logger.getLogger(frmAddUser.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In User Class) update() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_btnRejectUserActionPerformed
 
@@ -691,7 +711,9 @@ public class frmAddUser extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Error occured during this process!","Unsuccessful Insertation",JOptionPane.ERROR_MESSAGE);
             }     
         } catch (IOException ex) {
-            Logger.getLogger(frmAddUser.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In User Class) update() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_btnInsertUserActionPerformed
 
@@ -721,9 +743,11 @@ public class frmAddUser extends javax.swing.JFrame {
             userSecQ = (UserSecurityQuestions)new ClientHandler(c).request().objectResult;
             System.out.println(per+"*");
         }
-        catch(IOException io)
+        catch(IOException ex)
         {
-            
+            CustomException ce = new CustomException(date.toString()+": Unknown Error in one of the following classes: Person, UserSecurityQuestions",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
         
         txtFirstname.setText(person.getName());

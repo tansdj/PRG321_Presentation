@@ -5,23 +5,21 @@
  */
 package Forms;
 
-import PersonManagement.Person;
 import PersonManagement.PersonManagement_Methods;
 import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
 import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.Validation;
 import bc_stationary_management_system.ClientHandler;
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.event.ChangeEvent;
 
 /**
  *
@@ -34,10 +32,10 @@ public class frmLogin extends javax.swing.JFrame {
      */
     public frmLogin() {
         initComponents();
-        this.setLocationRelativeTo(null); // Centers form in the middle of screen
-        btnRegister.setOpaque(false);
-        btnRegister.setContentAreaFilled(false);
-        btnRegister.setBorderPainted(false);
+        this.setLocationRelativeTo(null); // Centers form in the middle of screen.
+        btnRegister.setOpaque(false); // Add transparency to the button.
+        btnRegister.setContentAreaFilled(false); // Removes grey background colour when hovering over the button.
+        btnRegister.setBorderPainted(false); // Removes border of this button.
         
         
     }
@@ -165,6 +163,7 @@ public class frmLogin extends javax.swing.JFrame {
         cbxForgotPassword.setForeground(new java.awt.Color(255, 255, 255));
         cbxForgotPassword.setText("Forgot Password?");
         cbxForgotPassword.setBorder(null);
+        cbxForgotPassword.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cbxForgotPassword.setFocusPainted(false);
         cbxForgotPassword.setOpaque(false);
         cbxForgotPassword.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -179,6 +178,7 @@ public class frmLogin extends javax.swing.JFrame {
         btnLogin.setText("Login");
         btnLogin.setBorder(null);
         btnLogin.setBorderPainted(false);
+        btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLogin.setFocusPainted(false);
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -246,6 +246,9 @@ public class frmLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
    
         try {
@@ -263,15 +266,18 @@ public class frmLogin extends javax.swing.JFrame {
                 User currentUser = (User) new ClientHandler(c).request().objectResult;
                 String accessLevel = currentUser.getAccessLevel();
                 GenericSerializer gen = new GenericSerializer("loggedUser.txt",currentUser);
-                gen.Serialize();
+                gen.Serialize(false); // In order to keep track of the currently logged in user, the current user details are stored in a file.
+                                      // The file is local stored on the users' computer.
                 if(accessLevel.equals("Administrator"))
                 {
+                    JOptionPane.showMessageDialog(null, "Login Credentials is correct. Proceed to Main Menu!","Successful Login",JOptionPane.INFORMATION_MESSAGE);
                     AdministratorMainDash adminDash = new AdministratorMainDash();
                     adminDash.setVisible(true);
                     this.setVisible(false);
                 }
                 else if (accessLevel.equals("Standard"))
                 {
+                    JOptionPane.showMessageDialog(null, "Login Credentials is correct. Proceed to Main Menu!","Successful Login",JOptionPane.INFORMATION_MESSAGE);
                     StandardMainDash standardDash = new StandardMainDash();
                     standardDash.setVisible(true);
                     this.setVisible(false);
@@ -287,8 +293,11 @@ public class frmLogin extends javax.swing.JFrame {
             else if(allowAccess == -1)
             {
                 JOptionPane.showMessageDialog(null, "Your account has not yet been approved, therefore no access privileges have been assigned!","Insufficient Access Privileges",JOptionPane.WARNING_MESSAGE);
-            }} catch (IOException ex) {
-            Logger.getLogger(frmLogin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            CustomException ce = new CustomException(date.toString()+": (In User Class) testLogin() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
         
     }//GEN-LAST:event_btnLoginActionPerformed
@@ -307,7 +316,7 @@ public class frmLogin extends javax.swing.JFrame {
                 String username = txtUsername.getText();
                 User user = new User(username,"");
                 c = new Communication(PersonManagement_Methods.USER_TEST_EXISTING.methodIdentifier,user);
-                boolean existingUser = new ClientHandler(c).request().boolResult;
+                boolean existingUser = new ClientHandler(c).request().boolResult; //Check if username and password already exists.
                 if(username.equals("") || (!existingUser))
                 {
                     JOptionPane.showMessageDialog(null, "Please provide the correct username!","Incorrect Username",JOptionPane.WARNING_MESSAGE);
@@ -321,16 +330,21 @@ public class frmLogin extends javax.swing.JFrame {
                         c = new Communication(PersonManagement_Methods.USQ_SELECT_SPEC.methodIdentifier,uQuestion);
                         UserSecurityQuestions specUQuestion = (UserSecurityQuestions) new ClientHandler(c).request().objectResult;
                         SecurityQuestions questions = specUQuestion.getQuestion();
-                        String question = questions.getQuestion();
-                        String answer = specUQuestion.getAnswer();
+                        String question = questions.getQuestion(); // Convert specific Sequrity Question into String to use it in the InputDialog.
+                        String answer = specUQuestion.getAnswer(); // Convert specific Sequrity Question Answer into String to compare it with input in the InputDialog.
                         
                         String securityAnswerInput = JOptionPane.showInputDialog(null,question,"Security Question",JOptionPane.QUESTION_MESSAGE);
-                        if(securityAnswerInput.equals(answer))
+                        if(securityAnswerInput == null) // If you press Cancel then the value is null, which cannot be used in a .equals() comparison
+                        {
+                            securityAnswerInput = "";
+                        }
+                        
+                        if(securityAnswerInput.equals(answer)) // If answers match
                         {
                             String newPassword = JOptionPane.showInputDialog(null,"Enter New Password:","Reset Password",JOptionPane.QUESTION_MESSAGE);
                             String newRePassword = JOptionPane.showInputDialog(null,"Re-Enter New Password:","Reset Password",JOptionPane.QUESTION_MESSAGE);
-                            
-                            if((!"".equals(newPassword))&&(!"".equals(newRePassword)))
+
+                            if((newPassword != null)&&(newRePassword != null))
                             {
                                 if(newPassword.equals(newRePassword))
                                 {
@@ -351,6 +365,7 @@ public class frmLogin extends javax.swing.JFrame {
                                         c = new Communication(PersonManagement_Methods.USER_UPDATE.methodIdentifier,userToUpdate);
                                         int result = new ClientHandler(c).request().intResult;
                                         boolean success = true;
+                                        
                                         if (result == -1)
                                         {
                                             success = false;
@@ -375,21 +390,21 @@ public class frmLogin extends javax.swing.JFrame {
                                     JOptionPane.showMessageDialog(null, "There was a password mismatch!","Reset Password Process Failed",JOptionPane.WARNING_MESSAGE);
                                 }
                             }
-                            else
-                            {
-                                JOptionPane.showMessageDialog(null, "The password may not be empty!","Reset Password Process Failed",JOptionPane.WARNING_MESSAGE);
-                            }
                         }
                         else
                         {
                             JOptionPane.showMessageDialog(null, "That answer is incorrect!","Incorrect Answer",JOptionPane.WARNING_MESSAGE);
                         }
                     } catch (IOException ex) {
-                        Logger.getLogger(frmLogin.class.getName()).log(Level.SEVERE, null, ex);
+                        CustomException ce = new CustomException(date.toString()+": Unknown Error in one of the following classes: User, UserSecurityQuestions",ex);
+                        GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                        gen.Serialize(true); // append to file
                     }
                 }
             } catch (IOException ex) {
-                Logger.getLogger(frmLogin.class.getName()).log(Level.SEVERE, null, ex);
+                CustomException ce = new CustomException(date.toString()+": (In User Class) testForExistingUser() method failed!",ex);
+                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                gen.Serialize(true); // append to file
             }
             
         }
@@ -414,15 +429,17 @@ public class frmLogin extends javax.swing.JFrame {
                     User currentUser = (User) new ClientHandler(c).request().objectResult;
                     String accessLevel = currentUser.getAccessLevel();
                     GenericSerializer gen = new GenericSerializer("loggedUser.txt",currentUser);
-                    gen.Serialize();
+                    gen.Serialize(false);
                     if(accessLevel.equals("Administrator"))
                     {
+                        JOptionPane.showMessageDialog(null, "Login Credentials is correct. Proceed to Main Menu!","Successful Login",JOptionPane.INFORMATION_MESSAGE);
                         AdministratorMainDash adminDash = new AdministratorMainDash();
                         adminDash.setVisible(true);
                         this.setVisible(false);
                     }
                     else if (accessLevel.equals("Standard"))
                     {
+                        JOptionPane.showMessageDialog(null, "Login Credentials is correct. Proceed to Main Menu!","Successful Login",JOptionPane.INFORMATION_MESSAGE);
                         StandardMainDash standardDash = new StandardMainDash();
                         standardDash.setVisible(true);
                         this.setVisible(false);
@@ -441,7 +458,9 @@ public class frmLogin extends javax.swing.JFrame {
                 }
             } 
             catch (IOException ex) {
-            Logger.getLogger(frmLogin.class.getName()).log(Level.SEVERE, null, ex);
+                CustomException ce = new CustomException(date.toString()+": (In User Class) Either testLogin() or selectSpecUser() failed!",ex);
+                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                gen.Serialize(true); // append to file
             }
         }
     }//GEN-LAST:event_txtPasswordKeyPressed

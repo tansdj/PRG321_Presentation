@@ -90,7 +90,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="607" max="-2" attributes="0"/>
                       <Component id="lblMainDashboard" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="699" max="32767" attributes="0"/>
+                      <EmptySpace pref="531" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -113,7 +113,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Main Dashboard"/>
+                <Property name="text" type="java.lang.String" value="Main Standard User Dashboard"/>
                 <Property name="alignmentY" type="float" value="0.0"/>
               </Properties>
             </Component>
@@ -133,7 +133,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="btnManageRequest" alignment="1" max="32767" attributes="0"/>
               <Component id="btnManageProfile" alignment="0" max="32767" attributes="0"/>
-              <Component id="btnViewUserDetails" alignment="0" max="32767" attributes="0"/>
+              <Component id="btnViewProductDetails" alignment="0" max="32767" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnExit" max="32767" attributes="0"/>
@@ -149,7 +149,7 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnManageProfile" min="-2" pref="39" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="btnViewUserDetails" min="-2" pref="39" max="-2" attributes="0"/>
+                  <Component id="btnViewProductDetails" min="-2" pref="39" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnExit" min="-2" pref="39" max="-2" attributes="0"/>
                   <EmptySpace pref="700" max="32767" attributes="0"/>
@@ -259,7 +259,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExitActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnViewUserDetails">
+        <Component class="javax.swing.JButton" name="btnViewProductDetails">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="28" green="28" red="28" type="rgb"/>
@@ -291,7 +291,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnViewUserDetailsMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnViewProductDetailsMouseClicked"/>
           </Events>
         </Component>
       </SubComponents>

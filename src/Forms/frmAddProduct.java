@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 /**
  *
@@ -28,6 +26,9 @@ public class frmAddProduct extends javax.swing.JFrame {
      */
     
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmAddProduct() {
         try {
             initComponents();
@@ -43,7 +44,9 @@ public class frmAddProduct extends javax.swing.JFrame {
                 cmbCategory.addItem(c.getDescription());
             }
         } catch (IOException ex) {
-            Logger.getLogger(frmAddProduct.class.getName()).log(Level.SEVERE, null, ex);
+           CustomException ce = new CustomException(date.toString()+": (In Category Class) select() method failed!",ex);
+           GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+           gen.Serialize(true); // append to file
         }
     }
 
@@ -151,6 +154,7 @@ public class frmAddProduct extends javax.swing.JFrame {
         btnAddProduct.setBorder(null);
         btnAddProduct.setBorderPainted(false);
         btnAddProduct.setContentAreaFilled(false);
+        btnAddProduct.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddProduct.setFocusPainted(false);
         btnAddProduct.setIconTextGap(30);
         btnAddProduct.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
@@ -163,6 +167,7 @@ public class frmAddProduct extends javax.swing.JFrame {
         btnUpdateStock.setBorder(null);
         btnUpdateStock.setBorderPainted(false);
         btnUpdateStock.setContentAreaFilled(false);
+        btnUpdateStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdateStock.setFocusPainted(false);
         btnUpdateStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnUpdateStock.setIconTextGap(5);
@@ -181,6 +186,7 @@ public class frmAddProduct extends javax.swing.JFrame {
         btnViewStock.setBorder(null);
         btnViewStock.setBorderPainted(false);
         btnViewStock.setContentAreaFilled(false);
+        btnViewStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewStock.setFocusPainted(false);
         btnViewStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewStock.setIconTextGap(40);
@@ -199,6 +205,7 @@ public class frmAddProduct extends javax.swing.JFrame {
         btnAddStock.setBorder(null);
         btnAddStock.setBorderPainted(false);
         btnAddStock.setContentAreaFilled(false);
+        btnAddStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddStock.setFocusPainted(false);
         btnAddStock.setIconTextGap(50);
         btnAddStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
@@ -216,6 +223,7 @@ public class frmAddProduct extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(45);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -313,6 +321,7 @@ public class frmAddProduct extends javax.swing.JFrame {
         pnlExistingCategory.setBackground(new java.awt.Color(45, 45, 45));
 
         cmbCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cmbCategory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout pnlExistingCategoryLayout = new javax.swing.GroupLayout(pnlExistingCategory);
         pnlExistingCategory.setLayout(pnlExistingCategoryLayout);
@@ -337,11 +346,6 @@ public class frmAddProduct extends javax.swing.JFrame {
 
         txtCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtCategory.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtCategory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCategoryActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout pnlNewCategoryLayout = new javax.swing.GroupLayout(pnlNewCategory);
         pnlNewCategory.setLayout(pnlNewCategoryLayout);
@@ -454,6 +458,7 @@ public class frmAddProduct extends javax.swing.JFrame {
 
         numQuantity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         numQuantity.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        numQuantity.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout pnlInStockLayout = new javax.swing.GroupLayout(pnlInStock);
         pnlInStock.setLayout(pnlInStockLayout);
@@ -486,6 +491,7 @@ public class frmAddProduct extends javax.swing.JFrame {
         btnInsertProduct.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnInsertProduct.setText("Add Product");
         btnInsertProduct.setBorderPainted(false);
+        btnInsertProduct.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnInsertProduct.setFocusPainted(false);
         btnInsertProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -564,11 +570,11 @@ public class frmAddProduct extends javax.swing.JFrame {
         {
             if(!"".equals(txtProductName.getText()))
             {
-                pName =  txtProductName.getText();
+                pName =  txtProductName.getText().trim();
                 lblProductName.setForeground(Color.white);
                 if(!"".equals(txtDescription.getText()))
                 {
-                    pDescription = txtDescription.getText();
+                    pDescription = txtDescription.getText().trim();
                     lblDescription.setForeground(Color.white);
                     
                     if((Integer)numQuantity.getValue() >= 0)
@@ -583,15 +589,15 @@ public class frmAddProduct extends javax.swing.JFrame {
                         pStatus = txtStatus.getText();
                         if(txtProductModel.getText() != "")
                         {
-                             pModel = txtProductModel.getText();
+                             pModel = txtProductModel.getText().trim();
                              lblProductModel.setForeground(Color.white);
                              if(validation.testDouble(txtProductCost.getText()))
                              {
-                                 costPrice = (Double)Double.parseDouble(txtProductCost.getText());
+                                 costPrice = (Double)Double.parseDouble(txtProductCost.getText().trim());
                                  lblProductCost.setForeground(Color.white);
                                  if(validation.testDouble(txtProductSale.getText()))
                                  {
-                                     salePrice = (Double)Double.parseDouble(txtProductSale.getText());
+                                     salePrice = (Double)Double.parseDouble(txtProductSale.getText().trim());
                                      lblProductSale.setForeground(Color.white);
                                      
                                      int selectedCategOption = jTabbedPane2.getSelectedIndex();
@@ -716,9 +722,11 @@ public class frmAddProduct extends javax.swing.JFrame {
                 txtProductName.grabFocus();
                 lblProductName.setForeground(Color.red);
             }
-        } catch (Exception e) 
+        } catch (IOException ex) 
         {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            CustomException ce = new CustomException(date.toString()+": Unknown Exception in one of the following classes: Stock, Product, Model, Category",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_btnInsertProductActionPerformed
 
@@ -733,10 +741,6 @@ public class frmAddProduct extends javax.swing.JFrame {
         mainDash.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
-
-    private void txtCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCategoryActionPerformed
-
-    }//GEN-LAST:event_txtCategoryActionPerformed
 
     /**
      * @param args the command line arguments

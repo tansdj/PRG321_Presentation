@@ -9,15 +9,15 @@ import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.*;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
 import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.Validation;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -33,6 +33,9 @@ public class frmManageProfile extends javax.swing.JFrame {
      */
     public ArrayList<User> userList = new ArrayList<User>();
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmManageProfile() {
         try {
             initComponents();
@@ -63,7 +66,9 @@ public class frmManageProfile extends javax.swing.JFrame {
                 cmbDepartment.addItem(d.getName());
             }
         } catch (IOException ex) {
-            Logger.getLogger(frmManageProfile.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": Unknown Exception in one of the following classes: User, Department",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }
 
@@ -180,6 +185,7 @@ public class frmManageProfile extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(20);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -198,6 +204,7 @@ public class frmManageProfile extends javax.swing.JFrame {
         btnUpdateUser.setBorder(null);
         btnUpdateUser.setBorderPainted(false);
         btnUpdateUser.setContentAreaFilled(false);
+        btnUpdateUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdateUser.setFocusPainted(false);
         btnUpdateUser.setIconTextGap(18);
         btnUpdateUser.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
@@ -224,6 +231,7 @@ public class frmManageProfile extends javax.swing.JFrame {
         );
 
         lbxUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxUsers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbxUsers.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lbxUsersValueChanged(evt);
@@ -295,6 +303,7 @@ public class frmManageProfile extends javax.swing.JFrame {
         btnEditUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnEditUser.setText("Update User");
         btnEditUser.setBorderPainted(false);
+        btnEditUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEditUser.setFocusPainted(false);
         btnEditUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -314,11 +323,7 @@ public class frmManageProfile extends javax.swing.JFrame {
         lblDepartmentInfo.setText("Department Information");
 
         cmbDepartment.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        cmbDepartment.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cmbDepartmentMouseClicked(evt);
-            }
-        });
+        cmbDepartment.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         lblDepartment.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblDepartment.setForeground(new java.awt.Color(255, 255, 255));
@@ -551,11 +556,7 @@ public class frmManageProfile extends javax.swing.JFrame {
 
         cmbCampus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         cmbCampus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pretoria", "Ekurhuleni", "Nelson Mandela Bay" }));
-        cmbCampus.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cmbCampusMouseClicked(evt);
-            }
-        });
+        cmbCampus.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout pnlUserInfo1Layout = new javax.swing.GroupLayout(pnlUserInfo1);
         pnlUserInfo1.setLayout(pnlUserInfo1Layout);
@@ -681,8 +682,10 @@ public class frmManageProfile extends javax.swing.JFrame {
             c = new Communication(PersonManagement_Methods.USQ_SELECT_SPEC.methodIdentifier, userSecQ);
             userSecQ = (UserSecurityQuestions) new ClientHandler(c).request().objectResult;
         } 
-        catch (IOException io) {
-
+        catch (IOException ex) {
+            CustomException ce = new CustomException(date.toString()+": Unknown Exception in one of the following classes: Person, UserSecurityQuestions",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
 
         txtFirstnameUpdate.setText(person.getName());
@@ -744,15 +747,15 @@ public class frmManageProfile extends javax.swing.JFrame {
                 lblCampusUpdate.setForeground(Color.white);
                 if(!"".equals(txtLine1.getText()))
                 {
-                    addressLine1 = txtLine1.getText();
+                    addressLine1 = txtLine1.getText().trim();
                     lblLine1.setForeground(Color.white);
                     if(!"".equals(txtLine2.getText()))
                     {
-                        addressLine2 = txtLine2.getText();
+                        addressLine2 = txtLine2.getText().trim();
                         lblLine2.setForeground(Color.white);
                         if((validation.testProperString(txtCity.getText()))&&(!"".equals(txtCity.getText())))
                         {
-                            addressCity = txtCity.getText();
+                            addressCity = txtCity.getText().trim();
                             lblCity.setForeground(Color.white);
                             if((validation.testNumericString(txtPostalCode.getText()))&&(!"".equals(txtPostalCode.getText())))
                             {
@@ -769,7 +772,7 @@ public class frmManageProfile extends javax.swing.JFrame {
                                             char[] emailCharacters = new char[]{'@','.'};
                                             if((validation.testContains(txtEmail.getText(), emailCharacters))&&(!"".equals(txtEmail.getText())))
                                             {
-                                                contactEmail = txtEmail.getText();
+                                                contactEmail = txtEmail.getText().trim();
                                                 lblEmail.setForeground(Color.white);
                                                 if(!"".equals(cmbDepartment.getSelectedItem().toString()))
                                                 {
@@ -781,7 +784,7 @@ public class frmManageProfile extends javax.swing.JFrame {
                                                     userSecQuestion = txtSecQuestion.getText();
                                                     if(!"".equals(txtAnswer1.getText()))
                                                     {
-                                                        userSecAnswer = txtAnswer1.getText();
+                                                        userSecAnswer = txtAnswer1.getText().trim();
                                                         lblAnswer1.setForeground(Color.white);
                                                     }
                                                     else
@@ -789,7 +792,6 @@ public class frmManageProfile extends javax.swing.JFrame {
                                                         JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Security Answer",JOptionPane.WARNING_MESSAGE);
                                                         lblAnswer1.setForeground(Color.red);
                                                         txtAnswer1.grabFocus();
-                                                        txtAnswer1.setText("");
                                                     }
                                                 }
                                                 else
@@ -801,7 +803,6 @@ public class frmManageProfile extends javax.swing.JFrame {
                                             else
                                             {
                                                 JOptionPane.showMessageDialog(null, "This is not a valid email address. Please Try Again!","Incorrect Email",JOptionPane.WARNING_MESSAGE);
-                                                txtEmail.setText("");
                                                 txtEmail.grabFocus();
                                                 lblEmail.setForeground(Color.red);
                                             }
@@ -809,7 +810,6 @@ public class frmManageProfile extends javax.swing.JFrame {
                                         else
                                         {
                                             JOptionPane.showMessageDialog(null, "This field must contain 10 numeric characters. Please Try Again!","Incorrect Cellphone Number",JOptionPane.WARNING_MESSAGE);
-                                            txtCellphoneNo.setText("");
                                             txtCellphoneNo.grabFocus();
                                             lblCellNo.setForeground(Color.red);
                                         }
@@ -817,7 +817,6 @@ public class frmManageProfile extends javax.swing.JFrame {
                                     else
                                     {
                                         JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain letters. Please Try Again!","Incorrect Cellphone Number",JOptionPane.WARNING_MESSAGE);
-                                        txtCellphoneNo.setText("");
                                         txtCellphoneNo.grabFocus();
                                         lblCellNo.setForeground(Color.red);
                                     }
@@ -825,7 +824,6 @@ public class frmManageProfile extends javax.swing.JFrame {
                                 else
                                 {
                                     JOptionPane.showMessageDialog(null, "This field must contain 4 numeric characters. Please Try Again!","Incorrect Postal Code",JOptionPane.WARNING_MESSAGE);
-                                    txtPostalCode.setText("");
                                     txtPostalCode.grabFocus();
                                     lblPostalCode.setForeground(Color.red);
                                 }
@@ -833,7 +831,6 @@ public class frmManageProfile extends javax.swing.JFrame {
                             else
                             {
                                 JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain letters. Please Try Again!","Incorrect Postal Code",JOptionPane.WARNING_MESSAGE);
-                                txtPostalCode.setText("");
                                 txtPostalCode.grabFocus();
                                 lblPostalCode.setForeground(Color.red);
                             }
@@ -841,7 +838,6 @@ public class frmManageProfile extends javax.swing.JFrame {
                         else
                         {
                             JOptionPane.showMessageDialog(null, "This field cannot be empty nor can it contain numberic characters. Please Try Again!","Incorrect City",JOptionPane.WARNING_MESSAGE);
-                            txtCity.setText("");
                             txtCity.grabFocus();
                             lblCity.setForeground(Color.red);
                         }
@@ -849,7 +845,6 @@ public class frmManageProfile extends javax.swing.JFrame {
                     else
                     {
                         JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Address Line 2",JOptionPane.WARNING_MESSAGE);
-                        txtLine2.setText("");
                         txtLine2.grabFocus();
                         lblLine2.setForeground(Color.red);
                     }
@@ -857,7 +852,6 @@ public class frmManageProfile extends javax.swing.JFrame {
                 else
                 {
                     JOptionPane.showMessageDialog(null, "This field cannot be empty. Please Try Again!","Incorrect Address Line 1",JOptionPane.WARNING_MESSAGE);
-                    txtLine1.setText("");
                     txtLine1.grabFocus();
                     lblLine1.setForeground(Color.red);
                 }
@@ -886,7 +880,7 @@ public class frmManageProfile extends javax.swing.JFrame {
                     
                     if (userSecUpdateSuccess != -1) {
                         JOptionPane.showMessageDialog(null, "User was successfully updated!", "Successful Update", JOptionPane.INFORMATION_MESSAGE);
-                        AdministratorMainDash mainDash = new AdministratorMainDash();
+                        StandardMainDash mainDash = new StandardMainDash();
                         mainDash.setVisible(true);
                         this.setVisible(false);
                     }
@@ -905,17 +899,11 @@ public class frmManageProfile extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Error occured during this process!", "Unsuccessful Update", JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException ex) {
-            Logger.getLogger(frmManageProfile.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": Unknown Exception in one of the following classes: User, Person, UserSecurityQuestions",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_btnEditUserActionPerformed
-
-    private void cmbDepartmentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbDepartmentMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbDepartmentMouseClicked
-
-    private void cmbCampusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbCampusMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbCampusMouseClicked
 
     /**
      * @param args the command line arguments

@@ -10,14 +10,14 @@ import ProductManagement.Product;
 import ProductManagement.ProductManagement_Methods;
 import ProductManagement.UserRequest;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
 import bc_stationary_bll.GenericSerializer;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -33,6 +33,9 @@ public class frmViewRequest extends javax.swing.JFrame {
     public ArrayList<Product> products;
     public User loggedInuser;
     Communication c; 
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmViewRequest() {
         try {
             initComponents();
@@ -43,6 +46,7 @@ public class frmViewRequest extends javax.swing.JFrame {
             c = new Communication(ProductManagement_Methods.UR_SELECT_PRODUCTS_ONREQ.methodIdentifier, request);
             products = new ClientHandler(c).request().listResult;
             
+            cmbProduct.addItem("Select a Product:");
             for(Product p:products){
                 cmbProduct.addItem(p.getName()+"("+ p.getDescription()+"-"+p.getModel().getDescription()+")");
             }
@@ -64,7 +68,9 @@ public class frmViewRequest extends javax.swing.JFrame {
             txtCompleteDate.setEditable(false);
             txtRequestDate.setEditable(false);
         } catch (IOException ex) {
-            Logger.getLogger(frmViewRequest.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) productsOnRequest() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }
 
@@ -166,15 +172,11 @@ public class frmViewRequest extends javax.swing.JFrame {
         btnViewRequest.setBorder(null);
         btnViewRequest.setBorderPainted(false);
         btnViewRequest.setContentAreaFilled(false);
+        btnViewRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewRequest.setFocusPainted(false);
         btnViewRequest.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewRequest.setIconTextGap(16);
         btnViewRequest.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
-        btnViewRequest.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewRequestActionPerformed(evt);
-            }
-        });
 
         btnAddRequest.setBackground(new java.awt.Color(204, 0, 0));
         btnAddRequest.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
@@ -184,6 +186,7 @@ public class frmViewRequest extends javax.swing.JFrame {
         btnAddRequest.setBorder(null);
         btnAddRequest.setBorderPainted(false);
         btnAddRequest.setContentAreaFilled(false);
+        btnAddRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddRequest.setFocusPainted(false);
         btnAddRequest.setIconTextGap(20);
         btnAddRequest.addActionListener(new java.awt.event.ActionListener() {
@@ -200,6 +203,7 @@ public class frmViewRequest extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(38);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -217,6 +221,7 @@ public class frmViewRequest extends javax.swing.JFrame {
         btnEditRequest.setBorder(null);
         btnEditRequest.setBorderPainted(false);
         btnEditRequest.setContentAreaFilled(false);
+        btnEditRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEditRequest.setFocusPainted(false);
         btnEditRequest.setIconTextGap(22);
         btnEditRequest.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
@@ -258,6 +263,7 @@ public class frmViewRequest extends javax.swing.JFrame {
         lblSearchProducts.setText("Select a Product:");
 
         cmbProduct.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cmbProduct.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbProduct.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -511,10 +517,6 @@ public class frmViewRequest extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnViewRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRequestActionPerformed
-
-    }//GEN-LAST:event_btnViewRequestActionPerformed
-
     private void btnAddRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRequestActionPerformed
         frmManageRequest manageRequest = new frmManageRequest();
         manageRequest.setVisible(true);
@@ -543,105 +545,111 @@ public class frmViewRequest extends javax.swing.JFrame {
             Date requestDate;
             Date completedDate;
             
-            String selectedProductSearch = cmbProduct.getSelectedItem().toString();
-            String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
-            String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf("-"));
-            String searchedModel = selectedProductSearch.substring(selectedProductSearch.indexOf("-")+1,selectedProductSearch.indexOf(")"));
-            
-            selectedProduct = new Product();
-            for(Product p : products)
+            if(cmbProduct.getSelectedIndex() > 0)
             {
-                if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))&&(p.getModel().getDescription().equals(searchedModel))))
+                String selectedProductSearch = cmbProduct.getSelectedItem().toString();
+                String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
+                String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf("-"));
+                String searchedModel = selectedProductSearch.substring(selectedProductSearch.indexOf("-")+1,selectedProductSearch.indexOf(")"));
+            
+                selectedProduct = new Product();
+                for(Product p : products)
                 {
-                    selectedProduct = p;
+                    if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))&&(p.getModel().getDescription().equals(searchedModel))))
+                    {
+                        selectedProduct = p;
+                    }
+                }
+                UserRequest request = new UserRequest(loggedInuser);
+                c = new Communication(ProductManagement_Methods.UR_SELECT_SPEC_USER_REQ.methodIdentifier, request);
+                ArrayList<UserRequest> allRequests = new ClientHandler(c).request().listResult;
+            
+                for(UserRequest ur: allRequests)
+                {
+                    if(ur.getProduct().getName().equals(selectedProduct.getName()))
+                    {
+                        selectedRequest = ur;
+                    }
+                }
+            
+                txtProductName.setText(selectedProduct.getName());
+                txtProductName.setEditable(false);
+            
+                txtDescription.setText(selectedProduct.getDescription());
+                txtDescription.setEditable(false);
+            
+                txtCategory.setText(selectedProduct.getCategory().getDescription());
+                txtCategory.setEditable(false);
+            
+                txtProductModel.setText(selectedProduct.getModel().getDescription());
+                txtProductModel.setEditable(false);
+            
+                txtQuantity.setText(Integer.toString(selectedRequest.getQuantity()));
+                txtQuantity.setEditable(false);
+            
+                priorityLevel = selectedRequest.getPriorityLevel();
+                switch(priorityLevel)
+                {
+                    case 1: priority = "Low";
+                        break;
+                    case 2: priority = "Medium";
+                        break;
+                    case 3: priority = "High";
+                        break;
+                    default:
+                        break;
+                }
+            
+                txtPriority.setText(priority);
+                txtPriority.setEditable(false);
+            
+                currentStatus = selectedRequest.getStatus();
+            
+                if(currentStatus.equals("Unprocessed"))
+                {
+                    txtStatus.setForeground(Color.red);
+                }
+                else if(currentStatus.equals("Partially Processed"))
+                {
+                    txtStatus.setForeground(Color.blue);
+                }
+                else if(currentStatus.equals("Back Ordered"))
+                {
+                    txtStatus.setForeground(Color.blue);
+                }
+                else if(currentStatus.equals("Awaiting Purchase"))
+                {
+                    txtStatus.setForeground(Color.blue);
+                }
+            
+                txtStatus.setText(currentStatus);
+                txtStatus.setEditable(false);
+            
+                requestDate = (Date)selectedRequest.getReqDate();
+                completedDate = (Date)selectedRequest.getCompletedDate();
+            
+                if(requestDate.after(completedDate)) // If the CompleteDate is after the ReqDate it means that the request is this incomplete
+                {
+                    txtRequestDate.setText(requestDate.toString());
+                    txtRequestDate.setEditable(false);
+                
+                    txtCompleteDate.setText("Not yet specified");
+                    txtCompleteDate.setEditable(false);
+                }
+                else
+                {
+                    txtRequestDate.setText(requestDate.toString());
+                    txtRequestDate.setEditable(false);
+                
+                    txtCompleteDate.setText(completedDate.toString());
+                    txtCompleteDate.setEditable(false);
                 }
             }
-            UserRequest request = new UserRequest(loggedInuser);
-            c = new Communication(ProductManagement_Methods.UR_SELECT_SPEC_USER_REQ.methodIdentifier, request);
-            ArrayList<UserRequest> allRequests = new ClientHandler(c).request().listResult;
             
-            for(UserRequest ur: allRequests)
-            {
-                if(ur.getProduct().getName().equals(selectedProduct.getName()))
-                {
-                    selectedRequest = ur;
-                }
-            }
-            
-            txtProductName.setText(selectedProduct.getName());
-            txtProductName.setEditable(false);
-            
-            txtDescription.setText(selectedProduct.getDescription());
-            txtDescription.setEditable(false);
-            
-            txtCategory.setText(selectedProduct.getCategory().getDescription());
-            txtCategory.setEditable(false);
-            
-            txtProductModel.setText(selectedProduct.getModel().getDescription());
-            txtProductModel.setEditable(false);
-            
-            txtQuantity.setText(Integer.toString(selectedRequest.getQuantity()));
-            txtQuantity.setEditable(false);
-            
-            priorityLevel = selectedRequest.getPriorityLevel();
-            switch(priorityLevel)
-            {
-                case 1: priority = "Low";
-                break;
-                case 2: priority = "Medium";
-                break;
-                case 3: priority = "High";
-                break;
-                default:
-                    break;
-            }
-            
-            txtPriority.setText(priority);
-            txtPriority.setEditable(false);
-            
-            currentStatus = selectedRequest.getStatus();
-            
-            if(currentStatus.equals("Unprocessed"))
-            {
-                txtStatus.setForeground(Color.red);
-            }
-            else if(currentStatus.equals("Partially Processed"))
-            {
-                txtStatus.setForeground(Color.blue);
-            }
-            else if(currentStatus.equals("Back Ordered"))
-            {
-                txtStatus.setForeground(Color.blue);
-            }
-            else if(currentStatus.equals("Ready for Delivery"))
-            {
-                txtStatus.setForeground(Color.green);
-            }
-            
-            txtStatus.setText(currentStatus);
-            txtStatus.setEditable(false);
-            
-            requestDate = (Date)selectedRequest.getReqDate();
-            completedDate = (Date)selectedRequest.getCompletedDate();
-            
-            if(requestDate.after(completedDate))
-            {
-                txtRequestDate.setText(requestDate.toString());
-                txtRequestDate.setEditable(false);
-                
-                txtCompleteDate.setText("Not yet specified");
-                txtCompleteDate.setEditable(false);
-            }
-            else
-            {
-                txtRequestDate.setText(requestDate.toString());
-                txtRequestDate.setEditable(false);
-                
-                txtCompleteDate.setText(completedDate.toString());
-                txtCompleteDate.setEditable(false);
-            }
         } catch (IOException ex) {
-            Logger.getLogger(frmViewRequest.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) selectSpecUserRequest() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_cmbProductPopupMenuWillBecomeInvisible
 

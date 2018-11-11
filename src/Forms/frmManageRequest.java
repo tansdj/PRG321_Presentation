@@ -6,13 +6,11 @@
 package Forms;
 
 import PersonManagement.User;
-import ProductManagement.Category;
-import ProductManagement.Model;
 import ProductManagement.Product;
 import ProductManagement.ProductManagement_Methods;
-import ProductManagement.Stock;
 import ProductManagement.UserRequest;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
 import bc_stationary_bll.GenericSerializer;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
@@ -20,8 +18,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -38,15 +34,19 @@ public class frmManageRequest extends javax.swing.JFrame {
     public ArrayList<Product> products;
     public User loggedInuser;
     Communication c;
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmManageRequest() {
         try {
             initComponents();
             this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             this.getContentPane().setBackground(new Color(45,45,45));
+            lblListHeading.setText(String.format("%S                %S          %S          %S              %S          %S", "Product","Qty","Priority","Status","Request Date","Complete Date"));
             Product product = new Product();
             c = new Communication(ProductManagement_Methods.PRODUCT_SELECT_ALL.methodIdentifier, product);
             products = new ClientHandler(c).request().listResult;
             
+            cmbProduct.addItem("Select a Product:");
             for(Product p:products){
                 cmbProduct.addItem(p.getName()+"("+ p.getDescription()+"-"+p.getModel().getDescription()+")");
             }
@@ -60,15 +60,16 @@ public class frmManageRequest extends javax.swing.JFrame {
             txtProductModel.setEditable(false);
             txtDescription.setEditable(false);
             
-            txtLoggedUser.setText(loggedInuser.getPerson().getName() +" "+ loggedInuser.getPerson().getSurname() );
-            txtLoggedUser.setEditable(false);
-            
-            LocalDate local = LocalDate.now();
-            Date date = Date.valueOf(local);
-            txtRequestDate.setText(date.toString());
-            txtRequestDate.setEditable(false);
-        } catch (IOException ex) {
-            Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
+            txtLoggedUser.setText(loggedInuser.getPerson().getName() +" "+ loggedInuser.getPerson().getSurname());
+            txtLoggedUser.setEditable(false); // Default value: name and surname of the currently logged in user.
+
+            txtRequestDate.setText(date.toString()); 
+            txtRequestDate.setEditable(false); // Default value: today's date.
+        } 
+        catch (IOException ex) {
+            CustomException ce = new CustomException(date.toString()+": (In Product Class) select() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }
 
@@ -115,6 +116,7 @@ public class frmManageRequest extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         lbxRequestedItems = new javax.swing.JList<>();
         btnSubmitRequest = new javax.swing.JButton();
+        lblListHeading = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -170,6 +172,7 @@ public class frmManageRequest extends javax.swing.JFrame {
         btnViewRequest.setBorder(null);
         btnViewRequest.setBorderPainted(false);
         btnViewRequest.setContentAreaFilled(false);
+        btnViewRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewRequest.setFocusPainted(false);
         btnViewRequest.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewRequest.setIconTextGap(16);
@@ -188,13 +191,9 @@ public class frmManageRequest extends javax.swing.JFrame {
         btnAddRequest.setBorder(null);
         btnAddRequest.setBorderPainted(false);
         btnAddRequest.setContentAreaFilled(false);
+        btnAddRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddRequest.setFocusPainted(false);
         btnAddRequest.setIconTextGap(20);
-        btnAddRequest.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddRequestActionPerformed(evt);
-            }
-        });
 
         btnBack.setBackground(new java.awt.Color(204, 0, 0));
         btnBack.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
@@ -204,6 +203,7 @@ public class frmManageRequest extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(38);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -221,6 +221,7 @@ public class frmManageRequest extends javax.swing.JFrame {
         btnEditRequest.setBorder(null);
         btnEditRequest.setBorderPainted(false);
         btnEditRequest.setContentAreaFilled(false);
+        btnEditRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEditRequest.setFocusPainted(false);
         btnEditRequest.setIconTextGap(22);
         btnEditRequest.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
@@ -262,6 +263,7 @@ public class frmManageRequest extends javax.swing.JFrame {
         lblSearchProducts.setText("Select a Product:");
 
         cmbProduct.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cmbProduct.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbProduct.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -306,11 +308,6 @@ public class frmManageRequest extends javax.swing.JFrame {
 
         txtCategory.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtCategory.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtCategory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCategoryActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout pnlProjectInfoLayout = new javax.swing.GroupLayout(pnlProjectInfo);
         pnlProjectInfo.setLayout(pnlProjectInfoLayout);
@@ -397,6 +394,7 @@ public class frmManageRequest extends javax.swing.JFrame {
         btnAddItem.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnAddItem.setText("Add Item");
         btnAddItem.setBorderPainted(false);
+        btnAddItem.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddItem.setFocusPainted(false);
         btnAddItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -461,17 +459,23 @@ public class frmManageRequest extends javax.swing.JFrame {
         );
 
         lbxRequestedItems.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxRequestedItems.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(lbxRequestedItems);
 
         btnSubmitRequest.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnSubmitRequest.setText("Submit Request");
         btnSubmitRequest.setBorderPainted(false);
+        btnSubmitRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSubmitRequest.setFocusPainted(false);
         btnSubmitRequest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSubmitRequestActionPerformed(evt);
             }
         });
+
+        lblListHeading.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblListHeading.setForeground(new java.awt.Color(255, 255, 255));
+        lblListHeading.setText("Product");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -492,7 +496,10 @@ public class frmManageRequest extends javax.swing.JFrame {
                                 .addComponent(pnlProjectInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 1018, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnSubmitRequest))))
+                            .addComponent(btnSubmitRequest)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(lblListHeading)))))
                 .addGap(0, 20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -513,7 +520,9 @@ public class frmManageRequest extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblListHeading)
+                        .addGap(4, 4, 4)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSubmitRequest)
                         .addGap(0, 0, Short.MAX_VALUE))))
@@ -529,10 +538,6 @@ public class frmManageRequest extends javax.swing.JFrame {
     }//GEN-LAST:event_btnViewRequestActionPerformed
 
     
-    private void btnAddRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRequestActionPerformed
-        
-    }//GEN-LAST:event_btnAddRequestActionPerformed
-
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         StandardMainDash mainDash = new StandardMainDash();
         mainDash.setVisible(true);
@@ -540,10 +545,6 @@ public class frmManageRequest extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     
-    private void txtCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCategoryActionPerformed
-
-    }//GEN-LAST:event_txtCategoryActionPerformed
-
     public ArrayList<UserRequest> requestItems = new ArrayList<UserRequest>();
     private void btnAddItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddItemActionPerformed
         String priority, requestDate;
@@ -553,12 +554,13 @@ public class frmManageRequest extends javax.swing.JFrame {
         if(!"".equals(txtProductName.getText()))
         {
             lblSearchProducts.setForeground(Color.white);   
-            if((Integer)numQuantity.getValue() > 0)
+            if((Integer)numQuantity.getValue() > 0) // The quantity value cannot be negative
             {
                 lblQuantity.setForeground(Color.white);
                 priority = cmbPriority.getSelectedItem().toString();
                 requestDate = txtRequestDate.getText();
                 quantity = (Integer)numQuantity.getValue();
+                
                 if(priority.toLowerCase().equals("low"))
                 {
                     priorityLevel = 1;
@@ -571,7 +573,7 @@ public class frmManageRequest extends javax.swing.JFrame {
                 {
                     priorityLevel = 3;
                 }
-                completeDate = LocalDate.now().minusDays(1);
+                completeDate = LocalDate.now().minusDays(1); // An incomplete request will be identified when the completeDate is less than the reqDate
                 
                 request = new UserRequest(loggedInuser,selectedProduct,quantity,priorityLevel,"Unprocessed",Date.valueOf(requestDate),Date.valueOf(completeDate));
                 requestItems.add(request);
@@ -617,12 +619,12 @@ public class frmManageRequest extends javax.swing.JFrame {
         try {
             boolean success = true;
             UserRequest request = new UserRequest();
-            c = new Communication(ProductManagement_Methods.UR_SELECT_BACKORDER.methodIdentifier, request);
+            c = new Communication(ProductManagement_Methods.UR_SELECT_UNPROCESSED.methodIdentifier, request);
             ArrayList<UserRequest> loggedRequests = new ClientHandler(c).request().listResult;
             
-            for(UserRequest uNew : requestItems)
+            for(UserRequest uNew : requestItems) // loop through the listbox
             {
-                if(loggedRequests.size() > 0)
+                if(loggedRequests.size() > 0) // if there are existing user requests with a status of Unprocessed or Back Ordered 
                 {
                     for(UserRequest uOld : loggedRequests)
                     {
@@ -633,6 +635,9 @@ public class frmManageRequest extends javax.swing.JFrame {
                         
                         int newQuantity=0, existingQuantity=0, newPriority=0, existingPriority=0;
                         
+                        // If a there is an existing user request that is still Unprocessed for the same product and user,
+                        // then it must append the quantity to the existing requested quantity.
+                        // If no existing user request that fit this criteria exist then a new user request must be created.
                         if((newProductName.equals(existingProductName))&&(newUserName.equals(existingUserName)))
                         {
                             try {
@@ -652,9 +657,12 @@ public class frmManageRequest extends javax.swing.JFrame {
                                 if(uNewUpdateSuccess == -1) // update existing Unprocessed Product
                                 {
                                     success = false;
-                                }} catch (IOException ex) {
-                                    Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
                                 }
+                            } catch (IOException ex) {
+                                CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) update() method failed!",ex);
+                                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                                gen.Serialize(true); // append to file
+                            }
                         }
                         else
                         {
@@ -666,7 +674,9 @@ public class frmManageRequest extends javax.swing.JFrame {
                                     success = false;
                                 }
                             } catch (IOException ex) {
-                                Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
+                                CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) insert() method failed!",ex);
+                                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                                gen.Serialize(true); // append to file
                             }
                         }
                     }
@@ -681,7 +691,9 @@ public class frmManageRequest extends javax.swing.JFrame {
                             success = false;
                         }
                     } catch (IOException ex) {
-                        Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
+                        CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) insert() method failed!",ex);
+                        GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                        gen.Serialize(true); // append to file
                     }
                 }  
             }
@@ -698,7 +710,9 @@ public class frmManageRequest extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Error occured during this process!", "Unsuccessful Submission", JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException ex) {
-            Logger.getLogger(frmManageRequest.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) selectUnprocessed() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
         
         
@@ -712,32 +726,34 @@ public class frmManageRequest extends javax.swing.JFrame {
 
     public Product selectedProduct;
     private void cmbProductPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
-        String selectedProductSearch = cmbProduct.getSelectedItem().toString();
-        String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
-        String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf("-"));
-        String searchedModel = selectedProductSearch.substring(selectedProductSearch.indexOf("-")+1,selectedProductSearch.indexOf(")"));
-
-        selectedProduct = new Product();
-        for(Product p : products)
+        if(cmbProduct.getSelectedIndex() > 0)
         {
-            if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))&&(p.getModel().getDescription().equals(searchedModel))))
+            String selectedProductSearch = cmbProduct.getSelectedItem().toString();
+            String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
+            String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf("-"));
+            String searchedModel = selectedProductSearch.substring(selectedProductSearch.indexOf("-")+1,selectedProductSearch.indexOf(")"));
+
+            selectedProduct = new Product();
+            for(Product p : products)
             {
-                selectedProduct = p;
+                if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))&&(p.getModel().getDescription().equals(searchedModel))))
+                {
+                    selectedProduct = p;
+                }
             }
-        }
         
-        txtProductName.setText(selectedProduct.getName());
-        txtProductName.setEditable(false);
+            txtProductName.setText(selectedProduct.getName());
+            txtProductName.setEditable(false);
 
-        txtDescription.setText(selectedProduct.getDescription());
-        txtDescription.setEditable(false);
+            txtDescription.setText(selectedProduct.getDescription());
+            txtDescription.setEditable(false);
         
-        txtCategory.setText(selectedProduct.getCategory().getDescription()); 
-        txtCategory.setEditable(false);
+            txtCategory.setText(selectedProduct.getCategory().getDescription()); 
+            txtCategory.setEditable(false);
 
-        txtProductModel.setText(selectedProduct.getModel().getDescription());
-        txtProductModel.setEditable(false);
+            txtProductModel.setText(selectedProduct.getModel().getDescription());
+            txtProductModel.setEditable(false);
+        }     
     }//GEN-LAST:event_cmbProductPopupMenuWillBecomeInvisible
 
     /**
@@ -788,6 +804,7 @@ public class frmManageRequest extends javax.swing.JFrame {
     private javax.swing.JLabel lblAddRequest;
     private javax.swing.JLabel lblCategory;
     private javax.swing.JLabel lblDescription;
+    private javax.swing.JLabel lblListHeading;
     private javax.swing.JLabel lblLoggedUser;
     private javax.swing.JLabel lblPriority;
     private javax.swing.JLabel lblProductInfo;

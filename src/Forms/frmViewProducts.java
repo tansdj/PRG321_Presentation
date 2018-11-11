@@ -9,15 +9,17 @@ import ProductManagement.Product;
 import ProductManagement.ProductManagement_Methods;
 import ProductManagement.Stock;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
+import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.SoundEx;
 import bc_stationary_bll.genericSort;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 
@@ -32,6 +34,9 @@ public class frmViewProducts extends javax.swing.JFrame {
      */
     ArrayList<Product> productList;
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmViewProducts() {
         initComponents();
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
@@ -53,8 +58,18 @@ public class frmViewProducts extends javax.swing.JFrame {
                 model.addElement(p);
             }
             lbxProducts.setModel(model);
+            txtProductName2.setEditable(false);               
+            txtDescription2.setEditable(false);
+            txtStatus.setEditable(false);
+            txtProductModel.setEditable(false);
+            txtCategory.setEditable(false);
+            txtProductCost.setEditable(false);
+            txtProductSale.setEditable(false);
+            txtQuantity.setEditable(false);
         } catch (IOException ex) {
-            Logger.getLogger(frmViewProducts.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In Product Class) select() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file;
         }
     }
     /**
@@ -66,6 +81,7 @@ public class frmViewProducts extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         pnlRegisterHeader = new javax.swing.JPanel();
         pnlRegisterHeader1 = new javax.swing.JPanel();
         lblAddProduct = new javax.swing.JLabel();
@@ -155,14 +171,10 @@ public class frmViewProducts extends javax.swing.JFrame {
         btnViewProduct.setBorder(null);
         btnViewProduct.setBorderPainted(false);
         btnViewProduct.setContentAreaFilled(false);
+        btnViewProduct.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewProduct.setFocusPainted(false);
         btnViewProduct.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewProduct.setIconTextGap(5);
-        btnViewProduct.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewProductActionPerformed(evt);
-            }
-        });
 
         btnBack.setBackground(new java.awt.Color(204, 0, 0));
         btnBack.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
@@ -172,6 +184,7 @@ public class frmViewProducts extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(20);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -217,6 +230,7 @@ public class frmViewProducts extends javax.swing.JFrame {
         });
 
         lbxProducts.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxProducts.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbxProducts.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lbxProductsValueChanged(evt);
@@ -225,9 +239,11 @@ public class frmViewProducts extends javax.swing.JFrame {
         jScrollPane1.setViewportView(lbxProducts);
 
         rbtnSortQuantity.setBackground(new java.awt.Color(45, 45, 45));
+        buttonGroup1.add(rbtnSortQuantity);
         rbtnSortQuantity.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         rbtnSortQuantity.setForeground(new java.awt.Color(255, 255, 255));
         rbtnSortQuantity.setText("Sort via Quantity (High to Low)");
+        rbtnSortQuantity.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rbtnSortQuantity.setFocusPainted(false);
         rbtnSortQuantity.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -236,9 +252,11 @@ public class frmViewProducts extends javax.swing.JFrame {
         });
 
         rbtnSortProductName.setBackground(new java.awt.Color(45, 45, 45));
+        buttonGroup1.add(rbtnSortProductName);
         rbtnSortProductName.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         rbtnSortProductName.setForeground(new java.awt.Color(255, 255, 255));
         rbtnSortProductName.setText("Sort via Product Name (Alphabetically)");
+        rbtnSortProductName.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rbtnSortProductName.setFocusPainted(false);
         rbtnSortProductName.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -441,10 +459,6 @@ public class frmViewProducts extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnViewProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewProductActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnViewProductActionPerformed
-
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         StandardMainDash mainDash = new StandardMainDash();
         mainDash.setVisible(true);
@@ -452,7 +466,6 @@ public class frmViewProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void txtSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchMouseClicked
-        // TODO add your handling code here:
         txtSearch.setText("");
         initializeForm();
     }//GEN-LAST:event_txtSearchMouseClicked
@@ -472,7 +485,9 @@ public class frmViewProducts extends javax.swing.JFrame {
                 }
                 lbxProducts.setModel(model);
             } catch (IOException ex) {
-                Logger.getLogger(frmViewProducts.class.getName()).log(Level.SEVERE, null, ex);
+                CustomException ce = new CustomException(date.toString()+": (In Product Class) select() method failed!",ex);
+                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                gen.Serialize(true); // append to file;
             }
         } else {
             int numSearchChars; // amount of characters that are typed into the search box.
@@ -484,14 +499,18 @@ public class frmViewProducts extends javax.swing.JFrame {
                 if (p.getName().length() >= numSearchChars) {
 
                     productCode = SoundEx.Soundex(p.getName().substring(0, numSearchChars));
-                    if(p.getCategory().getDescription().length()>=numSearchChars){
+                    if(p.getCategory().getDescription().length() >= numSearchChars)
+                    {
                         catCode = SoundEx.Soundex(p.getCategory().getDescription().substring(0,numSearchChars));
                     }
-                    if ((productCode.equals(searchCode))) {
+                    if ((productCode.equals(searchCode))) 
+                    {
 
                         productsThatFitCriteria.add(p);
 
-                    }else if(catCode.equals(searchCode)){
+                    }
+                    else if(catCode.equals(searchCode))
+                    {
                         productsThatFitCriteria.add(p);
                     }
 
@@ -504,7 +523,10 @@ public class frmViewProducts extends javax.swing.JFrame {
             lbxProducts.setModel(model);
             if(productList.size()==0){
                 model.addElement(new String("No Results Found"));
-            }else{
+            }
+            else
+            {
+                // Populate Listbox
                 for (Product p : productList) {
                     model.addElement(p);
                 }
@@ -518,36 +540,45 @@ public class frmViewProducts extends javax.swing.JFrame {
         int index= lbxProducts.getSelectedIndex();
         if(index == -1){
             index = 0;
-        }else{
-            selectedProduct = productList.get(index);
-
-            Stock stock = new Stock(selectedProduct,0);
-            stock = stock.selectSpecStock();
-
-            txtSearch.setText(selectedProduct.toString());
-            txtProductName2.setText(selectedProduct.getName());
-            txtProductName2.setEditable(false);
-
-            txtDescription2.setText(selectedProduct.getDescription());
-            txtDescription2.setEditable(false);
-
-            txtStatus.setText(selectedProduct.getStatus());
-            txtStatus.setEditable(false);
-
-            txtProductModel.setText(selectedProduct.getModel().getDescription());
-            txtProductModel.setEditable(false);
-
-            txtCategory.setText(selectedProduct.getCategory().getDescription());
-            txtCategory.setEditable(false);
-
-            txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
-            txtProductCost.setEditable(false);
-
-            txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
-            txtProductSale.setEditable(false);
-
-            txtQuantity.setText(Integer.toString(stock.getQuantity()));
-            txtQuantity.setEditable(false);
+        }
+        else{
+            try {
+                selectedProduct = productList.get(index);
+                
+                Stock stock = new Stock(selectedProduct,0);
+                c = new Communication(ProductManagement_Methods.STOCK_SELECT_SPEC.methodIdentifier, stock);
+                stock = (Stock) new ClientHandler(c).request().objectResult;
+                
+                txtSearch.setText(selectedProduct.toString());
+                txtProductName2.setText(selectedProduct.getName());
+                txtProductName2.setEditable(false);
+                
+                txtDescription2.setText(selectedProduct.getDescription());
+                txtDescription2.setEditable(false);
+                
+                txtStatus.setText(selectedProduct.getStatus());
+                txtStatus.setEditable(false);
+                
+                txtProductModel.setText(selectedProduct.getModel().getDescription());
+                txtProductModel.setEditable(false);
+                
+                txtCategory.setText(selectedProduct.getCategory().getDescription());
+                txtCategory.setEditable(false);
+                
+                txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
+                txtProductCost.setEditable(false);
+                
+                txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
+                txtProductSale.setEditable(false);
+                
+                txtQuantity.setText(Integer.toString(stock.getQuantity()));
+                txtQuantity.setEditable(false);
+            } 
+            catch (IOException ex) {
+                CustomException ce = new CustomException(date.toString()+": (In Stock Class) selectSpecStock() method failed!",ex);
+                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                gen.Serialize(true); // append to file;
+            }
         }
     }//GEN-LAST:event_lbxProductsValueChanged
 
@@ -557,18 +588,35 @@ public class frmViewProducts extends javax.swing.JFrame {
         ArrayList<Product> newProductList = new ArrayList<Product>();
         for(Product p : productList)
         {
-            stock = new Stock(p,0);
-            allStockItems.add(stock.selectSpecStock());
+            try {
+                stock = new Stock(p,0);
+                c = new Communication(ProductManagement_Methods.STOCK_SELECT_SPEC.methodIdentifier, stock);
+                stock = (Stock) new ClientHandler(c).request().objectResult;
+                allStockItems.add((stock));
+            } catch (IOException ex) {
+                CustomException ce = new CustomException(date.toString()+": (In Stock Class) selectSpecStock() method failed!",ex);
+                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                gen.Serialize(true); // append to file;
+            }
         }
 
         try {
             Collections.sort(allStockItems,new genericSort(Stock.class.getField("quantity")));
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchFieldException ex) {
-            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (ClassNotFoundException ex) {
+            CustomException ce = new CustomException(date.toString()+": Stock class was not found!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file;
+        } 
+        catch (NoSuchFieldException ex) {
+            CustomException ce = new CustomException(date.toString()+": quantity field in the Stock class was not found!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file;
+        } 
+        catch (SecurityException ex) {
+            CustomException ce = new CustomException(date.toString()+": A Security Exception occured during Collections.sort(allStockItems) (frmViewProducts)!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file;
         }
 
         for(Stock s: allStockItems)
@@ -589,14 +637,23 @@ public class frmViewProducts extends javax.swing.JFrame {
     private void rbtnSortProductNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtnSortProductNameMouseClicked
         try {
             Collections.sort(productList,new genericSort(Product.class.getField("name")));
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchFieldException ex) {
-            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(frmViewStock.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (ClassNotFoundException ex) {
+            CustomException ce = new CustomException(date.toString()+": Product class was not found!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file;
+        } 
+        catch (NoSuchFieldException ex) {
+            CustomException ce = new CustomException(date.toString()+": name field in the Product class was not found!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file;
+        } 
+        catch (SecurityException ex) {
+            CustomException ce = new CustomException(date.toString()+": A Security Exception occured during Collections.sort(productList) (frmViewProducts)!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file;
         }
-
+        
         DefaultListModel model = new DefaultListModel();
         // Populate Listbox
         for(Product p: productList)
@@ -644,6 +701,7 @@ public class frmViewProducts extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnViewProduct;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAddProduct;
     private javax.swing.JLabel lblCategory2;

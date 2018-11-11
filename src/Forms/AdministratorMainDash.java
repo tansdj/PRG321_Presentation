@@ -12,6 +12,8 @@ import javax.swing.JOptionPane;
 /**
  *
  * @author Eldane
+ * This form is the Main Menu for the Administrator. It provides central navigation to any part of the
+ * Administration system.
  */
 public class AdministratorMainDash extends javax.swing.JFrame {
 
@@ -54,7 +56,7 @@ public class AdministratorMainDash extends javax.swing.JFrame {
 
         lblMainDashboard.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
         lblMainDashboard.setForeground(new java.awt.Color(255, 255, 255));
-        lblMainDashboard.setText("Main Dashboard");
+        lblMainDashboard.setText("Main Administrator Dashboard");
         lblMainDashboard.setAlignmentY(0.0F);
 
         javax.swing.GroupLayout pnlRegisterHeader1Layout = new javax.swing.GroupLayout(pnlRegisterHeader1);
@@ -64,7 +66,7 @@ public class AdministratorMainDash extends javax.swing.JFrame {
             .addGroup(pnlRegisterHeader1Layout.createSequentialGroup()
                 .addGap(607, 607, 607)
                 .addComponent(lblMainDashboard)
-                .addContainerGap(699, Short.MAX_VALUE))
+                .addContainerGap(537, Short.MAX_VALUE))
         );
         pnlRegisterHeader1Layout.setVerticalGroup(
             pnlRegisterHeader1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

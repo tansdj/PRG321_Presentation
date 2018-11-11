@@ -14,14 +14,15 @@ import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.UserSecurityQuestions;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
+import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.Validation;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -41,25 +42,32 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
     
     public Person person = null;
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmRegisterUserLogin(Person p)
     {
         try {
             initComponents();
             person = p;
-            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            this.getContentPane().setBackground(new Color(45,45,45));
-            txtAccessLevel.setEditable(false);
-            txtStatus.setEditable(false);
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH); // Maximize form
+            this.getContentPane().setBackground(new Color(45,45,45)); // Set background color of the form
+            txtAccessLevel.setEditable(false); // Default value: Standard
+            txtStatus.setEditable(false); // Default value: Pending
             ArrayList<SecurityQuestions> questions = new ArrayList<SecurityQuestions>();
             SecurityQuestions seqQuestion = new SecurityQuestions();
             c = new Communication(PersonManagement_Methods.SQ_SELECT_ALL.methodIdentifier, seqQuestion);
             questions = new ClientHandler(c).request().listResult;
+            
             // Populate Combobox
             for(SecurityQuestions s:questions){
                 cmbQuestion.addItem(s.getQuestion());
             }
-        } catch (IOException ex) {
-            Logger.getLogger(frmRegisterUserLogin.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) {
+            CustomException ce = new CustomException(date.toString()+": (In UserSecurityQuestions Class) select() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }
 
@@ -153,13 +161,9 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         btnRegisterUser.setBorder(null);
         btnRegisterUser.setBorderPainted(false);
         btnRegisterUser.setContentAreaFilled(false);
+        btnRegisterUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRegisterUser.setFocusPainted(false);
         btnRegisterUser.setIconTextGap(10);
-        btnRegisterUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegisterUserActionPerformed(evt);
-            }
-        });
 
         btnBack.setBackground(new java.awt.Color(40, 40, 40));
         btnBack.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
@@ -169,6 +173,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnBack.setIconTextGap(70);
@@ -355,10 +360,11 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
 
         btnRegister.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnRegister.setText("Register");
+        btnRegister.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRegister.setFocusPainted(false);
-        btnRegister.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegisterActionPerformed(evt);
+        btnRegister.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRegisterMouseClicked(evt);
             }
         });
 
@@ -408,7 +414,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
-    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+    private void btnRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegisterMouseClicked
         String userName="", passWord="", passWordRe="", passWordTemp="", accessLevel="", status="", securityQuestion="", securityAwns="";
         Validation validation = new Validation();
         
@@ -422,7 +428,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
         
         if(!"".equals(txtUsername.getText()))
         {
-            userName = txtUsername.getText();
+            userName = txtUsername.getText().trim();
             lblUsername.setForeground(Color.white);
             if((!"".equals(txtPassword.getText()))&&(!"".equals(txtRePassword.getText())))
             {
@@ -451,7 +457,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
                                     lblSecurityQuestion.setForeground(Color.white);
                                     if(!"".equals(txtAnswer.getText())) 
                                     {
-                                        securityAwns = txtAnswer.getText();
+                                        securityAwns = txtAnswer.getText().trim();
                                         lblAnswer.setForeground(Color.white);
                                         
                                         userToInsert = new User(person, userName, passWord, accessLevel, status);
@@ -518,7 +524,9 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
                                 lblRePassword.setForeground(Color.red);
                             }
                         } catch (IOException ex) {
-                            Logger.getLogger(frmRegisterUserLogin.class.getName()).log(Level.SEVERE, null, ex);
+                            CustomException ce = new CustomException(date.toString()+": Unknown Error in one of the following classes: User, Person, UserSecurityQuestions.",ex);
+                            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                            gen.Serialize(true); // append to file
                         }
                     }
                     else
@@ -557,11 +565,7 @@ public class frmRegisterUserLogin extends javax.swing.JFrame {
             txtUsername.grabFocus();
             lblUsername.setForeground(Color.red);
         } 
-    }//GEN-LAST:event_btnRegisterActionPerformed
-
-    private void btnRegisterUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterUserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRegisterUserActionPerformed
+    }//GEN-LAST:event_btnRegisterMouseClicked
 
     /**
      * @param args the command line arguments

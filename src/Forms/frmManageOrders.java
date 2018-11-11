@@ -15,7 +15,9 @@ import ProductManagement.ProductManagement_Methods;
 import ProductManagement.Stock;
 import ProductManagement.UserRequest;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
 import bc_stationary_bll.Email;
+import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.Reports.ReportBuilder;
 import bc_stationary_bll.Reports.ReportMenu;
 import bc_stationary_bll.Reports.Reporting;
@@ -23,16 +25,11 @@ import bc_stationary_bll.genericSort;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -48,6 +45,9 @@ public class frmManageOrders extends javax.swing.JFrame {
      */
     public ArrayList<Product> products;
     Communication c;
+      // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmManageOrders() {
         try {
             initComponents();
@@ -74,8 +74,11 @@ public class frmManageOrders extends javax.swing.JFrame {
             txtQuantity.setEditable(false);
             txtPriority.setEditable(false);
             txtRequestDate.setEditable(false);
-        } catch (IOException ex) {
-            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) {
+            CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) productsOnRequest() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }
 
@@ -185,6 +188,7 @@ public class frmManageOrders extends javax.swing.JFrame {
         btnAddRequest.setBorder(null);
         btnAddRequest.setBorderPainted(false);
         btnAddRequest.setContentAreaFilled(false);
+        btnAddRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddRequest.setFocusPainted(false);
         btnAddRequest.setIconTextGap(10);
         btnAddRequest.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/reactivate_Red.png"))); // NOI18N
@@ -197,6 +201,7 @@ public class frmManageOrders extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(68);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -214,6 +219,7 @@ public class frmManageOrders extends javax.swing.JFrame {
         btnEditRequest.setBorder(null);
         btnEditRequest.setBorderPainted(false);
         btnEditRequest.setContentAreaFilled(false);
+        btnEditRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEditRequest.setFocusPainted(false);
         btnEditRequest.setIconTextGap(40);
         btnEditRequest.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
@@ -252,6 +258,7 @@ public class frmManageOrders extends javax.swing.JFrame {
         lblSearchUsers.setText("Select a User:");
 
         cmbProduct.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cmbProduct.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbProduct.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -263,6 +270,7 @@ public class frmManageOrders extends javax.swing.JFrame {
         });
 
         lbxUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxUsers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbxUsers.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lbxUsersValueChanged(evt);
@@ -440,6 +448,7 @@ public class frmManageOrders extends javax.swing.JFrame {
         btnOrder.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnOrder.setText("Order");
         btnOrder.setBorderPainted(false);
+        btnOrder.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnOrder.setFocusPainted(false);
         btnOrder.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -450,15 +459,11 @@ public class frmManageOrders extends javax.swing.JFrame {
         btnPurchase.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnPurchase.setText("Add to Purchase Order");
         btnPurchase.setBorderPainted(false);
+        btnPurchase.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPurchase.setFocusPainted(false);
         btnPurchase.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnPurchaseMouseClicked(evt);
-            }
-        });
-        btnPurchase.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPurchaseActionPerformed(evt);
             }
         });
 
@@ -534,16 +539,11 @@ public class frmManageOrders extends javax.swing.JFrame {
         btnSendPurchase.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnSendPurchase.setText("Send Purchase Order");
         btnSendPurchase.setBorderPainted(false);
-        btnSendPurchase.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnSendPurchase.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSendPurchase.setFocusPainted(false);
         btnSendPurchase.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnSendPurchaseMouseClicked(evt);
-            }
-        });
-        btnSendPurchase.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSendPurchaseActionPerformed(evt);
             }
         });
 
@@ -690,7 +690,9 @@ public class frmManageOrders extends javax.swing.JFrame {
             txtRequestDate.setEditable(false);
             
             Stock stock = new Stock(selectedProduct, 0);
-            stockQuantity = stock.selectSpecStock().getQuantity();
+            c = new Communication(ProductManagement_Methods.STOCK_SELECT_SPEC.methodIdentifier, stock);
+            stock = (Stock) new ClientHandler(c).request().objectResult;
+            stockQuantity = stock.getQuantity();
             
             txtQuantityInStock.setText(Integer.toString(stockQuantity));
             txtQuantityInStock.setEditable(false);
@@ -708,14 +710,13 @@ public class frmManageOrders extends javax.swing.JFrame {
                 lblOrderStatus.setText("Enough quantity items to fill this order.");
                 btnOrder.setVisible(true);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) {
+            CustomException ce = new CustomException(date.toString()+": Unknown Error in one of the following classes: User, Stock",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_lbxUsersValueChanged
-
-    private void btnPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPurchaseActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPurchaseActionPerformed
 
     private void cmbProductPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductPopupMenuWillBecomeInvisible
         // TODO add your handling code here:
@@ -737,12 +738,21 @@ public class frmManageOrders extends javax.swing.JFrame {
                 allRequests = new ClientHandler(c).request().listResult;
                 try {
                     Collections.sort(allRequests, new genericSort(UserRequest.class.getField("priorityLevel")));
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NoSuchFieldException ex) {
-                    Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SecurityException ex) {
-                    Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+                } 
+                catch (ClassNotFoundException ex) {
+                    CustomException ce = new CustomException(date.toString()+": UserRequest class was not found!",ex);
+                    GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                    gen.Serialize(true); // append to file;
+                } 
+                catch (NoSuchFieldException ex) {
+                    CustomException ce = new CustomException(date.toString()+": priorityLevel field in the Stock class was not found!",ex);
+                    GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                    gen.Serialize(true); // append to file;
+                } 
+                catch (SecurityException ex) {
+                    CustomException ce = new CustomException(date.toString()+": A Security Exception occured during Collections.sort(allRequests) (frmManageOrders)!",ex);
+                    GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                    gen.Serialize(true); // append to file;
                 }
                 
                 DefaultListModel model = new DefaultListModel();
@@ -753,7 +763,9 @@ public class frmManageOrders extends javax.swing.JFrame {
                 
                 lbxUsers.setModel(model);
             } catch (IOException ex) {
-                Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+                CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) selectUnprocessed_ProductBackOrder() method failed!",ex);
+                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                gen.Serialize(true); // append to file
             }
         }
     }//GEN-LAST:event_cmbProductPopupMenuWillBecomeInvisible
@@ -784,7 +796,11 @@ public class frmManageOrders extends javax.swing.JFrame {
             Order order = new Order(selectedUser);
             c = new Communication(ProductManagement_Methods.ORDER_SELECT_USER_OPEN.methodIdentifier, order);
             orderToUpdate = (Order)new ClientHandler(c).request().objectResult;
-            if(orderToUpdate != null)
+            
+            // If an open order exists (meaning a order where the ReceivedDate is less than the OrderDate) for a specific user,
+            // then this order item will be added to the open order.
+            // If there is not an open order for a specific user then a new order will be added.
+            if(orderToUpdate != null) // open order exists
             {
                 OrderItems orderItem = new OrderItems(selectedProduct,requestQuantity,orderToUpdate);
                 try {
@@ -804,11 +820,15 @@ public class frmManageOrders extends javax.swing.JFrame {
                                 orderDate);
                             c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier,requestToUpdate);
                         }
+                        
                         int requestUpdateSuccess = new ClientHandler(c).request().intResult;
                         if(requestUpdateSuccess != -1)
                         {
                             newStockQuantity = stockQuantity - requestQuantity;
-                            if(newStockQuantity == 0)
+                         
+                            // If the stock is now 0, after filling the request, then the stock needs to updated to 0
+                            // and the Product Status to "Not Available"
+                            if(newStockQuantity == 0) // If the stock is now 0, after filling the request
                             {
                                 stockToUpdate = new Stock(selectedProduct,newStockQuantity);
                                 c = new Communication(ProductManagement_Methods.STOCK_UPDATE.methodIdentifier, stockToUpdate);
@@ -822,6 +842,9 @@ public class frmManageOrders extends javax.swing.JFrame {
                                     
                                     if(productUpdateSuccess != -1)
                                     {
+                                        // If the stock is not enough to fill the entire order, then the request is split into 2 parts.
+                                        // Part 1 : A order item is created for the amount of quantity currently in stock.
+                                        // Part 2 : A new request is created for the remaining quantity that could not be filled.
                                         if(stockInsufficient)
                                         {
                                             remainingRequestQuantity = initialRequestQuantity - requestQuantity;
@@ -903,7 +926,9 @@ public class frmManageOrders extends javax.swing.JFrame {
 
                     }
                 } catch (IOException ex) {                    
-                    Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+                    CustomException ce = new CustomException(date.toString()+": Unknown Error in one of the folowing classes: Order, OrderItems, Product, Stock, UserRequest ",ex);
+                    GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                    gen.Serialize(true); // append to file
                 }
             }
             else
@@ -984,13 +1009,14 @@ public class frmManageOrders extends javax.swing.JFrame {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": Unknown Error in one of the folowing classes: Order, OrderItems, Product, Stock, UserRequest ",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
         
     }//GEN-LAST:event_btnOrderMouseClicked
 
     private void btnPurchaseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPurchaseMouseClicked
-         // TODO add your handling code here:
         UserRequest requestToUpdate = new UserRequest(selectedRequest.getUser(),selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Awaiting Purchase",selectedRequest.getReqDate(),selectedRequest.getCompletedDate());
         try {   
             c = new Communication(ProductManagement_Methods.UR_UPDATE_UNPROCESSED.methodIdentifier,requestToUpdate);
@@ -1011,7 +1037,9 @@ public class frmManageOrders extends javax.swing.JFrame {
                 this.setVisible(false);
             }
         } catch (IOException ex) {
-            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) updateUnproccessed() failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     
     }//GEN-LAST:event_btnPurchaseMouseClicked
@@ -1055,11 +1083,13 @@ public class frmManageOrders extends javax.swing.JFrame {
                 
                     if(urUpdateSuccessfull)
                     {
+                        String emailAddress = JOptionPane.showInputDialog(null,"Please enter the email address of the purchase manager","Email of Purchase Manager",JOptionPane.QUESTION_MESSAGE);
+                        
                         Reporting report = new ReportBuilder(ReportMenu.PURCHASE_ORDER.reportOption,stockItems).createReport();
                         report.generateReport();
                         String message = "Please find attached, to this mail, the purchase order list for today ("+ today+")";
-                        String path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\\"+report.docName;
-                        Email email = new Email("eldanefer1@gmail.com", message, "Purchase Order Form", path);
+                        String path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\Project 3 -latest\\BC_Stationary_Management_System\\"+report.docName;
+                        Email email = new Email(emailAddress, message, "Purchase Order Form", path);
                         email.sendEmail();
                     
                         this.setCursor(Cursor.getDefaultCursor());
@@ -1085,14 +1115,13 @@ public class frmManageOrders extends javax.swing.JFrame {
             {
                 JOptionPane.showMessageDialog(null, "There are no items in the purchase order list yet!", "Purchase Order List is Empty ", JOptionPane.WARNING_MESSAGE);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) {
+            CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) either selectRequestsAwaitingPurchase() or updateAwaitingPurchase() failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_btnSendPurchaseMouseClicked
-
-    private void btnSendPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendPurchaseActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSendPurchaseActionPerformed
 
     /**
      * @param args the command line arguments

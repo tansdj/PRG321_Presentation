@@ -5,19 +5,19 @@
  */
 package Forms;
 
-import PersonManagement.SecurityQuestions;
 import PersonManagement.User;
 import PersonManagement.*;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
+import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.SoundEx;
 import bc_stationary_bll.Validation;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -33,6 +33,9 @@ public class frmUpdateUser extends javax.swing.JFrame {
      */
     public ArrayList<User> userList;
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmUpdateUser() {
         try {
             initComponents();
@@ -60,7 +63,9 @@ public class frmUpdateUser extends javax.swing.JFrame {
                 cmbDepartment.addItem(d.getName());
             }
         } catch (IOException ex) {
-            Logger.getLogger(frmUpdateUser.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": Unknown Error in one of the following classes: User, Department",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }
 
@@ -176,6 +181,7 @@ public class frmUpdateUser extends javax.swing.JFrame {
         btnViewUser.setBorder(null);
         btnViewUser.setBorderPainted(false);
         btnViewUser.setContentAreaFilled(false);
+        btnViewUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewUser.setFocusPainted(false);
         btnViewUser.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewUser.setIconTextGap(25);
@@ -190,12 +196,14 @@ public class frmUpdateUser extends javax.swing.JFrame {
         btnAddUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnAddUser.setForeground(new java.awt.Color(255, 255, 255));
         btnAddUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1.png"))); // NOI18N
-        btnAddUser.setText("Add User");
+        btnAddUser.setText("Accept User");
+        btnAddUser.setActionCommand("Accept User");
         btnAddUser.setBorder(null);
         btnAddUser.setBorderPainted(false);
         btnAddUser.setContentAreaFilled(false);
+        btnAddUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddUser.setFocusPainted(false);
-        btnAddUser.setIconTextGap(30);
+        btnAddUser.setIconTextGap(8);
         btnAddUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddUserActionPerformed(evt);
@@ -210,6 +218,7 @@ public class frmUpdateUser extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(20);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -227,6 +236,7 @@ public class frmUpdateUser extends javax.swing.JFrame {
         btnUpdateUser.setBorder(null);
         btnUpdateUser.setBorderPainted(false);
         btnUpdateUser.setContentAreaFilled(false);
+        btnUpdateUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdateUser.setFocusPainted(false);
         btnUpdateUser.setIconTextGap(5);
         btnUpdateUser.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
@@ -240,7 +250,7 @@ public class frmUpdateUser extends javax.swing.JFrame {
                 .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnViewUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAddUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnBack, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                    .addComponent(btnBack, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnUpdateUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -259,6 +269,7 @@ public class frmUpdateUser extends javax.swing.JFrame {
         );
 
         lbxUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxUsers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbxUsers.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lbxUsersValueChanged(evt);
@@ -319,6 +330,7 @@ public class frmUpdateUser extends javax.swing.JFrame {
         btnEditUser.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnEditUser.setText("Update User");
         btnEditUser.setBorderPainted(false);
+        btnEditUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEditUser.setFocusPainted(false);
         btnEditUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -328,9 +340,11 @@ public class frmUpdateUser extends javax.swing.JFrame {
 
         cmbStatus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Pending", "Disabled" }));
+        cmbStatus.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         cmbAccessLevel.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         cmbAccessLevel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrator", "Standard" }));
+        cmbAccessLevel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         pnlDepartmentInfo.setBackground(new java.awt.Color(45, 45, 45));
         pnlDepartmentInfo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -340,11 +354,7 @@ public class frmUpdateUser extends javax.swing.JFrame {
         lblDepartmentInfo.setText("Department Information");
 
         cmbDepartment.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        cmbDepartment.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cmbDepartmentMouseClicked(evt);
-            }
-        });
+        cmbDepartment.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         lblDepartment.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblDepartment.setForeground(new java.awt.Color(255, 255, 255));
@@ -555,11 +565,7 @@ public class frmUpdateUser extends javax.swing.JFrame {
 
         cmbCampus.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         cmbCampus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pretoria", "Ekurhuleni", "Nelson Mandela Bay" }));
-        cmbCampus.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cmbCampusMouseClicked(evt);
-            }
-        });
+        cmbCampus.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout pnlUserInfo1Layout = new javax.swing.GroupLayout(pnlUserInfo1);
         pnlUserInfo1.setLayout(pnlUserInfo1Layout);
@@ -709,8 +715,10 @@ public class frmUpdateUser extends javax.swing.JFrame {
             dep = per.getDepartment();
 
         } 
-        catch (IOException io) {
-
+        catch (IOException ex) {
+            CustomException ce = new CustomException(date.toString()+": (In Person Class) selectSpecProduct() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
         txtFirstnameUpdate.setText(person.getName());
         txtFirstnameUpdate.setEditable(false);
@@ -762,15 +770,15 @@ public class frmUpdateUser extends javax.swing.JFrame {
                 lblCampusUpdate.setForeground(Color.white);
                 if(!"".equals(txtLine1.getText()))
                 {
-                    addressLine1 = txtLine1.getText();
+                    addressLine1 = txtLine1.getText().trim();
                     lblLine1.setForeground(Color.white);
                     if(!"".equals(txtLine2.getText()))
                     {
-                        addressLine2 = txtLine2.getText();
+                        addressLine2 = txtLine2.getText().trim();
                         lblLine2.setForeground(Color.white);
                         if((validation.testProperString(txtCity.getText()))&&(!"".equals(txtCity.getText())))
                         {
-                            addressCity = txtCity.getText();
+                            addressCity = txtCity.getText().trim();
                             lblCity.setForeground(Color.white);
                             if((validation.testNumericString(txtPostalCode.getText()))&&(!"".equals(txtPostalCode.getText())))
                             {
@@ -919,17 +927,11 @@ public class frmUpdateUser extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Error occured during this process!", "Unsuccessful Update", JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException ex) {
-            Logger.getLogger(frmUpdateUser.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": Unknown Error in one of the following classes: User, Person",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_btnEditUserActionPerformed
-
-    private void cmbDepartmentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbDepartmentMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbDepartmentMouseClicked
-
-    private void cmbCampusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbCampusMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbCampusMouseClicked
 
     private void btnAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUserActionPerformed
         frmAddUser addUser = new frmAddUser();
@@ -938,12 +940,10 @@ public class frmUpdateUser extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddUserActionPerformed
 
     private void txtSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchMouseClicked
-        // TODO add your handling code here:
         txtSearch.setText("");
     }//GEN-LAST:event_txtSearchMouseClicked
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
-        // TODO add your handling code here:
         User user = new User();
         ArrayList<User> usersThatFitCriteria = new ArrayList<User>();
         String searchCode = "", userCode = "", searchText = txtSearch.getText();
@@ -958,7 +958,9 @@ public class frmUpdateUser extends javax.swing.JFrame {
                 }
                 lbxUsers.setModel(model);
             } catch (IOException ex) {
-                Logger.getLogger(frmUpdateUser.class.getName()).log(Level.SEVERE, null, ex);
+                CustomException ce = new CustomException(date.toString()+": (In User Class) select() method failed!",ex);
+                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                gen.Serialize(true); // append to file
             }
         } else {
             int numSearchChars; // amount of characters that are typed into the search box.
@@ -979,8 +981,10 @@ public class frmUpdateUser extends javax.swing.JFrame {
                             p = (Person) new ClientHandler(c).request().objectResult;
                             u.setPerson(p);
                             usersThatFitCriteria.add(u);
-                        } catch (IOException io) {
-                            System.out.println(io);
+                        } catch (IOException ex) {
+                            CustomException ce = new CustomException(date.toString()+": (In Person Class) selectSpecPerson() method failed!",ex);
+                            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                            gen.Serialize(true); // append to file
                         }
 
                     }

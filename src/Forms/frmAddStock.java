@@ -11,14 +11,14 @@ import ProductManagement.Product;
 import ProductManagement.ProductManagement_Methods;
 import ProductManagement.Stock;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
+import bc_stationary_bll.GenericSerializer;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -33,6 +33,9 @@ public class frmAddStock extends javax.swing.JFrame {
      */
     public ArrayList<Product> products;
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmAddStock() {
         try {
             initComponents();
@@ -41,11 +44,24 @@ public class frmAddStock extends javax.swing.JFrame {
             Product product = new Product();
             c = new Communication(ProductManagement_Methods.PRODUCT_SELECT_ALL.methodIdentifier,product);
             products = new ClientHandler(c).request().listResult;
+            
+            cmbProductSearch.addItem("Select Product:");
             for(Product p:products){
                 cmbProductSearch.addItem(p.getName()+"("+ p.getDescription()+")");
+                
             }
+            txtProductName.setEditable(false);
+            txtDescription.setEditable(false);
+            txtStatus.setEditable(false);
+            txtCategory.setEditable(false);
+            txtProductModel.setEditable(false);
+            txtProductCost.setEditable(false);
+            txtProductSale.setEditable(false);
+            
         } catch (IOException ex) {
-            Logger.getLogger(frmAddStock.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In Product Class) select() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }
 
@@ -154,6 +170,7 @@ public class frmAddStock extends javax.swing.JFrame {
 
         numQuantity.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         numQuantity.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        numQuantity.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout pnlInStockLayout = new javax.swing.GroupLayout(pnlInStock);
         pnlInStock.setLayout(pnlInStockLayout);
@@ -186,6 +203,7 @@ public class frmAddStock extends javax.swing.JFrame {
         btnInsertStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnInsertStock.setText("Add Stock");
         btnInsertStock.setBorderPainted(false);
+        btnInsertStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnInsertStock.setFocusPainted(false);
         btnInsertStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -332,6 +350,7 @@ public class frmAddStock extends javax.swing.JFrame {
         );
 
         cmbProductSearch.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cmbProductSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbProductSearch.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -352,6 +371,7 @@ public class frmAddStock extends javax.swing.JFrame {
         btnAddProduct.setBorder(null);
         btnAddProduct.setBorderPainted(false);
         btnAddProduct.setContentAreaFilled(false);
+        btnAddProduct.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddProduct.setFocusPainted(false);
         btnAddProduct.setIconTextGap(30);
         btnAddProduct.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
@@ -369,6 +389,7 @@ public class frmAddStock extends javax.swing.JFrame {
         btnUpdateStock.setBorder(null);
         btnUpdateStock.setBorderPainted(false);
         btnUpdateStock.setContentAreaFilled(false);
+        btnUpdateStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdateStock.setFocusPainted(false);
         btnUpdateStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnUpdateStock.setIconTextGap(5);
@@ -387,6 +408,7 @@ public class frmAddStock extends javax.swing.JFrame {
         btnViewStock.setBorder(null);
         btnViewStock.setBorderPainted(false);
         btnViewStock.setContentAreaFilled(false);
+        btnViewStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewStock.setFocusPainted(false);
         btnViewStock.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewStock.setIconTextGap(40);
@@ -405,6 +427,7 @@ public class frmAddStock extends javax.swing.JFrame {
         btnAddStock.setBorder(null);
         btnAddStock.setBorderPainted(false);
         btnAddStock.setContentAreaFilled(false);
+        btnAddStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddStock.setFocusPainted(false);
         btnAddStock.setIconTextGap(50);
         btnAddStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Add1_Red.png"))); // NOI18N
@@ -422,6 +445,7 @@ public class frmAddStock extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(45);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -553,8 +577,11 @@ public class frmAddStock extends javax.swing.JFrame {
                 {
                     JOptionPane.showMessageDialog(null, "Something went wrong during the update process. Stock Update was unsuccessful!","Registration Failed",JOptionPane.WARNING_MESSAGE);
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(frmAddStock.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+            catch (IOException ex) {
+                CustomException ce = new CustomException(date.toString()+": (In Stock Class) update() method failed!",ex);
+                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                gen.Serialize(true); // append to file
             }
             }
             else
@@ -596,50 +623,54 @@ public class frmAddStock extends javax.swing.JFrame {
 
     private void cmbProductSearchPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductSearchPopupMenuWillBecomeInvisible
         try {
-            // TODO add your handling code here:
-            String selectedProductSearch = cmbProductSearch.getSelectedItem().toString();
-            String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
-            String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf(")"));
-            
-            Product selectedProduct = new Product();
-            for(Product p : products)
+            if(cmbProductSearch.getSelectedIndex() > 0)
             {
-                if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))))
+                String selectedProductSearch = cmbProductSearch.getSelectedItem().toString();
+                String searchedProduct = selectedProductSearch.substring(0,selectedProductSearch.indexOf("("));
+                String searchedDescription = selectedProductSearch.substring(selectedProductSearch.indexOf("(")+1,selectedProductSearch.indexOf(")"));
+            
+                Product selectedProduct = new Product();
+                for(Product p : products)
                 {
-                    selectedProduct = p;
+                    if((p.getName().equals(searchedProduct)&&(p.getDescription().equals(searchedDescription))))
+                    {
+                        selectedProduct = p;
+                    }
                 }
-            }
             
-            Model model = selectedProduct.getModel();
-            Category category = selectedProduct.getCategory();
-            Stock stock = new Stock(selectedProduct,0);
-            c = new Communication(ProductManagement_Methods.STOCK_SELECT_SPEC.methodIdentifier, stock);
-            stock = (Stock) new ClientHandler(c).request().objectResult;
+                Model model = selectedProduct.getModel();
+                Category category = selectedProduct.getCategory();
+                Stock stock = new Stock(selectedProduct,0);
+                c = new Communication(ProductManagement_Methods.STOCK_SELECT_SPEC.methodIdentifier, stock);
+                stock = (Stock) new ClientHandler(c).request().objectResult;
             
-            txtProductName.setText(selectedProduct.getName());
-            txtProductName.setEditable(false);
+                txtProductName.setText(selectedProduct.getName());
+                txtProductName.setEditable(false);
             
-            txtDescription.setText(selectedProduct.getDescription());
-            txtDescription.setEditable(false);
+                txtDescription.setText(selectedProduct.getDescription());
+                txtDescription.setEditable(false);
             
-            txtStatus.setText(selectedProduct.getStatus());
-            txtStatus.setEditable(false);
+                txtStatus.setText(selectedProduct.getStatus());
+                txtStatus.setEditable(false);
             
-            txtCategory.setText(category.getDescription());
-            txtCategory.setEditable(false);
+                txtCategory.setText(category.getDescription());
+                txtCategory.setEditable(false);
             
-            txtProductModel.setText(model.getDescription());
-            txtProductModel.setEditable(false);
+                txtProductModel.setText(model.getDescription());
+                txtProductModel.setEditable(false);
             
-            txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
-            txtProductCost.setEditable(false);
+                txtProductCost.setText(Double.toString(selectedProduct.getCostPrice()));
+                txtProductCost.setEditable(false);
             
-            txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
-            txtProductSale.setEditable(false);
+                txtProductSale.setText(Double.toString(selectedProduct.getSalesPrice()));
+                txtProductSale.setEditable(false);
             
-            numQuantity.setValue(stock.getQuantity());
+                numQuantity.setValue(stock.getQuantity());
+            }    
         } catch (IOException ex) {
-            Logger.getLogger(frmAddStock.class.getName()).log(Level.SEVERE, null, ex);
+            CustomException ce = new CustomException(date.toString()+": (In Stock Class) selectSpecStock() method failed!",ex);
+            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+            gen.Serialize(true); // append to file
         }
     }//GEN-LAST:event_cmbProductSearchPopupMenuWillBecomeInvisible
 

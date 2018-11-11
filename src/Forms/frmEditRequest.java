@@ -8,12 +8,14 @@ package Forms;
 import ProductManagement.ProductManagement_Methods;
 import ProductManagement.UserRequest;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.CustomException;
+import bc_stationary_bll.GenericSerializer;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -29,13 +31,17 @@ public class frmEditRequest extends javax.swing.JFrame {
      */
     public ArrayList<UserRequest> requestItems;
     Communication c;
+    // Date is used to log the custom exceptions
+    public final LocalDate local = LocalDate.now();
+    public final Date date = Date.valueOf(local);
     public frmEditRequest() {
         try {
             initComponents();
             this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             this.getContentPane().setBackground(new Color(45, 45, 45));
+            lblListHeading.setText(String.format("%S                %S          %S          %S              %S          %S", "Product","Qty","Priority","Status","Request Date","Complete Date"));
             UserRequest request = new UserRequest();
-            c  = new Communication(ProductManagement_Methods.UR_SELECT_ALL.methodIdentifier, request);
+            c  = new Communication(ProductManagement_Methods.UR_SELECT_UNPROCESSED.methodIdentifier, request);
             requestItems = new ClientHandler(c).request().listResult;
             
             DefaultListModel model = new DefaultListModel();
@@ -46,7 +52,9 @@ public class frmEditRequest extends javax.swing.JFrame {
             
             lbxRequestedItems.setModel(model);
         } catch (IOException ex) {
-            Logger.getLogger(frmEditRequest.class.getName()).log(Level.SEVERE, null, ex);
+           CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) selectUnprocessed() method failed!",ex);
+           GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+           gen.Serialize(true); // append to file
         }
     }
 
@@ -70,6 +78,7 @@ public class frmEditRequest extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         lbxRequestedItems = new javax.swing.JList<>();
         lblProductName = new javax.swing.JLabel();
+        lblListHeading = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -124,6 +133,7 @@ public class frmEditRequest extends javax.swing.JFrame {
         btnViewRequest.setBorder(null);
         btnViewRequest.setBorderPainted(false);
         btnViewRequest.setContentAreaFilled(false);
+        btnViewRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewRequest.setFocusPainted(false);
         btnViewRequest.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewRequest.setIconTextGap(16);
@@ -142,6 +152,7 @@ public class frmEditRequest extends javax.swing.JFrame {
         btnAddRequest.setBorder(null);
         btnAddRequest.setBorderPainted(false);
         btnAddRequest.setContentAreaFilled(false);
+        btnAddRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddRequest.setFocusPainted(false);
         btnAddRequest.setIconTextGap(20);
         btnAddRequest.addActionListener(new java.awt.event.ActionListener() {
@@ -158,6 +169,7 @@ public class frmEditRequest extends javax.swing.JFrame {
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBack.setFocusPainted(false);
         btnBack.setIconTextGap(38);
         btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
@@ -175,6 +187,7 @@ public class frmEditRequest extends javax.swing.JFrame {
         btnEditRequest.setBorder(null);
         btnEditRequest.setBorderPainted(false);
         btnEditRequest.setContentAreaFilled(false);
+        btnEditRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEditRequest.setFocusPainted(false);
         btnEditRequest.setIconTextGap(22);
         btnEditRequest.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Edit1_Red.png"))); // NOI18N
@@ -207,6 +220,7 @@ public class frmEditRequest extends javax.swing.JFrame {
         );
 
         lbxRequestedItems.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lbxRequestedItems.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbxRequestedItems.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lbxRequestedItemsValueChanged(evt);
@@ -218,20 +232,28 @@ public class frmEditRequest extends javax.swing.JFrame {
         lblProductName.setForeground(new java.awt.Color(255, 255, 255));
         lblProductName.setText("Select Item to delete from list:");
 
+        lblListHeading.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblListHeading.setForeground(new java.awt.Color(255, 255, 255));
+        lblListHeading.setText("Product");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 994, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(68, 68, 68)
-                            .addComponent(lblProductName)
-                            .addGap(731, 731, 731))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(lblListHeading))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(68, 68, 68)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 994, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblProductName))))
+                .addGap(290, 290, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -245,6 +267,8 @@ public class frmEditRequest extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(122, 122, 122)
                         .addComponent(lblProductName)
+                        .addGap(16, 16, 16)
+                        .addComponent(lblListHeading)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -288,7 +312,9 @@ public class frmEditRequest extends javax.swing.JFrame {
                     this.setVisible(false);
                 }
             } catch (IOException ex) {
-                Logger.getLogger(frmEditRequest.class.getName()).log(Level.SEVERE, null, ex);
+                CustomException ce = new CustomException(date.toString()+": (In UserRequest Class) delete() method failed!",ex);
+                GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                gen.Serialize(true); // append to file
             }
         }
     }//GEN-LAST:event_lbxRequestedItemsValueChanged
@@ -335,6 +361,7 @@ public class frmEditRequest extends javax.swing.JFrame {
     private javax.swing.JButton btnViewRequest;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEditRequest;
+    private javax.swing.JLabel lblListHeading;
     private javax.swing.JLabel lblProductName;
     private javax.swing.JList<String> lbxRequestedItems;
     private javax.swing.JPanel pnlMainDashHeader;
