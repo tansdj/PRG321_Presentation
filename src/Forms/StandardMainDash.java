@@ -7,6 +7,7 @@ package Forms;
 
 import java.awt.Color;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -96,6 +97,7 @@ public class StandardMainDash extends javax.swing.JFrame {
         btnManageRequest.setBorder(null);
         btnManageRequest.setBorderPainted(false);
         btnManageRequest.setContentAreaFilled(false);
+        btnManageRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnManageRequest.setFocusPainted(false);
         btnManageRequest.setIconTextGap(34);
         btnManageRequest.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/products_Red.png"))); // NOI18N
@@ -113,6 +115,7 @@ public class StandardMainDash extends javax.swing.JFrame {
         btnManageProfile.setBorder(null);
         btnManageProfile.setBorderPainted(false);
         btnManageProfile.setContentAreaFilled(false);
+        btnManageProfile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnManageProfile.setFocusPainted(false);
         btnManageProfile.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnManageProfile.setIconTextGap(55);
@@ -131,6 +134,7 @@ public class StandardMainDash extends javax.swing.JFrame {
         btnExit.setBorder(null);
         btnExit.setBorderPainted(false);
         btnExit.setContentAreaFilled(false);
+        btnExit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExit.setFocusPainted(false);
         btnExit.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnExit.setIconTextGap(145);
@@ -150,6 +154,7 @@ public class StandardMainDash extends javax.swing.JFrame {
         btnViewUserDetails.setBorder(null);
         btnViewUserDetails.setBorderPainted(false);
         btnViewUserDetails.setContentAreaFilled(false);
+        btnViewUserDetails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewUserDetails.setFocusPainted(false);
         btnViewUserDetails.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnViewUserDetails.setIconTextGap(10);
@@ -221,8 +226,11 @@ public class StandardMainDash extends javax.swing.JFrame {
     }//GEN-LAST:event_btnManageProfileActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        // TODO add your handling code here:
-        System.exit(0);
+        int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?","Exit",JOptionPane.YES_NO_OPTION);
+        if(answer == 0)// yes
+        {
+            System.exit(0);
+        }    
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnViewUserDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewUserDetailsMouseClicked
