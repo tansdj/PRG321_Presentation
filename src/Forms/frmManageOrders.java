@@ -810,7 +810,7 @@ public class frmManageOrders extends javax.swing.JFrame {
                     {
                         if(stockInsufficient)
                         {
-                            requestToUpdate = new UserRequest(selectedUser,selectedProduct,(selectedRequest.getQuantity()-requestQuantity),selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
+                            requestToUpdate = new UserRequest(selectedUser,selectedProduct,requestQuantity,selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
                                 orderDate);
                             c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier,requestToUpdate);
                         }

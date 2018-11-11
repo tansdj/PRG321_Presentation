@@ -317,7 +317,7 @@ public class frmEditOrders extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
     
-    ArrayList<Order> userOrders;
+    ArrayList<Order> userOrders = new ArrayList<Order>();
     public User selectedUser = null;
     private void cmbUsersPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbUsersPopupMenuWillBecomeInvisible
         if(cmbUsers.getSelectedIndex()> 0){
@@ -330,8 +330,9 @@ public class frmEditOrders extends javax.swing.JFrame {
                 }
                 
                 Order order  = new Order(selectedUser,null,null,null);
-                c = new Communication(ProductManagement_Methods.ORDER_SELECT_USER.methodIdentifier, order);
-                userOrders = new ClientHandler(c).request().listResult;
+                c = new Communication(ProductManagement_Methods.ORDER_SELECT_USER_OPEN.methodIdentifier, order);
+                order = (Order) new ClientHandler(c).request().objectResult;
+                userOrders.add(order);
                 
                 DefaultListModel model = new DefaultListModel();
                 for(Order o: userOrders){
