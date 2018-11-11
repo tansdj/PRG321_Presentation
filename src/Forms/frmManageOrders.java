@@ -16,19 +16,23 @@ import ProductManagement.Stock;
 import ProductManagement.UserRequest;
 import bc_stationary_bll.Communication;
 import bc_stationary_bll.Email;
-import bc_stationary_bll.Reporting;
+import bc_stationary_bll.Reports.ReportBuilder;
+import bc_stationary_bll.Reports.ReportMenu;
+import bc_stationary_bll.Reports.Reporting;
 import bc_stationary_bll.genericSort;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.util.converter.LocalDateStringConverter;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -49,6 +53,8 @@ public class frmManageOrders extends javax.swing.JFrame {
             initComponents();
             this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             this.getContentPane().setBackground(new Color(45, 45, 45));
+            btnSendPurchase.setEnabled(true);
+            
             btnPurchase.setVisible(false);
             btnOrder.setVisible(false);
             
@@ -120,8 +126,12 @@ public class frmManageOrders extends javax.swing.JFrame {
         txtQuantityInStock = new javax.swing.JTextField();
         btnOrder = new javax.swing.JButton();
         btnPurchase = new javax.swing.JButton();
+        pnlDayPurchaseOrder = new javax.swing.JPanel();
+        lblProductInfo1 = new javax.swing.JLabel();
+        btnSendPurchase = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
 
         pnlMainDashHeader.setBackground(new java.awt.Color(255, 255, 0));
@@ -340,7 +350,7 @@ public class frmManageOrders extends javax.swing.JFrame {
                     .addGroup(pnlProjectInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lblProductModel)
                         .addComponent(txtProductModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         pnlProjectInfo2.setBackground(new java.awt.Color(45, 45, 45));
@@ -438,7 +448,7 @@ public class frmManageOrders extends javax.swing.JFrame {
         });
 
         btnPurchase.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        btnPurchase.setText("Send Purchase Order");
+        btnPurchase.setText("Add to Purchase Order");
         btnPurchase.setBorderPainted(false);
         btnPurchase.setFocusPainted(false);
         btnPurchase.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -457,33 +467,28 @@ public class frmManageOrders extends javax.swing.JFrame {
         pnlProjectInfo2Layout.setHorizontalGroup(
             pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlProjectInfo2Layout.createSequentialGroup()
-                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(28, 28, 28)
+                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblPriority)
+                        .addGap(64, 64, 64)
+                        .addComponent(txtPriority))
+                    .addComponent(lblRequestInfo)
                     .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnPurchase))
-                    .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
-                                .addComponent(lblPriority)
-                                .addGap(64, 64, 64)
-                                .addComponent(txtPriority))
-                            .addComponent(lblRequestInfo)
-                            .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
-                                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblQuantity)
-                                    .addComponent(lblRequestDate)
-                                    .addComponent(lblLoggedUser))
-                                .addGap(41, 41, 41)
-                                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtStaffMember, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtRequestDate)
-                                    .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
-                        .addComponent(pnlProjectInfo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblQuantity)
+                            .addComponent(lblRequestDate)
+                            .addComponent(lblLoggedUser))
+                        .addGap(41, 41, 41)
+                        .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtStaffMember, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtRequestDate)
+                            .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnPurchase)
+                    .addComponent(pnlProjectInfo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(120, 120, 120))
         );
         pnlProjectInfo2Layout.setVerticalGroup(
@@ -491,7 +496,7 @@ public class frmManageOrders extends javax.swing.JFrame {
             .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlProjectInfo2Layout.createSequentialGroup()
                         .addComponent(lblRequestInfo)
                         .addGap(32, 32, 32)
                         .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -508,16 +513,59 @@ public class frmManageOrders extends javax.swing.JFrame {
                         .addGap(21, 21, 21)
                         .addGroup(pnlProjectInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblPriority)
-                            .addComponent(txtPriority, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(pnlProjectInfo2Layout.createSequentialGroup()
+                            .addComponent(txtPriority, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlProjectInfo2Layout.createSequentialGroup()
                         .addGap(7, 7, 7)
-                        .addComponent(pnlProjectInfo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnPurchase)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                        .addComponent(btnOrder)))
-                .addContainerGap())
+                        .addComponent(pnlProjectInfo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnPurchase)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnOrder)
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+
+        pnlDayPurchaseOrder.setBackground(new java.awt.Color(45, 45, 45));
+        pnlDayPurchaseOrder.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        lblProductInfo1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        lblProductInfo1.setForeground(new java.awt.Color(255, 255, 255));
+        lblProductInfo1.setText("Send Today's Purchase Order");
+
+        btnSendPurchase.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnSendPurchase.setText("Send Purchase Order");
+        btnSendPurchase.setBorderPainted(false);
+        btnSendPurchase.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnSendPurchase.setFocusPainted(false);
+        btnSendPurchase.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSendPurchaseMouseClicked(evt);
+            }
+        });
+        btnSendPurchase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSendPurchaseActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlDayPurchaseOrderLayout = new javax.swing.GroupLayout(pnlDayPurchaseOrder);
+        pnlDayPurchaseOrder.setLayout(pnlDayPurchaseOrderLayout);
+        pnlDayPurchaseOrderLayout.setHorizontalGroup(
+            pnlDayPurchaseOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlDayPurchaseOrderLayout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(lblProductInfo1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 216, Short.MAX_VALUE)
+                .addComponent(btnSendPurchase)
+                .addGap(160, 160, 160))
+        );
+        pnlDayPurchaseOrderLayout.setVerticalGroup(
+            pnlDayPurchaseOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlDayPurchaseOrderLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(pnlDayPurchaseOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblProductInfo1)
+                    .addComponent(btnSendPurchase))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -526,40 +574,43 @@ public class frmManageOrders extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 407, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cmbProduct, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblSearchUsers))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlProjectInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(466, 466, 466))
+                    .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlProjectInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlDayPurchaseOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(84, 84, 84)
-                        .addComponent(cmbProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblSearchUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGap(41, 41, 41)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cmbProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblSearchUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(pnlProjectInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1))))
+                                .addComponent(pnlProjectInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(pnlDayPurchaseOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -704,10 +755,6 @@ public class frmManageOrders extends javax.swing.JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else {
-            frmManageOrders orders = new frmManageOrders();
-            orders.setVisible(true);
-            this.setVisible(false);
         }
     }//GEN-LAST:event_cmbProductPopupMenuWillBecomeInvisible
 
@@ -745,9 +792,18 @@ public class frmManageOrders extends javax.swing.JFrame {
                     int orderItemInsertSuccess = new ClientHandler(c).request().intResult;
                     if(orderItemInsertSuccess != -1)
                     {
-                        requestToUpdate = new UserRequest(selectedUser,selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
-                                selectedRequest.getCompletedDate());
-                        c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier,requestToUpdate);
+                        if(stockInsufficient)
+                        {
+                            requestToUpdate = new UserRequest(selectedUser,selectedProduct,(selectedRequest.getQuantity()-requestQuantity),selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
+                                orderDate);
+                            c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier,requestToUpdate);
+                        }
+                        else
+                        {
+                            requestToUpdate = new UserRequest(selectedUser,selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
+                                orderDate);
+                            c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier,requestToUpdate);
+                        }
                         int requestUpdateSuccess = new ClientHandler(c).request().intResult;
                         if(requestUpdateSuccess != -1)
                         {
@@ -759,7 +815,7 @@ public class frmManageOrders extends javax.swing.JFrame {
                                 int stockUpdateSuccess =  new ClientHandler(c).request().intResult;
                                 if(stockUpdateSuccess != -1)
                                 {
-                                    productToUpdate = new Product(selectedProduct.getName(),selectedProduct.getDescription(),selectedProduct.getCategory(),"Unavailable",selectedProduct.getModel(),
+                                    productToUpdate = new Product(selectedProduct.getName(),selectedProduct.getDescription(),selectedProduct.getCategory(),"Not Available",selectedProduct.getModel(),
                                             selectedProduct.getCostPrice(), selectedProduct.getSalesPrice(), selectedProduct.getEntryDate());
                                     c = new Communication(ProductManagement_Methods.PRODUCT_UPDATE.methodIdentifier,productToUpdate);
                                     int productUpdateSuccess = new ClientHandler(c).request().intResult;
@@ -857,9 +913,18 @@ public class frmManageOrders extends javax.swing.JFrame {
                 int orderInsertSuccess =  new ClientHandler(c).request().intResult;
                 if(orderInsertSuccess != -1)
                 {
-                    requestToUpdate = new UserRequest(selectedUser,selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
-                            selectedRequest.getCompletedDate());
-                    c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier,requestToUpdate);
+                    if(stockInsufficient)
+                        {
+                            requestToUpdate = new UserRequest(selectedUser,selectedProduct,(selectedRequest.getQuantity()-requestQuantity),selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
+                                orderDate);
+                            c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier,requestToUpdate);
+                        }
+                        else
+                        {
+                            requestToUpdate = new UserRequest(selectedUser,selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Partially Processed",selectedRequest.getReqDate(),
+                                orderDate);
+                            c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier,requestToUpdate);
+                        }
                     int requestUpdateSuccess = new ClientHandler(c).request().intResult;
                                         
                     if(requestUpdateSuccess != -1)
@@ -925,75 +990,30 @@ public class frmManageOrders extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOrderMouseClicked
 
     private void btnPurchaseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPurchaseMouseClicked
-        // TODO add your handling code here:
-        ArrayList<Stock> stockItems = new ArrayList<Stock>();
-        UserRequest requestToUpdate = new UserRequest(selectedRequest.getUser(),selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Back Ordered",selectedRequest.getReqDate(),selectedRequest.getCompletedDate());
-        
-        int answer = JOptionPane.showConfirmDialog(null, "Do you want to purchase more items than the requested amount?","Order Additional Quantity",JOptionPane.YES_NO_OPTION);
-        if(answer == 0)// yes
-        {
-            try {
-                int quantity = Integer.parseInt(JOptionPane.showInputDialog(null,"How many items do you want to purchase?","Specify Quantity",JOptionPane.QUESTION_MESSAGE));
-                stockItems.add(new Stock(selectedProduct,quantity));
-                c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier, requestToUpdate);
-                int requestUpdateSuccess =  new ClientHandler(c).request().intResult;
-                
-                if(requestUpdateSuccess != -1)
-                {
-                    String docName = "stockPurchaseOrder_"+selectedProduct.getName()+".pdf";
-                    Reporting report = new Reporting(stockItems, docName);
-                    report.generatePurchaseOrder();
-                    String message = "Please find attached, to this mail, the purchase order for Product Name: " + selectedProduct.getName();
-                    String path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\\"+docName;
-                    Email email = new Email("eldanefer1@gmail.com", message, "Purchase Order Form", path);
-                    email.sendEmail();
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(null, "Something went wrong! Purchase order was not successfully sent.", "Purchase Order Unsuccessfully Send ", JOptionPane.WARNING_MESSAGE);
-                    frmManageOrders manageOrders = new frmManageOrders();
-                    manageOrders.setVisible(true);
-                    this.setVisible(false);
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
-            }
-           
-        }
-        else
-        {
-            try {
-                c = new Communication(ProductManagement_Methods.UR_UPDATE.methodIdentifier, requestToUpdate);
-                int requestUpdateSuccess = new ClientHandler(c).request().intResult;
-                
-                if(requestUpdateSuccess != -1)
-                {
-                    //JOptionPane.showMessageDialog(null, "The requested quantity was send for purchase", "Purchase Order Send", JOptionPane.INFORMATION_MESSAGE);
-                    stockItems.add(new Stock(selectedProduct,requestQuantity));
-                    String docName = "stockPurchaseOrder_"+selectedProduct.getName()+".pdf";
-                    Reporting report = new Reporting(stockItems, docName);
-                    report.generatePurchaseOrder();
-                    String message = "Please find attached, to this mail, the purchase order for Product Name: " + selectedProduct.getName();
-                    String path = null;//"C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\";
-                    Email email = new Email("eldanefer1@gmail.com", message, "Purchase Order Form", path);
-                    email.sendEmail();
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(null, "Something went wrong! Purchase order was not successfully sent.", "Purchase Order Unsuccessfully Send ", JOptionPane.WARNING_MESSAGE);
-                    frmManageOrders manageOrders = new frmManageOrders();
-                    manageOrders.setVisible(true);
-                    this.setVisible(false);
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
-            }
+         // TODO add your handling code here:
+        UserRequest requestToUpdate = new UserRequest(selectedRequest.getUser(),selectedProduct,selectedRequest.getQuantity(),selectedRequest.getPriorityLevel(),"Awaiting Purchase",selectedRequest.getReqDate(),selectedRequest.getCompletedDate());
+        try {   
+            c = new Communication(ProductManagement_Methods.UR_UPDATE_UNPROCESSED.methodIdentifier,requestToUpdate);
+            int requestUpdateSuccess = new ClientHandler(c).request().intResult;
             
-            
+            if(requestUpdateSuccess != -1)
+            {
+                JOptionPane.showMessageDialog(null, "The requested quantity was added to today's purchase list.", "Successfully added to Today's Purchase Order List", JOptionPane.INFORMATION_MESSAGE);
+                frmManageOrders manageOrders = new frmManageOrders();
+                manageOrders.setVisible(true);
+                this.setVisible(false);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Something went wrong! Purchase order was not successfully added to the list.", "Purchase Order Unsuccessfully Addition ", JOptionPane.WARNING_MESSAGE);
+                frmManageOrders manageOrders = new frmManageOrders();
+                manageOrders.setVisible(true);
+                this.setVisible(false);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
+    
     }//GEN-LAST:event_btnPurchaseMouseClicked
 
     private void btnEditRequestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditRequestMouseClicked
@@ -1001,6 +1021,78 @@ public class frmManageOrders extends javax.swing.JFrame {
         editOrder.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnEditRequestMouseClicked
+
+    private void btnSendPurchaseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSendPurchaseMouseClicked
+        LocalDate local = LocalDate.now();
+        Date today = Date.valueOf(local);
+        ArrayList<Stock> stockItems = new ArrayList<Stock>();
+        UserRequest requestToUpdate = null;
+        boolean urUpdateSuccessfull = false;
+        btnSendPurchase.setEnabled(false);
+        
+        try {
+            c = new Communication(ProductManagement_Methods.UR_SELECT_AWAITING_PURCHASE.methodIdentifier, new UserRequest());
+            ArrayList<UserRequest> allRequestsAwaiting = new ClientHandler(c).request().listResult;
+            
+            if(allRequestsAwaiting.size() > 0) // check if list is empty
+            {
+                int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to send today's purchase order list to the purchase manager?","Send Purchase Order List",JOptionPane.YES_NO_OPTION);
+                if(answer == 0)// yes
+                {
+                    this.setCursor(Cursor.getPredefinedCursor(WAIT_CURSOR));
+                
+                    for(UserRequest u: allRequestsAwaiting)
+                    {
+                        requestToUpdate = new UserRequest(u.getUser(),u.getProduct(),u.getQuantity(),u.getPriorityLevel(),"Back Ordered",u.getReqDate(),u.getCompletedDate());
+                        c = new Communication(ProductManagement_Methods.UR_UPDATE_AWAITING_PURCHASE.methodIdentifier, requestToUpdate);
+                        int requestUpdateSuccess = new ClientHandler(c).request().intResult;
+                        if(requestUpdateSuccess != -1)
+                        {
+                            urUpdateSuccessfull = true;
+                            stockItems.add(new Stock(u.getProduct(),u.getQuantity()));
+                        }
+                    }
+                
+                    if(urUpdateSuccessfull)
+                    {
+                        Reporting report = new ReportBuilder(ReportMenu.PURCHASE_ORDER.reportOption,stockItems).createReport();
+                        report.generateReport();
+                        String message = "Please find attached, to this mail, the purchase order list for today ("+ today+")";
+                        String path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\\"+report.docName;
+                        Email email = new Email("eldanefer1@gmail.com", message, "Purchase Order Form", path);
+                        email.sendEmail();
+                    
+                        this.setCursor(Cursor.getDefaultCursor());
+                        JOptionPane.showMessageDialog(null, "Today's purchase order list was successfully send!", "Purchase Order List Send", JOptionPane.INFORMATION_MESSAGE);
+                        
+                        btnSendPurchase.setEnabled(true);
+                        frmManageOrders manageOrders = new frmManageOrders();
+                        manageOrders.setVisible(true);
+                        this.setVisible(false);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "Something went wrong! Purchase order list was not successfully sent.", "Purchase Order List Unsuccessfully Send ", JOptionPane.WARNING_MESSAGE);
+                        
+                        btnSendPurchase.setEnabled(true);
+                        frmManageOrders manageOrders = new frmManageOrders();
+                        manageOrders.setVisible(true);
+                        this.setVisible(false);
+                    }
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "There are no items in the purchase order list yet!", "Purchase Order List is Empty ", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmManageOrders.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnSendPurchaseMouseClicked
+
+    private void btnSendPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendPurchaseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSendPurchaseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1043,6 +1135,7 @@ public class frmManageOrders extends javax.swing.JFrame {
     private javax.swing.JButton btnEditRequest;
     private javax.swing.JButton btnOrder;
     private javax.swing.JButton btnPurchase;
+    private javax.swing.JButton btnSendPurchase;
     private javax.swing.JComboBox<String> cmbProduct;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAddRequest;
@@ -1053,6 +1146,7 @@ public class frmManageOrders extends javax.swing.JFrame {
     private javax.swing.JLabel lblOrderStatus;
     private javax.swing.JLabel lblPriority;
     private javax.swing.JLabel lblProductInfo;
+    private javax.swing.JLabel lblProductInfo1;
     private javax.swing.JLabel lblProductModel;
     private javax.swing.JLabel lblProductName;
     private javax.swing.JLabel lblQuantity;
@@ -1061,6 +1155,7 @@ public class frmManageOrders extends javax.swing.JFrame {
     private javax.swing.JLabel lblRequestInfo1;
     private javax.swing.JLabel lblSearchUsers;
     private javax.swing.JList<String> lbxUsers;
+    private javax.swing.JPanel pnlDayPurchaseOrder;
     private javax.swing.JPanel pnlMainDashHeader;
     private javax.swing.JPanel pnlMenu;
     private javax.swing.JPanel pnlProjectInfo;

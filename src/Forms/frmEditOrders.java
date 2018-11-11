@@ -11,8 +11,13 @@ import ProductManagement.Order;
 import ProductManagement.OrderItems;
 import ProductManagement.ProductManagement_Methods;
 import bc_stationary_bll.Communication;
+import bc_stationary_bll.Email;
+import bc_stationary_bll.Reports.ReportBuilder;
+import bc_stationary_bll.Reports.ReportMenu;
+import bc_stationary_bll.Reports.Reporting;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -43,7 +48,7 @@ public class frmEditOrders extends javax.swing.JFrame {
             this.getContentPane().setBackground(new Color(45, 45, 45));
             
             Order order = new Order();
-            c = new Communication(ProductManagement_Methods.ORDER_SELECT_USER_OPEN.methodIdentifier, order);
+            c = new Communication(ProductManagement_Methods.ORDER_SELECTUSERS_WITH_OPEN_ORDERS.methodIdentifier, order);
             users = new ClientHandler(c).request().listResult;
             cmbUsers.addItem("Select a User");
             for(User u:users){
@@ -304,7 +309,7 @@ public class frmEditOrders extends javax.swing.JFrame {
     private void cmbUsersPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbUsersPopupMenuWillBecomeInvisible
         // TODO add your handling code here:
         User selectedUser = null;
-        if(cmbUsers.getSelectedIndex()>-1){
+        if(cmbUsers.getSelectedIndex()> 0){
             try {
                 for(User u: users)
                 {
@@ -345,15 +350,27 @@ public class frmEditOrders extends javax.swing.JFrame {
     private void btnFinalizeOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFinalizeOrderMouseClicked
         if(lbxOrders.getSelectedIndex()>-1){
             try {
+                btnFinalizeOrder.setEnabled(false);
+                
                 LocalDate localOrder = LocalDate.now();
                 Date receiveDate = Date.valueOf(localOrder);
-                
+                ArrayList<OrderItems> items = selectedOrder.getOrderItems();
+                String user = cmbUsers.getSelectedItem().toString();
                 selectedOrder.setReceivedDate(receiveDate);
                 c = new Communication(ProductManagement_Methods.ORDER_UPDATE.methodIdentifier, selectedOrder);
                 int orderUpdateSuccess = new ClientHandler(c).request().intResult;
                 
+                this.setCursor(Cursor.getPredefinedCursor(WAIT_CURSOR));
                 if(orderUpdateSuccess != -1)
                 {
+                    Reporting report = new ReportBuilder(ReportMenu.ORDER_DELIVERY_REPORT.reportOption,items).createReport();
+                    report.generateReport();
+                    String message = String.format("Dear %S,\n Your order is ready for delivery and will arrive shortly!\nPlease find attached, to this mail, the list of items that are currently in this order.", user);
+                    String path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\\"+report.docName;
+                    Email email = new Email("eldanefer1@gmail.com", message, "Your Order is Ready for Delivery", path);
+                    email.sendEmail();
+                    
+                    this.setCursor(Cursor.getDefaultCursor());
                     JOptionPane.showMessageDialog(null, "Order was successfully finalized! It is now ready for delivery.","Successful Finalization",JOptionPane.INFORMATION_MESSAGE);
                     AdministratorMainDash mainDash = new AdministratorMainDash();
                     mainDash.setVisible(true);

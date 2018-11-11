@@ -15,6 +15,7 @@ import bc_stationary_bll.GenericSerializer;
 import bc_stationary_bll.Validation;
 import bc_stationary_management_system.ClientHandler;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -210,6 +211,11 @@ public class frmLogin extends javax.swing.JFrame {
 
         txtPassword.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtPassword.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPasswordKeyPressed(evt);
+            }
+        });
         pnlLoginDetails.add(txtPassword);
         txtPassword.setBounds(250, 140, 180, 25);
 
@@ -241,7 +247,7 @@ public class frmLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     Communication c;
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-       
+   
         try {
             String userName, passWord;
             int allowAccess;
@@ -389,6 +395,56 @@ public class frmLogin extends javax.swing.JFrame {
         }
        
     }//GEN-LAST:event_cbxForgotPasswordStateChanged
+
+    private void txtPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) // Perform login button event when you press Enter after typing in the password
+        {
+            try {
+                String userName, passWord;
+                int allowAccess;
+                userName = txtUsername.getText();
+                passWord = txtPassword.getText();
+                User userLogin = new User(userName,passWord);
+                c = new Communication(PersonManagement_Methods.USER_TEST_LOGIN.methodIdentifier,userLogin);
+                allowAccess = new ClientHandler(c).request().intResult;
+
+                if(allowAccess == 1)
+                {
+                    c = new Communication(PersonManagement_Methods.USER_SELECT_SPEC.methodIdentifier,userLogin);
+                    User currentUser = (User) new ClientHandler(c).request().objectResult;
+                    String accessLevel = currentUser.getAccessLevel();
+                    GenericSerializer gen = new GenericSerializer("loggedUser.txt",currentUser);
+                    gen.Serialize();
+                    if(accessLevel.equals("Administrator"))
+                    {
+                        AdministratorMainDash adminDash = new AdministratorMainDash();
+                        adminDash.setVisible(true);
+                        this.setVisible(false);
+                    }
+                    else if (accessLevel.equals("Standard"))
+                    {
+                        StandardMainDash standardDash = new StandardMainDash();
+                        standardDash.setVisible(true);
+                        this.setVisible(false);
+                    }
+                }
+                else if(allowAccess == 0)
+                {
+                    JOptionPane.showMessageDialog(null, "You have provided incorrect login credentials! Please try again!","Incorrect Login Credentials",JOptionPane.WARNING_MESSAGE);
+                    txtUsername.setText("");
+                    txtPassword.setText("");
+                    txtUsername.grabFocus();
+                }
+                else if(allowAccess == -1)
+                {
+                    JOptionPane.showMessageDialog(null, "Your account has not yet been approved, therefore no access privileges have been assigned!","Insufficient Access Privileges",JOptionPane.WARNING_MESSAGE);
+                }
+            } 
+            catch (IOException ex) {
+            Logger.getLogger(frmLogin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_txtPasswordKeyPressed
 
     /**
      * @param args the command line arguments

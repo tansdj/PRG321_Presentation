@@ -5,6 +5,27 @@
  */
 package Forms;
 
+import PersonManagement.User;
+import ProductManagement.Order;
+import ProductManagement.ProductManagement_Methods;
+import ProductManagement.Stock;
+import ProductManagement.UserRequest;
+import bc_stationary_bll.Communication;
+import bc_stationary_bll.Reports.ReportBuilder;
+import bc_stationary_bll.Reports.ReportMenu;
+import bc_stationary_bll.Reports.Reporting;
+import bc_stationary_management_system.ClientHandler;
+import java.awt.Color;
+import java.io.IOException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Eldane
@@ -14,8 +35,35 @@ public class frmGenerateReports extends javax.swing.JFrame {
     /**
      * Creates new form frmViewOrders
      */
+    public ArrayList<User> users = new ArrayList<User>();
+    public ArrayList<UserRequest> requestsForReport = new ArrayList<UserRequest>();
+    Communication c;
     public frmGenerateReports() {
-        initComponents();
+        try {
+            initComponents();
+            this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            this.getContentPane().setBackground(new Color(45, 45, 45));
+            btnViewAvailableStock.setOpaque(false);
+            btnViewAvailableStock.setContentAreaFilled(false);
+            btnViewAvailableStock.setBorderPainted(false);
+            pnlAvailableStock.setVisible(false);
+            btnViewAvailableStock.setEnabled(false);
+            pnlStaffOrder.setVisible(false);
+            pnlStaffOrderFilter.setVisible(false);
+            btnViewStaffOrder.setEnabled(false);
+            dtpSpecifiedDate.setVisible(false);
+            
+            ArrayList<UserRequest> allRequests = new ArrayList<UserRequest>();
+            c = new Communication(ProductManagement_Methods.UR_SELECT_USERS_WITH_REQ.methodIdentifier, new UserRequest());
+            users = new ClientHandler(c).request().listResult;
+            
+            cmbUsers.addItem("Select a User");
+            for(User u:users){
+                cmbUsers.addItem(u.toString());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmGenerateReports.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -27,21 +75,692 @@ public class frmGenerateReports extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
+        pnlMainDashHeader = new javax.swing.JPanel();
+        pnlRegisterHeader1 = new javax.swing.JPanel();
+        lblEditRequest = new javax.swing.JLabel();
+        pnlMenu = new javax.swing.JPanel();
+        btnBack = new javax.swing.JButton();
+        btnGenerateReports = new javax.swing.JButton();
+        pnlGenerateReport = new javax.swing.JPanel();
+        lblGenerateReport = new javax.swing.JLabel();
+        rbntAvailableStock = new javax.swing.JRadioButton();
+        rbtnStaffOrder = new javax.swing.JRadioButton();
+        pnlStaffOrder = new javax.swing.JPanel();
+        lblGenerateStaffOrder = new javax.swing.JLabel();
+        btnGenerateStaffOrder = new javax.swing.JButton();
+        btnViewStaffOrder = new javax.swing.JButton();
+        cmbUsers = new javax.swing.JComboBox<>();
+        pnlStaffOrderFilter = new javax.swing.JPanel();
+        lblGenerateStaffOrder1 = new javax.swing.JLabel();
+        rbtnSOToday = new javax.swing.JRadioButton();
+        rbtnSOMonth = new javax.swing.JRadioButton();
+        rbtnSOSpecified = new javax.swing.JRadioButton();
+        dtpSpecifiedDate = new datechooser.beans.DateChooserCombo();
+        pnlAvailableStock = new javax.swing.JPanel();
+        lblGenerateAvailableStock = new javax.swing.JLabel();
+        btnGenerateAvailableStock = new javax.swing.JButton();
+        btnViewAvailableStock = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 732, Short.MAX_VALUE)
+        pnlMainDashHeader.setBackground(new java.awt.Color(255, 255, 0));
+        pnlMainDashHeader.setPreferredSize(new java.awt.Dimension(1071, 530));
+
+        pnlRegisterHeader1.setBackground(new java.awt.Color(204, 0, 0));
+        pnlRegisterHeader1.setPreferredSize(new java.awt.Dimension(1307, 65));
+
+        lblEditRequest.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
+        lblEditRequest.setForeground(new java.awt.Color(255, 255, 255));
+        lblEditRequest.setText("Generate Reports");
+        lblEditRequest.setAlignmentY(0.0F);
+
+        javax.swing.GroupLayout pnlRegisterHeader1Layout = new javax.swing.GroupLayout(pnlRegisterHeader1);
+        pnlRegisterHeader1.setLayout(pnlRegisterHeader1Layout);
+        pnlRegisterHeader1Layout.setHorizontalGroup(
+            pnlRegisterHeader1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlRegisterHeader1Layout.createSequentialGroup()
+                .addGap(607, 607, 607)
+                .addComponent(lblEditRequest)
+                .addContainerGap(690, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 444, Short.MAX_VALUE)
+        pnlRegisterHeader1Layout.setVerticalGroup(
+            pnlRegisterHeader1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRegisterHeader1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblEditRequest)
+                .addContainerGap())
         );
 
-        pack();
+        javax.swing.GroupLayout pnlMainDashHeaderLayout = new javax.swing.GroupLayout(pnlMainDashHeader);
+        pnlMainDashHeader.setLayout(pnlMainDashHeaderLayout);
+        pnlMainDashHeaderLayout.setHorizontalGroup(
+            pnlMainDashHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlRegisterHeader1, javax.swing.GroupLayout.DEFAULT_SIZE, 1500, Short.MAX_VALUE)
+        );
+        pnlMainDashHeaderLayout.setVerticalGroup(
+            pnlMainDashHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMainDashHeaderLayout.createSequentialGroup()
+                .addComponent(pnlRegisterHeader1, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        pnlMenu.setBackground(new java.awt.Color(40, 40, 40));
+
+        btnBack.setBackground(new java.awt.Color(204, 0, 0));
+        btnBack.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnBack.setForeground(new java.awt.Color(255, 255, 255));
+        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1.png"))); // NOI18N
+        btnBack.setText("Main Dash");
+        btnBack.setBorder(null);
+        btnBack.setBorderPainted(false);
+        btnBack.setContentAreaFilled(false);
+        btnBack.setFocusPainted(false);
+        btnBack.setIconTextGap(60);
+        btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/Back1_red.png"))); // NOI18N
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
+        btnGenerateReports.setBackground(new java.awt.Color(40, 40, 40));
+        btnGenerateReports.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnGenerateReports.setForeground(new java.awt.Color(255, 255, 255));
+        btnGenerateReports.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/reactivate_Red.png"))); // NOI18N
+        btnGenerateReports.setText("Generate Reports");
+        btnGenerateReports.setBorder(null);
+        btnGenerateReports.setBorderPainted(false);
+        btnGenerateReports.setContentAreaFilled(false);
+        btnGenerateReports.setFocusPainted(false);
+        btnGenerateReports.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnGenerateReports.setIconTextGap(5);
+        btnGenerateReports.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/reactivate_Red.png"))); // NOI18N
+        btnGenerateReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateReportsActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlMenuLayout = new javax.swing.GroupLayout(pnlMenu);
+        pnlMenu.setLayout(pnlMenuLayout);
+        pnlMenuLayout.setHorizontalGroup(
+            pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMenuLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnGenerateReports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnBack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        pnlMenuLayout.setVerticalGroup(
+            pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMenuLayout.createSequentialGroup()
+                .addGap(84, 84, 84)
+                .addComponent(btnGenerateReports, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(855, Short.MAX_VALUE))
+        );
+
+        pnlGenerateReport.setBackground(new java.awt.Color(45, 45, 45));
+        pnlGenerateReport.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        lblGenerateReport.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        lblGenerateReport.setForeground(new java.awt.Color(255, 255, 255));
+        lblGenerateReport.setText("Choose Report to Generate");
+
+        rbntAvailableStock.setBackground(new java.awt.Color(45, 45, 45));
+        buttonGroup1.add(rbntAvailableStock);
+        rbntAvailableStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        rbntAvailableStock.setForeground(new java.awt.Color(255, 255, 255));
+        rbntAvailableStock.setText("Generate Available Stock Report");
+        rbntAvailableStock.setBorder(null);
+        rbntAvailableStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rbntAvailableStock.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rbntAvailableStockMouseClicked(evt);
+            }
+        });
+
+        rbtnStaffOrder.setBackground(new java.awt.Color(45, 45, 45));
+        buttonGroup1.add(rbtnStaffOrder);
+        rbtnStaffOrder.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        rbtnStaffOrder.setForeground(new java.awt.Color(255, 255, 255));
+        rbtnStaffOrder.setText("Generate Staff Order Report");
+        rbtnStaffOrder.setBorder(null);
+        rbtnStaffOrder.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rbtnStaffOrder.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rbtnStaffOrderMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlGenerateReportLayout = new javax.swing.GroupLayout(pnlGenerateReport);
+        pnlGenerateReport.setLayout(pnlGenerateReportLayout);
+        pnlGenerateReportLayout.setHorizontalGroup(
+            pnlGenerateReportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlGenerateReportLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(lblGenerateReport)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGenerateReportLayout.createSequentialGroup()
+                .addGap(0, 61, Short.MAX_VALUE)
+                .addGroup(pnlGenerateReportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rbtnStaffOrder)
+                    .addComponent(rbntAvailableStock))
+                .addGap(27, 27, 27))
+        );
+        pnlGenerateReportLayout.setVerticalGroup(
+            pnlGenerateReportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlGenerateReportLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(lblGenerateReport)
+                .addGap(18, 18, 18)
+                .addComponent(rbntAvailableStock)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(rbtnStaffOrder)
+                .addContainerGap(46, Short.MAX_VALUE))
+        );
+
+        pnlStaffOrder.setBackground(new java.awt.Color(45, 45, 45));
+        pnlStaffOrder.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        lblGenerateStaffOrder.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        lblGenerateStaffOrder.setForeground(new java.awt.Color(255, 255, 255));
+        lblGenerateStaffOrder.setText("Generate Staff Order Report");
+
+        btnGenerateStaffOrder.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnGenerateStaffOrder.setText("Generate Report");
+        btnGenerateStaffOrder.setBorderPainted(false);
+        btnGenerateStaffOrder.setFocusPainted(false);
+        btnGenerateStaffOrder.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnGenerateStaffOrderMouseClicked(evt);
+            }
+        });
+
+        btnViewStaffOrder.setBackground(new java.awt.Color(45, 45, 45));
+        btnViewStaffOrder.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnViewStaffOrder.setForeground(new java.awt.Color(255, 255, 0));
+        btnViewStaffOrder.setText("View Report...");
+        btnViewStaffOrder.setBorderPainted(false);
+        btnViewStaffOrder.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewStaffOrder.setFocusPainted(false);
+        btnViewStaffOrder.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnViewStaffOrderMouseClicked(evt);
+            }
+        });
+
+        cmbUsers.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cmbUsers.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                cmbUsersPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+
+        pnlStaffOrderFilter.setBackground(new java.awt.Color(45, 45, 45));
+        pnlStaffOrderFilter.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        lblGenerateStaffOrder1.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
+        lblGenerateStaffOrder1.setForeground(new java.awt.Color(255, 255, 255));
+        lblGenerateStaffOrder1.setText("Generate Report For:");
+
+        rbtnSOToday.setBackground(new java.awt.Color(45, 45, 45));
+        buttonGroup2.add(rbtnSOToday);
+        rbtnSOToday.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        rbtnSOToday.setForeground(new java.awt.Color(255, 255, 255));
+        rbtnSOToday.setText("Stock Orders for Today");
+        rbtnSOToday.setBorder(null);
+        rbtnSOToday.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rbtnSOToday.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rbtnSOTodayMouseClicked(evt);
+            }
+        });
+
+        rbtnSOMonth.setBackground(new java.awt.Color(45, 45, 45));
+        buttonGroup2.add(rbtnSOMonth);
+        rbtnSOMonth.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        rbtnSOMonth.setForeground(new java.awt.Color(255, 255, 255));
+        rbtnSOMonth.setText("Stock Orders for the Month");
+        rbtnSOMonth.setBorder(null);
+        rbtnSOMonth.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rbtnSOMonth.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rbtnSOMonthMouseClicked(evt);
+            }
+        });
+
+        rbtnSOSpecified.setBackground(new java.awt.Color(45, 45, 45));
+        buttonGroup2.add(rbtnSOSpecified);
+        rbtnSOSpecified.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        rbtnSOSpecified.setForeground(new java.awt.Color(255, 255, 255));
+        rbtnSOSpecified.setText("Stock Orders for a Specified Date");
+        rbtnSOSpecified.setBorder(null);
+        rbtnSOSpecified.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rbtnSOSpecified.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rbtnSOSpecifiedMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlStaffOrderFilterLayout = new javax.swing.GroupLayout(pnlStaffOrderFilter);
+        pnlStaffOrderFilter.setLayout(pnlStaffOrderFilterLayout);
+        pnlStaffOrderFilterLayout.setHorizontalGroup(
+            pnlStaffOrderFilterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlStaffOrderFilterLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(pnlStaffOrderFilterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rbtnSOSpecified)
+                    .addComponent(rbtnSOMonth)
+                    .addComponent(rbtnSOToday))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlStaffOrderFilterLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblGenerateStaffOrder1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(91, 91, 91))
+        );
+        pnlStaffOrderFilterLayout.setVerticalGroup(
+            pnlStaffOrderFilterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlStaffOrderFilterLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblGenerateStaffOrder1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(rbtnSOToday)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rbtnSOMonth)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rbtnSOSpecified)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        dtpSpecifiedDate.setCurrentView(new datechooser.view.appearance.AppearancesList("Grey",
+            new datechooser.view.appearance.ViewAppearance("custom",
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    true,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 255),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(128, 128, 128),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.LabelPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.LabelPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(255, 0, 0),
+                    false,
+                    false,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                (datechooser.view.BackRenderer)null,
+                false,
+                true)));
+    dtpSpecifiedDate.setCalendarPreferredSize(new java.awt.Dimension(185, 152));
+    dtpSpecifiedDate.setFieldFont(new java.awt.Font("Century Gothic", java.awt.Font.PLAIN, 16));
+    dtpSpecifiedDate.setBehavior(datechooser.model.multiple.MultyModelBehavior.SELECT_SINGLE);
+    dtpSpecifiedDate.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
+        public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
+            dtpSpecifiedDateOnSelectionChange(evt);
+        }
+    });
+    dtpSpecifiedDate.addCommitListener(new datechooser.events.CommitListener() {
+        public void onCommit(datechooser.events.CommitEvent evt) {
+            dtpSpecifiedDateOnCommit(evt);
+        }
+    });
+
+    javax.swing.GroupLayout pnlStaffOrderLayout = new javax.swing.GroupLayout(pnlStaffOrder);
+    pnlStaffOrder.setLayout(pnlStaffOrderLayout);
+    pnlStaffOrderLayout.setHorizontalGroup(
+        pnlStaffOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnlStaffOrderLayout.createSequentialGroup()
+            .addGap(28, 28, 28)
+            .addGroup(pnlStaffOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(dtpSpecifiedDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlStaffOrderLayout.createSequentialGroup()
+                    .addGroup(pnlStaffOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(cmbUsers, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblGenerateStaffOrder, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
+                    .addGap(29, 29, 29)
+                    .addGroup(pnlStaffOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnGenerateStaffOrder)
+                        .addComponent(pnlStaffOrderFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnViewStaffOrder))))
+            .addGap(0, 153, Short.MAX_VALUE))
+    );
+    pnlStaffOrderLayout.setVerticalGroup(
+        pnlStaffOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnlStaffOrderLayout.createSequentialGroup()
+            .addGap(22, 22, 22)
+            .addComponent(lblGenerateStaffOrder)
+            .addGap(32, 32, 32)
+            .addGroup(pnlStaffOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(cmbUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlStaffOrderFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(dtpSpecifiedDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+            .addComponent(btnGenerateStaffOrder)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(btnViewStaffOrder)
+            .addGap(6, 6, 6))
+    );
+
+    pnlAvailableStock.setBackground(new java.awt.Color(45, 45, 45));
+    pnlAvailableStock.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+    lblGenerateAvailableStock.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+    lblGenerateAvailableStock.setForeground(new java.awt.Color(255, 255, 255));
+    lblGenerateAvailableStock.setText("Generate Available Stock Report");
+
+    btnGenerateAvailableStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+    btnGenerateAvailableStock.setText("Generate Report");
+    btnGenerateAvailableStock.setBorderPainted(false);
+    btnGenerateAvailableStock.setFocusPainted(false);
+    btnGenerateAvailableStock.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            btnGenerateAvailableStockMouseClicked(evt);
+        }
+    });
+
+    btnViewAvailableStock.setBackground(new java.awt.Color(45, 45, 45));
+    btnViewAvailableStock.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+    btnViewAvailableStock.setForeground(new java.awt.Color(255, 255, 0));
+    btnViewAvailableStock.setText("View Report...");
+    btnViewAvailableStock.setBorderPainted(false);
+    btnViewAvailableStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+    btnViewAvailableStock.setFocusPainted(false);
+    btnViewAvailableStock.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            btnViewAvailableStockMouseClicked(evt);
+        }
+    });
+
+    javax.swing.GroupLayout pnlAvailableStockLayout = new javax.swing.GroupLayout(pnlAvailableStock);
+    pnlAvailableStock.setLayout(pnlAvailableStockLayout);
+    pnlAvailableStockLayout.setHorizontalGroup(
+        pnlAvailableStockLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnlAvailableStockLayout.createSequentialGroup()
+            .addGroup(pnlAvailableStockLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlAvailableStockLayout.createSequentialGroup()
+                    .addGap(28, 28, 28)
+                    .addComponent(lblGenerateAvailableStock))
+                .addGroup(pnlAvailableStockLayout.createSequentialGroup()
+                    .addGap(63, 63, 63)
+                    .addGroup(pnlAvailableStockLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnViewAvailableStock)
+                        .addComponent(btnGenerateAvailableStock))))
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    );
+    pnlAvailableStockLayout.setVerticalGroup(
+        pnlAvailableStockLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnlAvailableStockLayout.createSequentialGroup()
+            .addGap(22, 22, 22)
+            .addComponent(lblGenerateAvailableStock)
+            .addGap(28, 28, 28)
+            .addComponent(btnGenerateAvailableStock)
+            .addGap(18, 18, 18)
+            .addComponent(btnViewAvailableStock)
+            .addContainerGap(25, Short.MAX_VALUE))
+    );
+
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+            .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(0, 476, Short.MAX_VALUE))
+        .addGroup(layout.createSequentialGroup()
+            .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(pnlGenerateReport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(18, 18, 18)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(pnlAvailableStock, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlStaffOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+            .addComponent(pnlMainDashHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(42, 42, 42)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(pnlAvailableStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(pnlStaffOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(pnlGenerateReport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addGap(0, 35, Short.MAX_VALUE))
+    );
+
+    pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        AdministratorMainDash mainDash = new AdministratorMainDash();
+        mainDash.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnGenerateReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportsActionPerformed
+
+    }//GEN-LAST:event_btnGenerateReportsActionPerformed
+
+    private void btnViewAvailableStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewAvailableStockMouseClicked
+        try
+        {
+            Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler "+ path);
+            frmGenerateReports reportGen = new frmGenerateReports();
+            reportGen.setVisible(true);
+            this.setVisible(false);
+        }
+        catch(IOException e)
+        {
+           
+        }
+        
+    }//GEN-LAST:event_btnViewAvailableStockMouseClicked
+
+    public String path;
+    private void btnGenerateAvailableStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGenerateAvailableStockMouseClicked
+        try {
+            Communication c = new Communication(ProductManagement_Methods.STOCK_SELECT_ALL.methodIdentifier, new Stock());
+            ArrayList<Stock> allStock = new ClientHandler(c).request().listResult;
+            
+            Reporting report = new ReportBuilder(ReportMenu.STOCK_REPORT.reportOption,allStock).createReport();
+            report.generateReport(); 
+            path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\\"+report.docName;
+            
+            if(allStock.size() > 0)
+            {
+                btnViewAvailableStock.setEnabled(true);
+                JOptionPane.showMessageDialog(null, "Available Stock Report was successfully generated! Please make sure to make an external backup after viewing.", "Successful Report Generation", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "There is no avaiable stock at this time. Therefore no report could be generated!", "Report Was Not Generated", JOptionPane.WARNING_MESSAGE);
+                        
+                frmGenerateReports reportGen = new frmGenerateReports();
+                reportGen.setVisible(true);
+                this.setVisible(false);
+            }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(frmGenerateReports.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnGenerateAvailableStockMouseClicked
+
+    private void btnGenerateStaffOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGenerateStaffOrderMouseClicked
+        // TODO add your handling code here:
+        String selectedDate = dtpSpecifiedDate.getText();
+        UserRequest request = new UserRequest(selectedUser);
+        try {
+            c = new Communication(ProductManagement_Methods.UR_SELECT_SPEC_USER_REQ.methodIdentifier, request);
+            ArrayList<UserRequest> allRequestForUser = new ClientHandler(c).request().listResult;
+            SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");
+            for(UserRequest ur: allRequestForUser)
+            {
+                if(sdf.format(ur.getReqDate()).equals(selectedDate))
+                {
+                    requestsForReport.add(ur);
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmGenerateReports.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        Reporting report = new ReportBuilder(ReportMenu.USER_REQUEST_REPORT.reportOption,requestsForReport).createReport();
+        report.generateReport(); 
+        path = "C:\\Users\\Eldane\\Documents\\NetBeansProjects\\BC_Stationary_Management_System\\"+report.docName;
+           
+        if(requestsForReport.size() > 0)
+        {
+            btnViewStaffOrder.setEnabled(true);
+            JOptionPane.showMessageDialog(null, "Staff Order Report was successfully generated! Please make sure to make an external backup after viewing.", "Successful Report Generation", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "There are no staff requests for this period. Therefore no report could be generated!", "Report Was Not Generated", JOptionPane.WARNING_MESSAGE);
+                      
+            frmGenerateReports reportGen = new frmGenerateReports();
+            reportGen.setVisible(true);
+            this.setVisible(false);
+        }  
+    }//GEN-LAST:event_btnGenerateStaffOrderMouseClicked
+
+    private void btnViewStaffOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewStaffOrderMouseClicked
+        // TODO add your handling code here:
+        try
+        {
+            Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler "+ path);
+            frmGenerateReports reportGen = new frmGenerateReports();
+            reportGen.setVisible(true);
+            this.setVisible(false);
+        }
+        catch(IOException e)
+        {
+        }
+    }//GEN-LAST:event_btnViewStaffOrderMouseClicked
+
+    public User selectedUser;
+    private void cmbUsersPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbUsersPopupMenuWillBecomeInvisible
+
+        if(cmbUsers.getSelectedIndex()> 0){
+            for(User u: users)
+            {
+                if(cmbUsers.getSelectedItem().toString().equals(u.toString())){
+                    selectedUser = u;
+                    pnlStaffOrderFilter.setVisible(true);
+                }
+            }
+        }
+
+    }//GEN-LAST:event_cmbUsersPopupMenuWillBecomeInvisible
+    
+    
+    private void rbtnSOTodayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtnSOTodayMouseClicked
+        // TODO add your handling code here:
+        LocalDate local = LocalDate.now();
+        Date today = Date.valueOf(local);
+        UserRequest request = new UserRequest(selectedUser);
+        try {
+            c = new Communication(ProductManagement_Methods.UR_SELECT_SPEC_USER_REQ.methodIdentifier, request);
+            ArrayList<UserRequest> allRequestForUser = new ClientHandler(c).request().listResult;
+            
+            for(UserRequest ur: allRequestForUser)
+            {
+                if(ur.getReqDate().equals(today))
+                {
+                    requestsForReport.add(ur);
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmGenerateReports.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_rbtnSOTodayMouseClicked
+
+    private void rbtnSOMonthMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtnSOMonthMouseClicked
+        // TODO add your handling code here:
+        LocalDate local = LocalDate.now();
+        Date today = Date.valueOf(local);
+        UserRequest request = new UserRequest(selectedUser);
+        try {
+            c = new Communication(ProductManagement_Methods.UR_SELECT_SPEC_USER_REQ.methodIdentifier, request);
+            ArrayList<UserRequest> allRequestForUser = new ClientHandler(c).request().listResult;
+            
+            for(UserRequest ur: allRequestForUser)
+            {
+                if(ur.getReqDate().getMonth() == today.getMonth())
+                {
+                    requestsForReport.add(ur);
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmGenerateReports.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_rbtnSOMonthMouseClicked
+
+    private void rbtnSOSpecifiedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtnSOSpecifiedMouseClicked
+        // TODO add your handling code here:
+        dtpSpecifiedDate.setVisible(true);
+        JOptionPane.showMessageDialog(null, "Please select a date using the calender.", "Select a Date", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_rbtnSOSpecifiedMouseClicked
+
+    private void dtpSpecifiedDateOnCommit(datechooser.events.CommitEvent evt) {//GEN-FIRST:event_dtpSpecifiedDateOnCommit
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_dtpSpecifiedDateOnCommit
+
+    private void rbntAvailableStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbntAvailableStockMouseClicked
+        // TODO add your handling code here:
+        pnlAvailableStock.setVisible(true);
+        pnlStaffOrder.setVisible(false);
+    }//GEN-LAST:event_rbntAvailableStockMouseClicked
+
+    private void rbtnStaffOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtnStaffOrderMouseClicked
+        // TODO add your handling code here:
+        pnlStaffOrder.setVisible(true);
+        pnlAvailableStock.setVisible(false);
+    }//GEN-LAST:event_rbtnStaffOrderMouseClicked
+
+    private void dtpSpecifiedDateOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_dtpSpecifiedDateOnSelectionChange
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_dtpSpecifiedDateOnSelectionChange
 
     /**
      * @param args the command line arguments
@@ -80,5 +799,36 @@ public class frmGenerateReports extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnGenerateAvailableStock;
+    private javax.swing.JButton btnGenerateAvailableStock1;
+    private javax.swing.JButton btnGenerateReports;
+    private javax.swing.JButton btnGenerateStaffOrder;
+    private javax.swing.JButton btnViewAvailableStock;
+    private javax.swing.JButton btnViewAvailableStock1;
+    private javax.swing.JButton btnViewStaffOrder;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JComboBox<String> cmbUsers;
+    private datechooser.beans.DateChooserCombo dtpSpecifiedDate;
+    private javax.swing.JLabel lblEditRequest;
+    private javax.swing.JLabel lblGenerateAvailableStock;
+    private javax.swing.JLabel lblGenerateAvailableStock1;
+    private javax.swing.JLabel lblGenerateReport;
+    private javax.swing.JLabel lblGenerateStaffOrder;
+    private javax.swing.JLabel lblGenerateStaffOrder1;
+    private javax.swing.JPanel pnlAvailableStock;
+    private javax.swing.JPanel pnlAvailableStock1;
+    private javax.swing.JPanel pnlGenerateReport;
+    private javax.swing.JPanel pnlMainDashHeader;
+    private javax.swing.JPanel pnlMenu;
+    private javax.swing.JPanel pnlRegisterHeader1;
+    private javax.swing.JPanel pnlStaffOrder;
+    private javax.swing.JPanel pnlStaffOrderFilter;
+    private javax.swing.JRadioButton rbntAvailableStock;
+    private javax.swing.JRadioButton rbtnSOMonth;
+    private javax.swing.JRadioButton rbtnSOSpecified;
+    private javax.swing.JRadioButton rbtnSOToday;
+    private javax.swing.JRadioButton rbtnStaffOrder;
     // End of variables declaration//GEN-END:variables
 }

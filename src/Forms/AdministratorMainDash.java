@@ -7,6 +7,7 @@ package Forms;
 
 import java.awt.Color;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -40,6 +41,7 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnManageUser = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
         btnManageRequests = new javax.swing.JButton();
+        btnGenerateReports = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -95,8 +97,9 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnManageStock.setBorder(null);
         btnManageStock.setBorderPainted(false);
         btnManageStock.setContentAreaFilled(false);
+        btnManageStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnManageStock.setFocusPainted(false);
-        btnManageStock.setIconTextGap(20);
+        btnManageStock.setIconTextGap(30);
         btnManageStock.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/products_Red.png"))); // NOI18N
         btnManageStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -112,9 +115,10 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnManageUser.setBorder(null);
         btnManageUser.setBorderPainted(false);
         btnManageUser.setContentAreaFilled(false);
+        btnManageUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnManageUser.setFocusPainted(false);
         btnManageUser.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnManageUser.setIconTextGap(30);
+        btnManageUser.setIconTextGap(40);
         btnManageUser.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/clients_Red.png"))); // NOI18N
         btnManageUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,18 +134,14 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnExit.setBorder(null);
         btnExit.setBorderPainted(false);
         btnExit.setContentAreaFilled(false);
+        btnExit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExit.setFocusPainted(false);
         btnExit.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnExit.setIconTextGap(110);
+        btnExit.setIconTextGap(120);
         btnExit.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/LogOut1_red.png"))); // NOI18N
         btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnExitMouseClicked(evt);
-            }
-        });
-        btnExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExitActionPerformed(evt);
             }
         });
 
@@ -153,13 +153,33 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         btnManageRequests.setBorder(null);
         btnManageRequests.setBorderPainted(false);
         btnManageRequests.setContentAreaFilled(false);
+        btnManageRequests.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnManageRequests.setFocusPainted(false);
         btnManageRequests.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnManageRequests.setIconTextGap(10);
+        btnManageRequests.setIconTextGap(20);
         btnManageRequests.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/View_Red.png"))); // NOI18N
         btnManageRequests.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnManageRequestsActionPerformed(evt);
+            }
+        });
+
+        btnGenerateReports.setBackground(new java.awt.Color(40, 40, 40));
+        btnGenerateReports.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        btnGenerateReports.setForeground(new java.awt.Color(255, 255, 255));
+        btnGenerateReports.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/reactivate.png"))); // NOI18N
+        btnGenerateReports.setText("Generate Reports");
+        btnGenerateReports.setBorder(null);
+        btnGenerateReports.setBorderPainted(false);
+        btnGenerateReports.setContentAreaFilled(false);
+        btnGenerateReports.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGenerateReports.setFocusPainted(false);
+        btnGenerateReports.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnGenerateReports.setIconTextGap(5);
+        btnGenerateReports.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Forms/Images/reactivate_Red.png"))); // NOI18N
+        btnGenerateReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateReportsActionPerformed(evt);
             }
         });
 
@@ -170,7 +190,12 @@ public class AdministratorMainDash extends javax.swing.JFrame {
             .addComponent(btnManageStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnManageUser, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
             .addComponent(btnManageRequests, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnExit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlMenuLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnGenerateReports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         pnlMenuLayout.setVerticalGroup(
             pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,8 +207,10 @@ public class AdministratorMainDash extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnManageRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(btnGenerateReports, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(700, Short.MAX_VALUE))
+                .addContainerGap(643, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -219,10 +246,6 @@ public class AdministratorMainDash extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnManageStockActionPerformed
 
-    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnExitActionPerformed
-
     private void btnManageRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageRequestsActionPerformed
         frmManageOrders manageO = new frmManageOrders();
         manageO.setVisible(true);
@@ -230,9 +253,18 @@ public class AdministratorMainDash extends javax.swing.JFrame {
     }//GEN-LAST:event_btnManageRequestsActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-        // TODO add your handling code here:
-        System.exit(0);
+        int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?","Exit",JOptionPane.YES_NO_OPTION);
+        if(answer == 0)// yes
+        {
+            System.exit(0);
+        }    
     }//GEN-LAST:event_btnExitMouseClicked
+
+    private void btnGenerateReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportsActionPerformed
+        frmGenerateReports reports = new frmGenerateReports();
+        reports.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnGenerateReportsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -271,6 +303,7 @@ public class AdministratorMainDash extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnGenerateReports;
     private javax.swing.JButton btnManageRequests;
     private javax.swing.JButton btnManageStock;
     private javax.swing.JButton btnManageUser;
