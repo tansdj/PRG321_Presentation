@@ -645,7 +645,7 @@ public class frmViewUsers extends javax.swing.JFrame {
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         User user = new User();
         ArrayList<User> usersThatFitCriteria = new ArrayList<User>();
-        String searchCode = "", userCode = "", searchText = txtSearch.getText();
+        String searchCode = "", userCode = "", campusCode="", searchText = txtSearch.getText();
         if (searchText.equals("")) {
             try {
                 c = new Communication(PersonManagement_Methods.USER_SELECT_ALL.methodIdentifier, user);
@@ -673,7 +673,10 @@ public class frmViewUsers extends javax.swing.JFrame {
                 if (u.getPerson().getName().length() >= numSearchChars) {
 
                     userCode = SoundEx.Soundex(u.getPerson().getName().substring(0, numSearchChars));
-
+                    if(u.getPerson().getCampus().length() >= numSearchChars)
+                    {
+                        campusCode = SoundEx.Soundex(u.getPerson().getCampus().substring(0, numSearchChars));
+                    }
                     if ((userCode.equals(searchCode))) {
 
                         Person p = u.getPerson();
@@ -690,6 +693,21 @@ public class frmViewUsers extends javax.swing.JFrame {
                         } 
                         
 
+                    }
+                    else if(campusCode.equals(searchCode))
+                    {
+                        Person p = u.getPerson();
+                        try {
+                            c = new Communication(PersonManagement_Methods.PERSON_SELECT_SPECIFIC.methodIdentifier, p);
+                            p = (Person) new ClientHandler(c).request().objectResult;
+                            u.setPerson(p);
+                            usersThatFitCriteria.add(u);
+                        } 
+                        catch (IOException ex) {
+                            CustomException ce = new CustomException(date.toString()+": (In Person Class) selectSpecPerson() method failed!",ex);
+                            GenericSerializer gen = new GenericSerializer("ExceptionHandler.txt",ce);
+                            gen.Serialize(true); // append to file
+                        } 
                     }
 
                 }
@@ -724,6 +742,10 @@ public class frmViewUsers extends javax.swing.JFrame {
     public User selectedUser;
     private void lbxUsersValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lbxUsersValueChanged
         int index = lbxUsers.getSelectedIndex();
+        if(index == -1){
+            index = 0;
+        }
+        else{
             selectedUser = userList.get(index);
             Person person = selectedUser.getPerson();
 
@@ -785,6 +807,8 @@ public class frmViewUsers extends javax.swing.JFrame {
 
             txtStatus.setText(selectedUser.getStatus());
             txtStatus.setEditable(false);
+        }
+            
     }//GEN-LAST:event_lbxUsersValueChanged
 
     /**
